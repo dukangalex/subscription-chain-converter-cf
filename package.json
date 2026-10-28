@@ -1,1 +1,21 @@
-{"dependencies":{"js-yaml":"5.5.0"},"description":"Cloudflare Workers variant of the self-hosted subscription converter with chain proxy (KV short links + KV rule mirror).","devDependencies":{"wrangler":"4.153.0"},"name":"subscription-chain-converter-cf","private":true,"scripts":{"deploy":"wrangler deploy","dev":"wrangler dev","test":"node test/smoke.mjs"},"type":"module","version":"1.0.0"}
+{
+  "dependencies": {
+    "js-yaml": "5.5.0"
+  },
+  "description": "Cloudflare Workers variant of the self-hosted subscription converter with chain proxy (KV short links + KV rule mirror).",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "wrangler": "4.153.0"
+  },
+  "name": "subscription-chain-converter-cf",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "test": "node test/smoke.mjs",
+    "build:pages": "esbuild src/worker.js --bundle --format=esm --platform=neutral --outfile=dist-pages/_worker.js",
+    "deploy:pages": "npm run build:pages && wrangler pages deploy dist-pages"
+  },
+  "type": "module",
+  "version": "1.0.0"
+}

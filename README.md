@@ -12,6 +12,14 @@ URLs never leave your account.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/dukangalex/subscription-chain-converter-cf)
 
+**Fork-friendly:** the button clones this repo into your account
+automatically. If you prefer a fork you can push changes back to,
+fork the repo first and deploy from your fork instead — every
+path below works identically from a fork: change the clone URL,
+or select your fork in the Pages Git integration. Nothing in the
+repo is tied to the original account (all ids in `wrangler.toml`
+are placeholders the deploy flows replace).
+
 ## Quick start
 
 ### Option A — one-click deploy (recommended)
@@ -70,6 +78,66 @@ curl -X POST https://<your-worker-domain>/admin/refresh \
   -H "Authorization: Bearer <REFRESH_TOKEN>"
 ```
 
+## Deploy to Pages
+
+The same code also deploys to **Cloudflare Pages** (Pages
+Functions, advanced mode): `npm run build:pages` bundles the
+Worker into a single `dist-pages/_worker.js`, which the smoke
+suite verifies with the same 37 assertions as the source module.
+Two ways in:
+
+**A. Pages Git integration (best from your fork).**
+
+1. Fork this repo, then in the Cloudflare dashboard:
+   Pages → Create → Connect to Git → select your fork.
+2. Build settings: build command `npm run build:pages`, build
+   output directory `dist-pages`. Deploy.
+3. Add the bindings under the Pages project's Settings →
+   Functions: KV namespace as `KV`, R2 bucket as `RULES`, D1
+   database as `DB` (create them inline if they don't exist),
+   and a secret `REFRESH_TOKEN` under Settings → Environment
+   variables. Redeploy once so the bindings take effect.
+4. Fill the rule mirror with the tokenless first-run call from
+   Quick start step 3.
+
+**B. Wrangler CLI.**
+
+```bash
+npm install
+npm run deploy:pages   # builds, then: wrangler pages deploy dist-pages
+```
+
+The first run asks you to create/select the Pages project; the
+bindings declared in `wrangler.toml` are applied to it.
+
+**One real difference: Pages has no Cron Triggers**, so the
+daily rule refresh needs an external trigger. Easiest is a
+GitHub Actions workflow in your fork — copy this to
+`.github/workflows/refresh-rules.yml`, and set two repository
+secrets (`PAGES_URL` = your deployment URL, `REFRESH_TOKEN`):
+
+```yaml
+name: refresh-rules
+on:
+  schedule:
+    - cron: "35 20 * * *"
+  workflow_dispatch:
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -fsS -X POST "$PAGES_URL/admin/refresh" \
+            -H "Authorization: Bearer $REFRESH_TOKEN"
+        env:
+          PAGES_URL: ${{ secrets.PAGES_URL }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+```
+
+Any external cron service hitting the same endpoint works too,
+as do manual refreshes. Workers deployments are unaffected —
+they keep the native Cron Trigger.
+
 ## 快速上手（中文）
 
 1. 点页面上方的 **Deploy to Cloudflare** 按钮，按向导走完：
@@ -90,6 +158,12 @@ curl -X POST https://<your-worker-domain>/admin/refresh \
    `Authorization: Bearer <令牌>` 调用同一接口。
 4. 也可以不用按钮：克隆仓库后执行 `bash deploy.sh`，一条
    命令完成建 KV、部署、填充与自检。
+5. Fork 与 Pages：可以直接 fork 本仓库再部署（按钮会自动克隆
+   到你账号，fork 后从自己的 fork 部署也完全一样）。部署到
+   Cloudflare Pages 亦可：构建命令 `npm run build:pages`、
+   输出目录 `dist-pages`，绑定同名 KV/R2/D1 即可；唯一差别
+   是 Pages 没有定时触发器，每日规则刷新需外部触发（可用
+   GitHub Actions，完整 YAML 在上方 Deploy to Pages 一节）。
 
 ## Using the page
 
@@ -225,7 +299,7 @@ and request URLs are not written to any log by the Worker.
 ## Files
 
 ```
-package.json          name, js-yaml + wrangler pins, scripts
+package.json          name, js-yaml + wrangler + esbuild pins, scripts (incl. Pages build/deploy)
 wrangler.toml         worker config (KV + R2 + D1 bindings, cron, vars)
 deploy.sh             one-command deploy + smoke test
 src/worker.js         the Worker (page, ingestion, builders, KV, HTTP)

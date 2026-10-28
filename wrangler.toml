@@ -5,6 +5,14 @@ name = "subscription-chain-converter"
 main = "src/worker.js"
 compatibility_date = "2026-10-01"
 
+# Cloudflare Pages deployment reads this directory instead:
+# `npm run build:pages` bundles the Worker into
+# dist-pages/_worker.js (Pages advanced mode), and the bindings
+# below apply to the Pages project as well. Note Pages has no
+# Cron Triggers — see the README's Pages section for the external
+# refresh options.
+pages_build_output_dir = "dist-pages"
+
 [vars]
 # Optional: base URL of an external subconverter, used only to proxy
 # /sub requests whose target is neither clash nor singbox (the formats
