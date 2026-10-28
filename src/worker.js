@@ -6,11 +6,18 @@
 // templates/ fallback of the Python service are not portable to
 // Workers and are intentionally absent (see README.md).
 //
-// Storage (single KV binding "KV"):
+// Storage (KV binding "KV", always used):
 //   link:<code>        JSON short-link record
 //   idx:<sha256hex>    content identity index -> code
 //   rule:<dst>         mirrored rule file bytes (manifest dst paths)
 //   meta:rules_status  JSON of the last rules refresh
+//
+// Optional advanced bindings (used when present, KV stays the
+// fallback so existing deployments keep working unchanged):
+//   DB    (D1)   links table (records + content hash + hit counts)
+//                and a refresh_log table
+//   RULES (R2)   the rule mirror as objects under their dst paths;
+//                reads try R2 first, then the KV copy
 //
 // The bundled skeletons (skeleton_clash.json / skeleton_singbox.json)
 // carry the literal placeholder __PUBLIC_ORIGIN__ in their rule URLs;
@@ -969,19 +976,115 @@ function genCode() {
   return code;
 }
 
+// ------------------------------------------------- D1 advanced store
+// The links live in D1 when the optional DB binding is present:
+// relational rows make the content-hash dedupe a lookup instead of
+// a second KV key, and every served short link can be counted.
+// Schema is created lazily (CREATE TABLE IF NOT EXISTS) so a
+// one-click deployment needs no migration step.
+const SQL_LINKS_SCHEMA = [
+  "CREATE TABLE IF NOT EXISTS links (" +
+  "code TEXT PRIMARY KEY, kind TEXT NOT NULL, target TEXT, " +
+  "url TEXT, entry TEXT, exit TEXT, hash TEXT NOT NULL, " +
+  "created_at TEXT NOT NULL, hits INTEGER NOT NULL DEFAULT 0)",
+  "CREATE INDEX IF NOT EXISTS idx_links_hash ON links(hash)",
+  "CREATE TABLE IF NOT EXISTS refresh_log (" +
+  "id INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL, " +
+  "ok INTEGER NOT NULL, failed TEXT NOT NULL)",
+];
+const SQL_LINK_BY_CODE =
+  "SELECT code, kind, target, url, entry, exit, hits FROM links " +
+  "WHERE code = ?";
+const SQL_CODE_BY_HASH = "SELECT code FROM links WHERE hash = ?";
+const SQL_LINK_INSERT =
+  "INSERT INTO links (code, kind, target, url, entry, exit, hash, " +
+  "created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+const SQL_LINK_HIT = "UPDATE links SET hits = hits + 1 WHERE code = ?";
+const SQL_REFRESH_LOG =
+  "INSERT INTO refresh_log (time, ok, failed) VALUES (?, ?, ?)";
+
+let _dbReady = null;
+async function ensureDb(env) {
+  if (!env.DB) return false;
+  if (!_dbReady) {
+    _dbReady = (async () => {
+      for (const sql of SQL_LINKS_SCHEMA) {
+        await env.DB.prepare(sql).run();
+      }
+      return true;
+    })().catch((e) => {
+      _dbReady = null;
+      throw e;
+    });
+  }
+  return _dbReady;
+}
+
+function rowToRecord(row) {
+  if (!row) return null;
+  const rec = { kind: row.kind, target: row.target };
+  if (row.url != null) rec.url = row.url;
+  if (row.entry != null) rec.entry = row.entry;
+  if (row.exit != null) rec.exit = row.exit;
+  rec.hits = row.hits ?? 0;
+  return rec;
+}
+
+async function dbGetLink(env, code) {
+  await ensureDb(env);
+  const row = await env.DB.prepare(SQL_LINK_BY_CODE).bind(code).first();
+  return rowToRecord(row);
+}
+
+async function dbStoreLink(env, record, wantCode, hash) {
+  await ensureDb(env);
+  const db = env.DB;
+  if (wantCode) {
+    const existing = await dbGetLink(env, wantCode);
+    if (existing) return samePayload(existing, record) ? wantCode : null;
+    await db.prepare(SQL_LINK_INSERT).bind(
+      wantCode, record.kind, record.target ?? null, record.url ?? null,
+      record.entry ?? null, record.exit ?? null, hash,
+      new Date().toISOString()).run();
+    return wantCode;
+  }
+  const byHash = await db.prepare(SQL_CODE_BY_HASH).bind(hash).first();
+  if (byHash && byHash.code) {
+    const rec = await dbGetLink(env, byHash.code);
+    if (rec && samePayload(rec, record)) return byHash.code;
+  }
+  let code = genCode();
+  while (await dbGetLink(env, code)) code = genCode();
+  await db.prepare(SQL_LINK_INSERT).bind(
+    code, record.kind, record.target ?? null, record.url ?? null,
+    record.entry ?? null, record.exit ?? null, hash,
+    new Date().toISOString()).run();
+  return code;
+}
+
 async function storeLink(env, record, wantCode) {
   // With wantCode: return it when free or already bound to the same
   // payload, and null when taken by a different payload. Without:
   // reuse the code of an identical payload (via the identity index),
-  // else generate a random one.
+  // else generate a random one. D1 when bound, KV otherwise; a D1
+  // failure falls back to KV for that call (reads check D1 first,
+  // then KV, so either home resolves).
+  const hash = await sha256Hex(linkIdentity(record));
+  if (env.DB) {
+    try {
+      return await dbStoreLink(env, record, wantCode, hash);
+    } catch {
+      /* fall through to KV */
+    }
+  }
   if (wantCode) {
     const existing = await env.KV.get("link:" + wantCode, "json");
     if (existing) return samePayload(existing, record) ? wantCode : null;
     await env.KV.put("link:" + wantCode, JSON.stringify(record));
-    await env.KV.put("idx:" + await sha256Hex(linkIdentity(record)), wantCode);
+    await env.KV.put("idx:" + hash, wantCode);
     return wantCode;
   }
-  const idxKey = "idx:" + await sha256Hex(linkIdentity(record));
+  const idxKey = "idx:" + hash;
   const existingCode = await env.KV.get(idxKey);
   if (existingCode) {
     const rec = await env.KV.get("link:" + existingCode, "json");
@@ -995,7 +1098,25 @@ async function storeLink(env, record, wantCode) {
 }
 
 async function getLink(env, code) {
+  if (env.DB) {
+    try {
+      const rec = await dbGetLink(env, code);
+      if (rec) return rec;
+    } catch {
+      /* fall through to KV */
+    }
+  }
   return env.KV.get("link:" + code, "json");
+}
+
+async function bumpLinkHit(env, code) {
+  if (!env.DB) return;
+  try {
+    await ensureDb(env);
+    await env.DB.prepare(SQL_LINK_HIT).bind(code).run();
+  } catch {
+    /* hit counting is best-effort */
+  }
 }
 
 // ------------------------------------------------------------ rules mirror
@@ -1012,10 +1133,36 @@ function validRule(dst, bytes) {
   return !(i < bytes.length && bytes[i] === 0x3c);
 }
 
+async function putRule(env, dst, bytes) {
+  // R2 (optional RULES binding) is the natural home for the mirror:
+  // object storage for large binaries, no KV value-size ceiling.
+  // Without it the mirror lives in KV under rule:<dst> as before.
+  if (env.RULES) {
+    await env.RULES.put(dst, bytes);
+    return;
+  }
+  await env.KV.put("rule:" + dst, bytes);
+}
+
+async function getRule(env, dst) {
+  // R2 first, KV second: copies mirrored before the R2 tier was
+  // enabled keep serving until the next refresh lands them in R2.
+  if (env.RULES) {
+    try {
+      const obj = await env.RULES.get(dst);
+      if (obj) return obj.arrayBuffer();
+    } catch {
+      /* fall through to KV */
+    }
+  }
+  return env.KV.get("rule:" + dst, "arrayBuffer");
+}
+
 async function refreshRules(env) {
   // Download every manifest entry from its official source, validate
-  // it, and put it into KV under rule:<dst>. A failed download keeps
-  // the previous copy. Status lands in meta:rules_status.
+  // it, and store it in the rule mirror (R2 when bound, else KV).
+  // A failed download keeps the previous copy. Status lands in
+  // meta:rules_status and, when D1 is bound, in the refresh_log.
   const results = new Map();
   const chunk = 8;
   for (let i = 0; i < MANIFEST.length; i += chunk) {
@@ -1030,7 +1177,7 @@ async function refreshRules(env) {
         if (!resp.ok) throw new Error("HTTP " + resp.status);
         const buf = new Uint8Array(await resp.arrayBuffer());
         if (!validRule(dst, buf)) throw new Error("validation failed");
-        await env.KV.put("rule:" + dst, buf);
+        await putRule(env, dst, buf);
         results.set(dst, true);
       } catch {
         results.set(dst, false);
@@ -1045,6 +1192,15 @@ async function refreshRules(env) {
   }
   const status = { time: new Date().toISOString(), ok, failed };
   await env.KV.put("meta:rules_status", JSON.stringify(status));
+  if (env.DB) {
+    try {
+      await ensureDb(env);
+      await env.DB.prepare(SQL_REFRESH_LOG)
+        .bind(status.time, ok, JSON.stringify(failed)).run();
+    } catch {
+      /* the log is an audit extra; the KV status stays canonical */
+    }
+  }
   return status;
 }
 
@@ -1125,7 +1281,7 @@ async function handleShorten(request, env) {
   return send(`https://${host}/c/${code}`);
 }
 
-async function handleFetch(request, env) {
+async function handleFetch(request, env, ctx) {
   const url = new URL(request.url);
   const path = url.pathname;
   const origin = url.origin;
@@ -1171,7 +1327,7 @@ async function handleFetch(request, env) {
   if (path.startsWith("/rules/")) {
     const rel = path.slice("/rules/".length);
     if (!DST_SET.has(rel)) return send("not found", { status: 404 });
-    const data = await env.KV.get("rule:" + rel, "arrayBuffer");
+    const data = await getRule(env, rel);
     if (!data) return send("not found", { status: 404 });
     const ctype = rel.endsWith(".svg")
       ? "image/svg+xml" : "application/octet-stream";
@@ -1203,6 +1359,8 @@ async function handleFetch(request, env) {
     const code = sm[2].replace(/^\/+|\/+$/g, "");
     const rec = code ? await getLink(env, code) : null;
     if (!rec) return send("link not found", { status: 404 });
+    // Count the fetch (D1 tier only; fire-and-forget via waitUntil).
+    if (ctx && ctx.waitUntil) ctx.waitUntil(bumpLinkHit(env, code));
     // The path letter picks the output format (m = Mihomo / clash,
     // s = sing-box); /c/ falls back to the format the link was
     // created with.
@@ -1286,7 +1444,7 @@ async function handleFetch(request, env) {
 }
 
 export default {
-  fetch: handleFetch,
+  fetch: (request, env, ctx) => handleFetch(request, env, ctx),
   async scheduled(event, env, ctx) {
     ctx.waitUntil(refreshRules(env));
   },
