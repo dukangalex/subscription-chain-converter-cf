@@ -1,0 +1,28 @@
+# Subscription converter with chain proxy — Cloudflare Workers.
+# The Worker code is src/worker.js; short links, the rule mirror and
+# the refresh status live in the KV namespace bound as "KV".
+name = "subscription-chain-converter"
+main = "src/worker.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+# Optional: base URL of an external subconverter, used only to proxy
+# /sub requests whose target is neither clash nor singbox (the formats
+# this variant cannot build itself). Leave empty to answer those
+# requests with 501. REFRESH_TOKEN is NOT a var: it is a secret, set
+# with `npx wrangler secret put REFRESH_TOKEN` (deploy.sh does it).
+EXTERNAL_SUBCONVERTER_URL = ""
+
+# Daily rule-mirror refresh, 04:35 CST (20:35 UTC).
+[triggers]
+crons = ["35 20 * * *"]
+
+# KV namespace holding link:<code>, idx:<hash>, rule:<dst> and
+# meta:rules_status. deploy.sh creates the namespaces and replaces
+# the placeholder ids below with the real ones; to do it by hand:
+#   npx wrangler kv namespace create KV
+#   npx wrangler kv namespace create KV --preview
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_WITH_KV_ID"
+preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
