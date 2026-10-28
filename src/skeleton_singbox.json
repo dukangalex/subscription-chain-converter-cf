@@ -1,0 +1,1176 @@
+{
+ "outbounds": [
+  {
+   "type": "urltest",
+   "tag": "⛓ 出口优选",
+   "outbounds": [
+    "@EXITS@"
+   ],
+   "url": "https://www.gstatic.com/generate_204",
+   "interval": "3m",
+   "tolerance": 100,
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "urltest",
+   "tag": "⛓ 入口优选",
+   "outbounds": [
+    "@ENTRIES@"
+   ],
+   "url": "https://www.gstatic.com/generate_204",
+   "interval": "3m",
+   "tolerance": 100,
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "@nodes@"
+  },
+  {
+   "type": "direct",
+   "tag": "direct",
+   "connect_timeout": "8s"
+  },
+  {
+   "type": "direct",
+   "tag": "🇨🇳 直连 | 双栈",
+   "connect_timeout": "8s"
+  },
+  {
+   "type": "direct",
+   "tag": "🇨🇳 直连 | IPv4优先",
+   "connect_timeout": "8s",
+   "domain_resolver": {
+    "server": "dns-cn",
+    "strategy": "prefer_ipv4"
+   }
+  },
+  {
+   "type": "direct",
+   "tag": "🇨🇳 直连 | IPv6优先",
+   "connect_timeout": "8s",
+   "domain_resolver": {
+    "server": "dns-cn",
+    "strategy": "prefer_ipv6"
+   }
+  },
+  {
+   "type": "direct",
+   "tag": "🇨🇳 直连 | 仅IPv4",
+   "connect_timeout": "8s",
+   "domain_resolver": {
+    "server": "dns-cn",
+    "strategy": "ipv4_only"
+   }
+  },
+  {
+   "type": "direct",
+   "tag": "🇨🇳 直连 | 仅IPv6",
+   "connect_timeout": "8s",
+   "domain_resolver": {
+    "server": "dns-cn",
+    "strategy": "ipv6_only"
+   }
+  },
+  {
+   "type": "socks",
+   "tag": "REJECT",
+   "server": "127.0.0.1",
+   "server_port": 9
+  },
+  {
+   "type": "selector",
+   "tag": "默认代理",
+   "outbounds": [
+    "⛓ 出口优选",
+    "⛓ 入口优选",
+    "手动选择",
+    "自动选择"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "手动选择",
+   "outbounds": [
+    "@ALL@"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "urltest",
+   "tag": "自动选择",
+   "outbounds": [
+    "@EXITS@"
+   ],
+   "url": "https://www.gstatic.com/generate_204",
+   "interval": "10m",
+   "tolerance": 50,
+   "idle_timeout": "30m",
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "AdBlock",
+   "outbounds": [
+    "REJECT"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "FCM",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false,
+   "default": "默认代理"
+  },
+  {
+   "type": "selector",
+   "tag": "YouTube",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Google",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "ClaudeAI",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false,
+   "default": "⛓ 出口优选"
+  },
+  {
+   "type": "selector",
+   "tag": "AI",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false,
+   "default": "⛓ 出口优选"
+  },
+  {
+   "type": "selector",
+   "tag": "Microsoft",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Apple",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Telegram",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Steam",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "TikTok",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Twitter",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Meta",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Line",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Netflix",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Emby",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "PikPak",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Spotify",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "Crypto",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "EHentai",
+   "outbounds": [
+    "默认代理",
+    "手动选择",
+    "自动选择",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false,
+   "default": "⛓ 出口优选"
+  },
+  {
+   "type": "selector",
+   "tag": "远控工具",
+   "outbounds": [
+    "REJECT",
+    "默认代理",
+    "直连"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "直连",
+   "outbounds": [
+    "direct",
+    "🇨🇳 直连 | 双栈",
+    "🇨🇳 直连 | IPv4优先",
+    "🇨🇳 直连 | IPv6优先",
+    "🇨🇳 直连 | 仅IPv4",
+    "🇨🇳 直连 | 仅IPv6"
+   ],
+   "interrupt_exist_connections": false
+  },
+  {
+   "type": "selector",
+   "tag": "漏网之鱼",
+   "outbounds": [
+    "默认代理",
+    "直连",
+    "⛓ 出口优选"
+   ],
+   "interrupt_exist_connections": false
+  }
+ ],
+ "route": {
+  "rules": [
+   {
+    "action": "sniff"
+   },
+   {
+    "protocol": "dns",
+    "action": "hijack-dns"
+   },
+   {
+    "port": 53,
+    "network": [
+     "udp",
+     "tcp"
+    ],
+    "action": "hijack-dns"
+   },
+   {
+    "clash_mode": "Global",
+    "outbound": "默认代理"
+   },
+   {
+    "clash_mode": "Direct",
+    "outbound": "direct"
+   },
+   {
+    "ip_version": 6,
+    "action": "reject"
+   },
+   {
+    "ip_is_private": true,
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-private",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geoip-cn",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-geolocation-cn",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-cn",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-category-games@cn",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-epicgames@cn",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-nvidia@cn",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-apple@cn",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-microsoft@cn",
+    "outbound": "直连"
+   },
+   {
+    "rule_set": "geosite-steam@cn",
+    "outbound": "直连"
+   },
+   {
+    "domain": [
+     "fsend.cn"
+    ],
+    "outbound": "直连"
+   },
+   {
+    "network": "udp",
+    "port_range": "3478:3481",
+    "action": "reject"
+   },
+   {
+    "network": "tcp",
+    "port_range": "3478:3481",
+    "action": "reject"
+   },
+   {
+    "network": "udp",
+    "port_range": "3478:3497",
+    "action": "reject"
+   },
+   {
+    "network": "tcp",
+    "port_range": "3478:3497",
+    "action": "reject"
+   },
+   {
+    "network": "udp",
+    "port_range": "5349:5355",
+    "action": "reject"
+   },
+   {
+    "network": "tcp",
+    "port_range": "5349:5355",
+    "action": "reject"
+   },
+   {
+    "network": "udp",
+    "port_range": "19302:19310",
+    "action": "reject"
+   },
+   {
+    "network": "tcp",
+    "port_range": "19302:19310",
+    "action": "reject"
+   },
+   {
+    "type": "logical",
+    "mode": "and",
+    "rules": [
+     {
+      "port": 53,
+      "network": [
+       "udp",
+       "tcp"
+      ]
+     },
+     {
+      "rule_set": "geoip-cn",
+      "invert": true
+     }
+    ],
+    "action": "reject"
+   },
+   {
+    "type": "logical",
+    "mode": "and",
+    "rules": [
+     {
+      "port": 853,
+      "network": [
+       "udp",
+       "tcp"
+      ]
+     },
+     {
+      "rule_set": "geoip-cn",
+      "invert": true
+     }
+    ],
+    "action": "reject"
+   },
+   {
+    "network": "udp",
+    "port": 443,
+    "rule_set": [
+     "geosite-cn",
+     "geosite-geolocation-cn"
+    ],
+    "outbound": "直连"
+   },
+   {
+    "network": "udp",
+    "port": 443,
+    "action": "reject"
+   },
+   {
+    "rule_set": "geosite-category-ads-all",
+    "outbound": "AdBlock"
+   },
+   {
+    "domain_suffix": [
+     "mtalk.google.com",
+     "android.googleapis.com"
+    ],
+    "outbound": "FCM"
+   },
+   {
+    "domain_suffix": [
+     "youtube.com",
+     "youtu.be",
+     "googlevideo.com",
+     "ytimg.com",
+     "ggpht.com",
+     "youtubekids.com",
+     "youtubei.googleapis.com",
+     "youtube.googleapis.com",
+     "wide-youtube.l.google.com"
+    ],
+    "outbound": "YouTube"
+   },
+   {
+    "rule_set": "geosite-youtube",
+    "outbound": "YouTube"
+   },
+   {
+    "package_name": [
+     "com.google.android.youtube",
+     "com.google.android.apps.youtube.music",
+     "app.revanced.android.youtube",
+     "com.vanced.android.youtube"
+    ],
+    "outbound": "YouTube"
+   },
+   {
+    "rule_set": "geosite-google",
+    "outbound": "Google"
+   },
+   {
+    "domain_suffix": [
+     "claude.ai",
+     "anthropic.com",
+     "claudeusercontent.com"
+    ],
+    "outbound": "ClaudeAI"
+   },
+   {
+    "rule_set": "geosite-anthropic",
+    "outbound": "ClaudeAI"
+   },
+   {
+    "package_name": [
+     "com.anthropic.claude"
+    ],
+    "outbound": "ClaudeAI"
+   },
+   {
+    "domain_suffix": [
+     "openai.com",
+     "chatgpt.com",
+     "gemini.google.com",
+     "generativelanguage.googleapis.com",
+     "aistudio.google.com"
+    ],
+    "outbound": "AI"
+   },
+   {
+    "rule_set": "geosite-category-ai-!cn",
+    "outbound": "AI"
+   },
+   {
+    "package_name": [
+     "com.google.android.apps.bard"
+    ],
+    "outbound": "AI"
+   },
+   {
+    "rule_set": "geosite-github",
+    "outbound": "默认代理"
+   },
+   {
+    "rule_set": "geosite-microsoft",
+    "outbound": "Microsoft"
+   },
+   {
+    "rule_set": "geosite-apple",
+    "outbound": "Apple"
+   },
+   {
+    "rule_set": "geosite-telegram",
+    "outbound": "Telegram"
+   },
+   {
+    "rule_set": "geosite-steam",
+    "outbound": "Steam"
+   },
+   {
+    "rule_set": "geosite-tiktok",
+    "outbound": "TikTok"
+   },
+   {
+    "rule_set": "geosite-twitter",
+    "outbound": "Twitter"
+   },
+   {
+    "domain_suffix": [
+     "facebook.com",
+     "fb.com",
+     "instagram.com",
+     "whatsapp.com",
+     "threads.net",
+     "messenger.com",
+     "meta.com",
+     "oculus.com"
+    ],
+    "outbound": "Meta"
+   },
+   {
+    "rule_set": "geosite-facebook",
+    "outbound": "Meta"
+   },
+   {
+    "rule_set": "geosite-instagram",
+    "outbound": "Meta"
+   },
+   {
+    "rule_set": "geosite-whatsapp",
+    "outbound": "Meta"
+   },
+   {
+    "rule_set": "geosite-threads",
+    "outbound": "Meta"
+   },
+   {
+    "rule_set": "geosite-messenger",
+    "outbound": "Meta"
+   },
+   {
+    "rule_set": "geosite-meta",
+    "outbound": "Meta"
+   },
+   {
+    "rule_set": "geosite-oculus",
+    "outbound": "Meta"
+   },
+   {
+    "domain_suffix": [
+     "line.me",
+     "line-apps.com",
+     "line.naver.jp"
+    ],
+    "outbound": "Line"
+   },
+   {
+    "rule_set": "geosite-netflix",
+    "outbound": "Netflix"
+   },
+   {
+    "domain_suffix": [
+     "mb3admin.com",
+     "nubebelle.com",
+     "emby.media"
+    ],
+    "outbound": "Emby"
+   },
+   {
+    "domain_keyword": [
+     "emby"
+    ],
+    "outbound": "Emby"
+   },
+   {
+    "domain_suffix": [
+     "mypikpak.com",
+     "pikpak.com"
+    ],
+    "outbound": "PikPak"
+   },
+   {
+    "rule_set": "geosite-spotify",
+    "outbound": "Spotify"
+   },
+   {
+    "domain_suffix": [
+     "htx.com"
+    ],
+    "outbound": "Crypto"
+   },
+   {
+    "rule_set": "geosite-paypal",
+    "outbound": "Crypto"
+   },
+   {
+    "rule_set": "geosite-binance",
+    "outbound": "Crypto"
+   },
+   {
+    "rule_set": "geosite-okx",
+    "outbound": "Crypto"
+   },
+   {
+    "rule_set": "geosite-bybit",
+    "outbound": "Crypto"
+   },
+   {
+    "rule_set": "geosite-huobi",
+    "outbound": "Crypto"
+   },
+   {
+    "rule_set": "geosite-category-cryptocurrency",
+    "outbound": "Crypto"
+   },
+   {
+    "domain_suffix": [
+     "e-hentai.org",
+     "exhentai.org",
+     "ehgt.org"
+    ],
+    "outbound": "EHentai"
+   },
+   {
+    "process_name": [
+     "anydesk",
+     "ToDesk",
+     "TeamViewer",
+     "rustdesk",
+     "tailscaled",
+     "zerotier-one",
+     "ngrok",
+     "frpc",
+     "frps",
+     "cloudflared"
+    ],
+    "outbound": "远控工具"
+   },
+   {
+    "package_name": [
+     "com.anydesk.anydeskandroid",
+     "com.oray.todesk",
+     "com.teamviewer.teamviewer.market.mobile",
+     "com.carriez.flutter_hbb",
+     "com.tailscale.ipn",
+     "com.zerotier.one"
+    ],
+    "outbound": "远控工具"
+   },
+   {
+    "rule_set": "geosite-geolocation-!cn",
+    "outbound": "默认代理"
+   }
+  ],
+  "rule_set": [
+   {
+    "type": "remote",
+    "tag": "geosite-private",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-private.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geoip-cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geoip-cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-geolocation-cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-geolocation-cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-category-games@cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-category-games@cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-epicgames@cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-epicgames@cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-nvidia@cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-nvidia@cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-apple@cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-apple@cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-microsoft@cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-microsoft@cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-steam@cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-steam@cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-category-ads-all",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-category-ads-all.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-youtube",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-youtube.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-google",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-google.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-anthropic",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-anthropic.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-category-ai-!cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-category-ai-!cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-github",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-github.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-microsoft",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-microsoft.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-apple",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-apple.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-telegram",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-telegram.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-steam",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-steam.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-tiktok",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-tiktok.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-twitter",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-twitter.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-facebook",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-facebook.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-instagram",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-instagram.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-whatsapp",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-whatsapp.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-threads",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-threads.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-messenger",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-messenger.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-meta",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-meta.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-oculus",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-oculus.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-netflix",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-netflix.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-spotify",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-spotify.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-paypal",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-paypal.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-binance",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-binance.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-okx",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-okx.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-bybit",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-bybit.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-huobi",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-huobi.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-category-cryptocurrency",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-category-cryptocurrency.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   },
+   {
+    "type": "remote",
+    "tag": "geosite-geolocation-!cn",
+    "format": "binary",
+    "url": "__PUBLIC_ORIGIN__/rules/singbox/geosite-geolocation-!cn.srs",
+    "update_interval": "24h",
+    "http_client": "http-direct"
+   }
+  ],
+  "final": "漏网之鱼",
+  "auto_detect_interface": true,
+  "find_process": false,
+  "default_domain_resolver": "dns-cn",
+  "default_http_client": "http-direct"
+ },
+ "http_clients": [
+  {
+   "tag": "http-direct"
+  }
+ ],
+ "dns": {
+  "servers": [
+   {
+    "type": "fakeip",
+    "tag": "dns-fakeip",
+    "inet4_range": "198.18.0.0/15"
+   },
+   {
+    "type": "udp",
+    "tag": "dns-cn",
+    "server": "223.5.5.5",
+    "server_port": 53,
+    "detour": "direct"
+   },
+   {
+    "type": "tcp",
+    "tag": "dns-remote",
+    "server": "1.1.1.1",
+    "server_port": 53,
+    "detour": "默认代理"
+   }
+  ],
+  "rules": [
+   {
+    "domain": [
+     "cloudflare-ech.com"
+    ],
+    "server": "dns-cn"
+   },
+   {
+    "rule_set": [
+     "geosite-cn",
+     "geosite-geolocation-cn"
+    ],
+    "server": "dns-cn"
+   },
+   {
+    "query_type": [
+     "HTTPS",
+     "SVCB"
+    ],
+    "action": "reject"
+   },
+   {
+    "query_type": [
+     "A",
+     "AAAA"
+    ],
+    "server": "dns-fakeip"
+   }
+  ],
+  "final": "dns-remote",
+  "strategy": "ipv4_only"
+ },
+ "inbounds": [
+  {
+   "type": "tun",
+   "tag": "tun-in",
+   "address": [
+    "172.19.0.1/30"
+   ],
+   "auto_route": true,
+   "strict_route": true,
+   "mtu": 1500
+  }
+ ],
+ "log": {
+  "level": "info"
+ }
+}

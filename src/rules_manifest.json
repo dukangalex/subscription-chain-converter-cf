@@ -1,0 +1,306 @@
+[
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs",
+  "dst": "clash/private.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.mrs",
+  "dst": "clash/category-games@cn.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/nvidia@cn.mrs",
+  "dst": "clash/nvidia@cn.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple@cn.mrs",
+  "dst": "clash/apple@cn.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft@cn.mrs",
+  "dst": "clash/microsoft@cn.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-cn.mrs",
+  "dst": "clash/geolocation-cn.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs",
+  "dst": "clash/cn.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs",
+  "dst": "clash/geolocation-!cn.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-stun.mrs",
+  "dst": "clash/category-stun.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.mrs",
+  "dst": "clash/bilibili.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/biliintl.mrs",
+  "dst": "clash/biliintl.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs",
+  "dst": "clash/disney.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.mrs",
+  "dst": "clash/category-ads-all.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/googlefcm.mrs",
+  "dst": "clash/googlefcm.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs",
+  "dst": "clash/youtube.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs",
+  "dst": "clash/google.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/anthropic.mrs",
+  "dst": "clash/anthropic.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs",
+  "dst": "clash/category-ai-!cn.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs",
+  "dst": "clash/github.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs",
+  "dst": "clash/microsoft.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs",
+  "dst": "clash/apple.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs",
+  "dst": "clash/telegram.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs",
+  "dst": "clash/steam.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs",
+  "dst": "clash/tiktok.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs",
+  "dst": "clash/twitter.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/meta.mrs",
+  "dst": "clash/meta.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/facebook.mrs",
+  "dst": "clash/facebook.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/line.mrs",
+  "dst": "clash/line.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs",
+  "dst": "clash/netflix.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-emby.mrs",
+  "dst": "clash/category-emby.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pikpak.mrs",
+  "dst": "clash/pikpak.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs",
+  "dst": "clash/spotify.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs",
+  "dst": "clash/category-cryptocurrency.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ehentai.mrs",
+  "dst": "clash/ehentai.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat",
+  "dst": "clash/geoip.dat"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat",
+  "dst": "clash/geosite.dat"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.metadb",
+  "dst": "clash/geoip.metadb"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/GeoLite2-ASN.mmdb",
+  "dst": "clash/GeoLite2-ASN.mmdb"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+  "dst": "singbox/geosite-private.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+  "dst": "singbox/geoip-cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
+  "dst": "singbox/geosite-geolocation-cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
+  "dst": "singbox/geosite-cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-games@cn.srs",
+  "dst": "singbox/geosite-category-games@cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-epicgames@cn.srs",
+  "dst": "singbox/geosite-epicgames@cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-nvidia@cn.srs",
+  "dst": "singbox/geosite-nvidia@cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-apple@cn.srs",
+  "dst": "singbox/geosite-apple@cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-microsoft@cn.srs",
+  "dst": "singbox/geosite-microsoft@cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-steam@cn.srs",
+  "dst": "singbox/geosite-steam@cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+  "dst": "singbox/geosite-category-ads-all.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-youtube.srs",
+  "dst": "singbox/geosite-youtube.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-google.srs",
+  "dst": "singbox/geosite-google.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-anthropic.srs",
+  "dst": "singbox/geosite-anthropic.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ai-!cn.srs",
+  "dst": "singbox/geosite-category-ai-!cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-github.srs",
+  "dst": "singbox/geosite-github.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-microsoft.srs",
+  "dst": "singbox/geosite-microsoft.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-apple.srs",
+  "dst": "singbox/geosite-apple.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-telegram.srs",
+  "dst": "singbox/geosite-telegram.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-steam.srs",
+  "dst": "singbox/geosite-steam.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tiktok.srs",
+  "dst": "singbox/geosite-tiktok.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-twitter.srs",
+  "dst": "singbox/geosite-twitter.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-facebook.srs",
+  "dst": "singbox/geosite-facebook.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-instagram.srs",
+  "dst": "singbox/geosite-instagram.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-whatsapp.srs",
+  "dst": "singbox/geosite-whatsapp.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-threads.srs",
+  "dst": "singbox/geosite-threads.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-messenger.srs",
+  "dst": "singbox/geosite-messenger.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-meta.srs",
+  "dst": "singbox/geosite-meta.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-oculus.srs",
+  "dst": "singbox/geosite-oculus.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-netflix.srs",
+  "dst": "singbox/geosite-netflix.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-spotify.srs",
+  "dst": "singbox/geosite-spotify.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-paypal.srs",
+  "dst": "singbox/geosite-paypal.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-binance.srs",
+  "dst": "singbox/geosite-binance.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-okx.srs",
+  "dst": "singbox/geosite-okx.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-bybit.srs",
+  "dst": "singbox/geosite-bybit.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-huobi.srs",
+  "dst": "singbox/geosite-huobi.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-cryptocurrency.srs",
+  "dst": "singbox/geosite-category-cryptocurrency.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
+  "dst": "singbox/geosite-geolocation-!cn.srs"
+ }
+]
