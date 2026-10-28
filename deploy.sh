@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
-# One-click deploy of the Cloudflare Workers variant of the
-# subscription converter (Worker + KV short links + KV rule mirror).
+# One-click deploy of the subscription converter's Cloudflare
+# Workers edition (Worker + KV, with the R2 rule mirror and the
+# D1 link store as the advanced storage tier).
 #
 # Usage:
 #   bash deploy.sh [custom-domain]
 #
 # What it does: installs dependencies, creates the KV namespace,
-# writes its id into wrangler.toml, generates and stores the
-# REFRESH_TOKEN secret, deploys the Worker, fills the rule mirror
-# via POST /admin/refresh, and smoke-tests the result (shorten ->
+# the R2 bucket and the D1 database, writes their ids into
+# wrangler.toml, generates and stores the REFRESH_TOKEN secret,
+# deploys the Worker, fills the rule mirror via
+# POST /admin/refresh, and smoke-tests the result (shorten ->
 # chain config with detour, one mirrored rule file). Re-running is
-# safe: existing KV data is kept, a NEW refresh token is generated
+# safe: existing data is kept, a NEW refresh token is generated
 # (save the one printed at the end).
 set -euo pipefail
 
@@ -63,6 +65,31 @@ if grep -q "REPLACE_WITH_KV_PREVIEW_ID" wrangler.toml; then
   fi
 fi
 rm -f wrangler.toml.bak
+
+# ------------------------------------------------------ R2 + D1 (advanced)
+# The advanced storage tier: an R2 bucket for the rule mirror and
+# a D1 database for the link store. Both are optional at runtime
+# (the Worker falls back to KV), but this script provisions them
+# so a fresh deployment starts on the advanced tier directly.
+log "creating R2 bucket (advanced rule mirror)"
+$WR r2 bucket create subscription-chain-converter-rules 2>&1 \
+  | tail -1 || true
+
+if grep -q "REPLACE_WITH_D1_ID" wrangler.toml; then
+  log "creating D1 database (advanced link store)"
+  OUT="$($WR d1 create subscription-chain-converter 2>&1 || true)"
+  D1_ID="$(printf '%s' "$OUT" | grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' | head -1)"
+  if [ -z "$D1_ID" ]; then
+    OUT="$($WR d1 list 2>&1 || true)"
+    D1_ID="$(printf '%s' "$OUT" | grep 'subscription-chain-converter' \
+      | grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' | head -1)"
+  fi
+  [ -n "$D1_ID" ] || die "could not create or find the D1 database:
+$OUT"
+  sed -i.bak "s/REPLACE_WITH_D1_ID/$D1_ID/" wrangler.toml
+  rm -f wrangler.toml.bak
+  log "D1 id written to wrangler.toml"
+fi
 
 # --------------------------------------------------------------- secret
 TOKEN="$(openssl rand -hex 24)"
@@ -124,7 +151,8 @@ Manual refresh:
   curl -X POST $BASE/admin/refresh -H "Authorization: Bearer <token>"
 
 Next step (optional): bind your own domain in the Cloudflare
-dashboard (Workers & Pages -> subscription-converter -> Settings ->
-Domains & Routes). Generated configs always use the origin they were
-requested through, so no code change is needed after binding.
+dashboard (Workers & Pages -> subscription-chain-converter ->
+Settings -> Domains & Routes). Generated configs always use the
+origin they were requested through, so no code change is needed
+after binding.
 EOF

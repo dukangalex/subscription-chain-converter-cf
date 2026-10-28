@@ -18,7 +18,8 @@ URLs never leave your account.
 
 1. Click the **Deploy to Cloudflare** button above and follow the
    flow: it clones this repo into your GitHub, creates the KV
-   namespace, and deploys the Worker.
+   namespace, the R2 bucket and the D1 database, and deploys the
+   Worker.
 2. Open your Worker URL. The converter page is live immediately;
    only the rule mirror still needs its first fill.
 3. Fill the rule mirror once (no token needed on first run):
@@ -49,11 +50,12 @@ cd subscription-chain-converter-cf
 bash deploy.sh                # or: bash deploy.sh sub.example.com
 ```
 
-The script installs dependencies, creates the KV namespace and
-writes its id into `wrangler.toml`, generates a `REFRESH_TOKEN`
-and stores it as a Worker secret, deploys, fills the rule mirror,
-and smoke-tests the deployment. It prints the token at the end —
-save it; rerunning generates a new one.
+The script installs dependencies, creates the KV namespace, the
+R2 bucket and the D1 database and writes their ids into
+`wrangler.toml`, generates a `REFRESH_TOKEN` and stores it as a
+Worker secret, deploys, fills the rule mirror, and smoke-tests
+the deployment. It prints the token at the end — save it;
+rerunning generates a new one.
 
 ### Option C — manual wrangler
 
@@ -71,7 +73,9 @@ curl -X POST https://<your-worker-domain>/admin/refresh \
 ## 快速上手（中文）
 
 1. 点页面上方的 **Deploy to Cloudflare** 按钮，按向导走完：
-   它会把仓库克隆到你的 GitHub、自动创建 KV 并部署 Worker。
+   它会把仓库克隆到你的 GitHub、自动创建 KV、R2 存储桶与
+   D1 数据库并部署 Worker（R2 存规则镜像、D1 存短链记录，
+   均为进阶存储，细节见 Advanced storage 一节）。
 2. 打开分配给你的 Worker 域名，转换页面即刻可用，只差规则
    镜像的首次填充。
 3. 首次填充规则（第一次调用不需要令牌）：
@@ -109,17 +113,48 @@ Open the Worker root in a browser — no setup beyond deploying:
 
 ## How it works
 
-Everything runs in a single Worker; storage lives in one KV
-namespace:
+Everything runs in a single Worker. KV is the baseline store;
+R2 and D1 form an optional advanced tier that the Worker uses
+automatically when the bindings exist (see the next section):
 
 | Concern | Implementation |
 |---|---|
-| Short-link records | KV keys `link:<code>` |
-| Content dedupe index | KV keys `idx:<sha256>` (same inputs → same code) |
-| Rule mirror | KV keys `rule:<dst>`, served at `GET /rules/<path>` |
-| Refresh state | KV key `meta:rules_status` |
+| Short-link records | D1 `links` table when bound, else KV keys `link:<code>` |
+| Content dedupe | D1 hash lookup (same inputs → same code), else KV keys `idx:<sha256>` |
+| Rule mirror | R2 objects when bound, else KV keys `rule:<dst>`; served at `GET /rules/<path>` |
+| Refresh state | KV key `meta:rules_status`, plus a D1 `refresh_log` row when bound |
 | Rule refresh | Cron Trigger `35 20 * * *` UTC + `POST /admin/refresh` |
 | Config skeletons | Bundled in `src/`; `__PUBLIC_ORIGIN__` is replaced per request with the request's own origin |
+
+## Advanced storage: R2 + D1
+
+Fresh one-click and `deploy.sh` deployments start on this tier
+automatically; nothing to configure. What each service holds:
+
+- **R2 — the rule mirror.** Object storage is the natural home
+  for 76 rule files including a ~16.5 MB `geoip.dat`: no KV
+  25 MB value ceiling to grow into, and reads/writes stop
+  counting against the KV quotas. R2's free tier (10 GB storage,
+  egress free) covers the mirror many times over.
+- **D1 — the link store.** Short-link records are structured
+  data: a `links` table (code, kind, target, inputs, content
+  hash, creation time) makes dedupe a single indexed lookup,
+  counts every served fetch in a `hits` column (visible in the
+  `GET /api/link/<code>` JSON), and a `refresh_log` table keeps
+  an audit history of rule refreshes. The schema is created
+  lazily by the Worker on first use — no migration step.
+  D1's free tier (5M row reads / 100k row writes per day) is far
+  beyond a personal converter's traffic.
+
+Compatibility is deliberate: the bindings are optional. A
+KV-only deployment (an older install, or the bindings removed)
+keeps working exactly as before, reads fall back D1 → KV and
+R2 → KV, rule files mirrored into KV before the R2 tier was
+enabled keep serving, and a D1 failure on any single call falls
+back to KV for that call. Enabling the tier on an existing
+deployment only takes binding the bucket/database — links
+created afterwards live in D1, and the next rule refresh lands
+the mirror in R2.
 
 Endpoints: `GET /` (page), `GET /chain`, `GET /conv`, `GET /sub`,
 `GET /version`, `POST /shorten`, `GET /c|m|s/<code>`,
@@ -135,11 +170,15 @@ sibling VPS repository:
 
 ## Free-tier feasibility
 
-KV free tier: 1 GB storage, 100k reads/day, 1k writes/day. One
-full rule refresh writes ~77 keys (76 files + status), well under
-a tenth of the daily write budget. The largest single value,
-`clash/geoip.dat` at about 16.5 MB, fits under the 25 MB KV value
-limit, and the whole mirror is well under 1 GB.
+KV free tier: 1 GB storage, 100k reads/day, 1k writes/day. On a
+KV-only deployment one full rule refresh writes ~77 keys (76
+files + status), well under a tenth of the daily write budget;
+the largest single value, `clash/geoip.dat` at about 16.5 MB,
+fits under the 25 MB KV value limit, and the whole mirror is
+well under 1 GB. On the advanced tier the mirror lives in R2
+instead (10 GB free storage, no egress fees), so refreshes cost
+a single KV write for the status key, and D1 absorbs the link
+traffic (5M row reads / 100k row writes per day free).
 
 One caveat: the Workers **free plan allows 50 subrequests per
 invocation**, while a full refresh fetches 76 files. On the free
@@ -187,7 +226,7 @@ and request URLs are not written to any log by the Worker.
 
 ```
 package.json          name, js-yaml + wrangler pins, scripts
-wrangler.toml         worker config (KV binding, cron, vars)
+wrangler.toml         worker config (KV + R2 + D1 bindings, cron, vars)
 deploy.sh             one-command deploy + smoke test
 src/worker.js         the Worker (page, ingestion, builders, KV, HTTP)
 src/skeleton_clash.json    config skeleton (groups, rules, DNS)

@@ -26,3 +26,20 @@ crons = ["35 20 * * *"]
 binding = "KV"
 id = "REPLACE_WITH_KV_ID"
 preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
+
+# Advanced storage (optional but recommended; used automatically
+# when bound, everything falls back to KV when absent):
+# R2 holds the rule mirror as objects (large binaries, no KV
+# value-size ceiling); D1 holds the short-link records, the
+# content-hash dedupe and per-link hit counts, plus a refresh log.
+# The one-click deploy flow provisions both; deploy.sh creates
+# them too. The D1 schema is created lazily by the Worker itself,
+# no migration step is needed.
+[[r2_buckets]]
+binding = "RULES"
+bucket_name = "subscription-chain-converter-rules"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "subscription-chain-converter"
+database_id = "REPLACE_WITH_D1_ID"
