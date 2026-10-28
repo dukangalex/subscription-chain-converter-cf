@@ -4,7 +4,11 @@
 //
 //   npm install   (once, for js-yaml)
 //   node test/smoke.mjs
-import worker from "../src/worker.js";
+// WORKER_PATH can point at the bundled Pages artifact
+// (../dist-pages/_worker.js) to smoke-test exactly what Pages
+// would run; it defaults to the source module.
+const worker = (await import(
+  process.env.WORKER_PATH || "../src/worker.js")).default;
 import manifest from "../src/rules_manifest.json" with { type: "json" };
 
 // ------------------------------------------------------------- KV stub
