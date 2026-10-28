@@ -39,6 +39,79 @@ class KVStub {
   }
 }
 
+// ------------------------------------------------------------- D1 stub
+// In-memory emulation of exactly the statements src/worker.js issues.
+class D1Stub {
+  constructor() {
+    this.links = new Map();
+    this.refreshLog = [];
+  }
+  prepare(sql) {
+    const db = this;
+    let args = [];
+    const stmt = {
+      bind(...a) { args = a; return stmt; },
+      async run() { db._run(sql, args); return { success: true }; },
+      async first() { return db._first(sql, args); },
+      async all() { return { results: [] }; },
+    };
+    return stmt;
+  }
+  _run(sql, a) {
+    if (sql.startsWith("CREATE")) return;
+    if (sql.includes("INSERT INTO links")) {
+      const [code, kind, target, url, entry, exit, hash, created_at] = a;
+      this.links.set(code, {
+        code, kind, target, url, entry, exit, hash, created_at, hits: 0,
+      });
+      return;
+    }
+    if (sql.includes("UPDATE links SET hits")) {
+      const row = this.links.get(a[0]);
+      if (row) row.hits++;
+      return;
+    }
+    if (sql.includes("INSERT INTO refresh_log")) {
+      this.refreshLog.push({ time: a[0], ok: a[1], failed: a[2] });
+      return;
+    }
+    throw new Error("D1Stub: unhandled SQL: " + sql.slice(0, 60));
+  }
+  _first(sql, a) {
+    if (sql.includes("SELECT code FROM links WHERE hash")) {
+      for (const row of this.links.values()) {
+        if (row.hash === a[0]) return { code: row.code };
+      }
+      return null;
+    }
+    if (sql.includes("WHERE code = ?")) {
+      const row = this.links.get(a[0]);
+      return row ? { ...row } : null;
+    }
+    throw new Error("D1Stub: unhandled query: " + sql.slice(0, 60));
+  }
+}
+
+// ------------------------------------------------------------- R2 stub
+class R2Stub {
+  constructor() {
+    this.map = new Map();
+  }
+  async put(key, value) {
+    const b = value instanceof Uint8Array
+      ? value : new Uint8Array(value);
+    this.map.set(key, b.slice());
+  }
+  async get(key) {
+    if (!this.map.has(key)) return null;
+    const b = this.map.get(key);
+    return {
+      arrayBuffer: async () =>
+        b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength),
+    };
+  }
+}
+
 // ---------------------------------------------------------- fetch stub
 const svgBytes = new TextEncoder().encode(
   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">' +
@@ -209,6 +282,69 @@ let code = null;
   check("page wires restore + one-click import",
     page.includes("/api/link/") && page.includes("install-config") &&
     page.includes("import-remote-profile"));
+}
+
+// (g) advanced tier: D1 links + R2 rule mirror when bound
+{
+  const env2 = {
+    KV: new KVStub(),
+    DB: new D1Stub(),
+    RULES: new R2Stub(),
+    REFRESH_TOKEN: ["test", "token"].join("-"),
+    EXTERNAL_SUBCONVERTER_URL: "",
+  };
+  const pending = [];
+  const ctx2 = { waitUntil(p) { pending.push(p); } };
+  const call2 = (path, opts = {}) =>
+    worker.fetch(new Request(BASE + path, opts), env2, ctx2);
+  const shorten2 = (body) => call2("/shorten", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  const r = await shorten2({ target: "singbox", entry: ENTRY, exit: EXIT });
+  const text = await r.text();
+  const code2 = text.split("/").pop();
+  check("D1: shorten returns 200 + 10-char code",
+    r.status === 200 && code2.length === 10, text);
+  check("D1: record stored in D1, not KV",
+    env2.DB.links.has(code2) && !(await env2.KV.get("link:" + code2)));
+  const g = await call2("/s/" + code2);
+  const gbody = await g.text();
+  check("D1: /s/<code> serves the chain config",
+    g.status === 200 && gbody.includes('"detour"'), `got ${g.status}`);
+  await Promise.all(pending.splice(0));
+  const api = await (await call2("/api/link/" + code2)).json();
+  check("D1: api/link reports the counted hit",
+    api.hits >= 1, JSON.stringify(api).slice(0, 200));
+  const dup = await shorten2({ target: "clash", entry: ENTRY, exit: EXIT });
+  check("D1: same content dedupes to the same code",
+    (await dup.text()).split("/").pop() === code2);
+  const c1 = await shorten2({
+    target: "singbox", entry: ENTRY, exit: EXIT, code: "d1-chain-01",
+  });
+  check("D1: custom code accepted", c1.status === 200, `got ${c1.status}`);
+  const c2 = await shorten2({
+    target: "singbox", entry: ENTRY2, exit: EXIT, code: "d1-chain-01",
+  });
+  check("D1: custom code conflict returns 409",
+    c2.status === 409, `got ${c2.status}`);
+
+  const before = await call2("/rules/clash/private.mrs");
+  check("R2: rules 404 before refresh",
+    before.status === 404, `got ${before.status}`);
+  const boot = await call2("/admin/refresh", { method: "POST" });
+  check("R2: bootstrap refresh returns 200",
+    boot.status === 200, `got ${boot.status}`);
+  check("R2: mirror object landed in R2",
+    env2.RULES.map.has("clash/private.mrs"));
+  check("D1: refresh was logged",
+    env2.DB.refreshLog.length === 1 &&
+    env2.DB.refreshLog[0].ok === manifest.length);
+  const served = await call2("/rules/clash/private.mrs");
+  check("R2: rules serve 200 after refresh",
+    served.status === 200, `got ${served.status}`);
 }
 
 console.log(failures === 0
