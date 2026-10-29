@@ -333,8 +333,11 @@
    "name": "⛓ 出口优选",
    "type": "url-test",
    "url": "https://www.gstatic.com/generate_204",
-   "interval": 180,
-   "tolerance": 100,
+   "interval": 60,
+   "tolerance": 20,
+   "lazy": false,
+   "timeout": 3000,
+   "max-failed-times": 3,
    "proxies": [
     "@EXITS@"
    ]
@@ -343,8 +346,11 @@
    "name": "⛓ 入口优选",
    "type": "url-test",
    "url": "https://www.gstatic.com/generate_204",
-   "interval": 180,
-   "tolerance": 100,
+   "interval": 60,
+   "tolerance": 20,
+   "lazy": false,
+   "timeout": 3000,
+   "max-failed-times": 3,
    "proxies": [
     "@ENTRIES@"
    ]
