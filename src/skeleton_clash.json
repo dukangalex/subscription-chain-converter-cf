@@ -334,9 +334,9 @@
    "type": "url-test",
    "url": "https://www.gstatic.com/generate_204",
    "interval": 60,
-   "tolerance": 20,
+   "tolerance": 100,
    "lazy": false,
-   "timeout": 3000,
+   "timeout": 5000,
    "max-failed-times": 3,
    "proxies": [
     "@EXITS@"
@@ -347,9 +347,9 @@
    "type": "url-test",
    "url": "https://www.gstatic.com/generate_204",
    "interval": 60,
-   "tolerance": 20,
+   "tolerance": 100,
    "lazy": false,
-   "timeout": 3000,
+   "timeout": 5000,
    "max-failed-times": 3,
    "proxies": [
     "@ENTRIES@"

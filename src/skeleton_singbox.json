@@ -8,7 +8,7 @@
    ],
    "url": "https://www.gstatic.com/generate_204",
    "interval": "1m",
-   "tolerance": 20,
+   "tolerance": 100,
    "interrupt_exist_connections": false
   },
   {
@@ -19,7 +19,7 @@
    ],
    "url": "https://www.gstatic.com/generate_204",
    "interval": "1m",
-   "tolerance": 20,
+   "tolerance": 100,
    "interrupt_exist_connections": false
   },
   {
