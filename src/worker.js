@@ -1325,7 +1325,12 @@ async function handleFetch(request, env, ctx) {
     return send(PAGE, { ctype: "text/html; charset=utf-8" });
   }
   if (path.startsWith("/rules/")) {
-    const rel = path.slice("/rules/".length);
+    let rel = path.slice("/rules/".length);
+    try {
+      rel = decodeURIComponent(rel);
+    } catch {
+      /* keep raw */
+    }
     if (!DST_SET.has(rel)) return send("not found", { status: 404 });
     const data = await getRule(env, rel);
     if (!data) return send("not found", { status: 404 });
