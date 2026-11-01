@@ -7230,6 +7230,104 @@ async function echFixBody(body) {
   }
   return body;
 }
+function chainGlyphName(name) {
+  const base = name.startsWith("\u267B") ? name.slice(2).trimStart() : name;
+  return "\u26D3 " + base;
+}
+function markChainGroupsClash(cfg) {
+  const exits = new Set((cfg.proxies || []).filter((p) => isObj(p) && p["dialer-proxy"]).map((p) => p.name));
+  const groups = cfg["proxy-groups"] || [];
+  if (!exits.size || !groups.length) return cfg;
+  const existing = new Set(groups.map((g) => g && g.name));
+  const ren = /* @__PURE__ */ new Map();
+  for (const g of groups) {
+    if (!isObj(g)) continue;
+    const name = g.name || "";
+    const mem = (g.proxies || []).filter((m) => typeof m === "string");
+    if (!mem.length || name.startsWith("\u26D3") || !mem.every((m) => exits.has(m))) continue;
+    const nw = chainGlyphName(name);
+    if (!existing.has(nw)) {
+      ren.set(name, nw);
+      g.name = nw;
+      existing.add(nw);
+    }
+  }
+  if (!ren.size) return cfg;
+  for (const g of groups) {
+    if (isObj(g) && Array.isArray(g.proxies)) {
+      g.proxies = g.proxies.map((m) => ren.get(m) ?? m);
+    }
+  }
+  if (Array.isArray(cfg.rules)) {
+    cfg.rules = cfg.rules.map((r) => {
+      if (typeof r !== "string" || !r.includes(",")) return r;
+      const parts = r.split(",");
+      const idx = parts[parts.length - 1].trim() === "no-resolve" ? parts.length - 2 : parts.length - 1;
+      const tgt = parts[idx].trim();
+      if (ren.has(tgt)) {
+        parts[idx] = ren.get(tgt);
+        return parts.join(",");
+      }
+      return r;
+    });
+  }
+  return cfg;
+}
+function finishChainClash(body) {
+  try {
+    const cfg = load(body);
+    if (isObj(cfg)) {
+      markChainGroupsClash(cfg);
+      return dump(cfg, { noRefs: true, lineWidth: 80 });
+    }
+  } catch {
+  }
+  return body;
+}
+function markChainGroupsSingbox(cfg) {
+  const exits = new Set((cfg.outbounds || []).filter((o) => isObj(o) && o.detour).map((o) => o.tag));
+  const obs = cfg.outbounds || [];
+  if (!exits.size || !obs.length) return cfg;
+  const existing = new Set(obs.map((o) => o && o.tag));
+  const ren = /* @__PURE__ */ new Map();
+  for (const o of obs) {
+    if (!isObj(o)) continue;
+    const tag = o.tag || "";
+    const mem = (o.outbounds || []).filter((m) => typeof m === "string");
+    if (!mem.length || tag.startsWith("\u26D3") || !mem.every((m) => exits.has(m))) continue;
+    const nw = chainGlyphName(tag);
+    if (!existing.has(nw)) {
+      ren.set(tag, nw);
+      o.tag = nw;
+      existing.add(nw);
+    }
+  }
+  if (!ren.size) return cfg;
+  for (const o of obs) {
+    if (!isObj(o)) continue;
+    if (Array.isArray(o.outbounds)) {
+      o.outbounds = o.outbounds.map((m) => ren.get(m) ?? m);
+    }
+    if (ren.has(o.detour)) o.detour = ren.get(o.detour);
+  }
+  const route = cfg.route || {};
+  if (ren.has(route.final)) route.final = ren.get(route.final);
+  for (const r of route.rules || []) {
+    if (isObj(r) && ren.has(r.outbound)) r.outbound = ren.get(r.outbound);
+  }
+  return cfg;
+}
+function finishChainSingbox(body) {
+  try {
+    const cfg = JSON.parse(body);
+    if (isObj(cfg)) {
+      markChainGroupsSingbox(cfg);
+      return JSON.stringify(cfg, null, 2);
+    }
+  } catch {
+  }
+  return body;
+}
 async function mergeSingbox(entryItems, exitItems, origin) {
   STAGE.cur = "entry-convert";
   const enodesRaw = await gather(entryItems);
@@ -7244,7 +7342,7 @@ async function mergeSingbox(entryItems, exitItems, origin) {
     throw new Error("\u5165\u53E3\u6216\u51FA\u53E3\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   }
   const built = ownSingboxChain(enodes, xnodes, origin);
-  return [await echFixBody(built[0]), built[1]];
+  return [await echFixBody(finishChainSingbox(built[0])), built[1]];
 }
 async function mergeClash(entryItems, exitItems, origin) {
   STAGE.cur = "entry-convert";
@@ -7259,7 +7357,8 @@ async function mergeClash(entryItems, exitItems, origin) {
   if (!eprox.length || !xprox.length) {
     throw new Error("\u5165\u53E3\u6216\u51FA\u53E3\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   }
-  return ownClashChain(eprox, xprox, origin);
+  const built = ownClashChain(eprox, xprox, origin);
+  return [finishChainClash(built[0]), built[1]];
 }
 async function buildConfig(target, items, origin) {
   const nodes = await gather(items);
