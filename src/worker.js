@@ -872,7 +872,7 @@ function markChainGroupsClash(cfg) {
     }
   }
   const chainParams = { url: "https://www.gstatic.com/generate_204",
-    interval: 60, tolerance: 100, lazy: false, timeout: 5000,
+    interval: 30, tolerance: 100, lazy: false, timeout: 5000,
     "max-failed-times": 3 };
   const entriesC = new Set((cfg.proxies || [])
     .filter((p) => isObj(p) && !p["dialer-proxy"]).map((p) => p.name));
@@ -956,7 +956,7 @@ function markChainGroupsSingbox(cfg) {
     if (o.type === "urltest" && mem.length &&
         (mem.every((m) => exits.has(m)) ||
          mem.every((m) => entriesS.has(m)))) {
-      o.interval = "1m";
+      o.interval = "30s";
       o.tolerance = 100;
     }
     if (o.tag === "默认代理" && Array.isArray(o.outbounds) &&

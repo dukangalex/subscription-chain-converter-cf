@@ -7255,7 +7255,7 @@ function markChainGroupsClash(cfg) {
   }
   const chainParams = {
     url: "https://www.gstatic.com/generate_204",
-    interval: 60,
+    interval: 30,
     tolerance: 100,
     lazy: false,
     timeout: 5e3,
@@ -7330,7 +7330,7 @@ function markChainGroupsSingbox(cfg) {
     if (!isObj(o)) continue;
     const mem = (o.outbounds || []).filter((m) => typeof m === "string");
     if (o.type === "urltest" && mem.length && (mem.every((m) => exits.has(m)) || mem.every((m) => entriesS.has(m)))) {
-      o.interval = "1m";
+      o.interval = "30s";
       o.tolerance = 100;
     }
     if (o.tag === "\u9ED8\u8BA4\u4EE3\u7406" && Array.isArray(o.outbounds) && o.outbounds.includes(EXIT_AUTO)) {
