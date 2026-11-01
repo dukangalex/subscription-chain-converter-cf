@@ -47,7 +47,7 @@ const DST_SET = new Set(MANIFEST.map((e) => e.dst));
 const STAGE = { cur: "-" };
 const ECH_CFG_CACHE = new Map();
 
-const PAGE = "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>订阅转换</title>\n<style>\n:root{color-scheme:dark}\n*{box-sizing:border-box}\nbody{font-family:system-ui,-apple-system,sans-serif;background:#111;color:#eee;margin:0;padding:24px 16px 40px}\n.wrap{max-width:600px;margin:0 auto}\nh1{font-size:22px;margin:0 0 4px}\n.sub{color:#999;font-size:14px;margin:0 0 20px}\n.card{background:#17181a;border:1px solid #2a2b2e;border-radius:12px;padding:16px;margin-bottom:16px}\n.card h2{font-size:15px;margin:0 0 10px;color:#ddd}\n.restore{display:flex;gap:8px}\n.restore input{flex:1}\n.tabs{display:flex;gap:8px;margin-bottom:16px}\n.tabs button{flex:1;padding:11px;border:1px solid #444;border-radius:10px;background:#1c1c1e;color:#bbb;font-size:15px;cursor:pointer}\n.tabs button.on{background:#0a84ff;color:#fff;border-color:#0a84ff}\nlabel{display:block;margin:16px 0 6px;color:#bbb;font-size:14px}\nlabel:first-of-type{margin-top:4px}\nselect,textarea,input{width:100%;padding:10px;border-radius:8px;border:1px solid #444;background:#1c1c1e;color:#eee;font-size:15px}\nselect:focus,textarea:focus,input:focus{outline:2px solid #0a84ff;border-color:#0a84ff}\ntextarea{resize:vertical;font-family:inherit;line-height:1.5}\n.ta-wrap{position:relative}\n.clear{position:absolute;top:6px;right:6px;padding:3px 10px;border:1px solid #444;border-radius:6px;background:#26262a;color:#aaa;font-size:12px;cursor:pointer}\n.go{margin-top:18px;width:100%;padding:13px;border:0;border-radius:10px;background:#0a84ff;color:#fff;font-size:16px;cursor:pointer}\n.go:disabled{opacity:.55;cursor:wait}\n.err{display:none;color:#ff6b60;font-size:14px;margin-top:10px}\n.ok{display:none;color:#4cc38a;font-size:14px;margin-top:10px}\n.out{margin-top:18px;display:none}\n.link-row{background:#1c1c1e;border:1px solid #333;border-radius:10px;padding:12px;margin-top:10px}\n.link-row .tag{font-size:12px;color:#0a84ff;margin-bottom:6px}\n.link-row .u{word-break:break-all;font-size:14px;color:#eee}\n.link-row .ops{display:flex;gap:8px;margin-top:10px}\n.link-row .ops button,.link-row .ops a{flex:1;padding:9px;border:0;border-radius:8px;background:#333;color:#eee;font-size:14px;text-align:center;text-decoration:none;cursor:pointer}\n.link-row .ops a.imp{background:#0a84ff;color:#fff}\n.note{color:#888;font-size:13px;margin-top:10px;line-height:1.6}\n.hide{display:none}\nfooter{color:#777;font-size:13px;margin-top:24px;line-height:1.6}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n<h1>订阅转换</h1>\n<p class=\"sub\">把节点、订阅转成客户端能直接用的订阅链接，支持普通转换与链式代理。</p>\n\n<div class=\"card\">\n<h2>已有短链？恢复上次的填写</h2>\n<div class=\"restore\">\n<input id=\"rcode\" placeholder=\"粘贴短码或完整链接\">\n<button class=\"go\" style=\"margin-top:0;width:auto;padding:10px 18px\" onclick=\"restore()\">恢复</button>\n</div>\n<div class=\"err\" id=\"rerr\">没找到这个短码</div>\n<div class=\"ok\" id=\"rok\">已恢复到下方表单，可修改后重新生成</div>\n</div>\n\n<div class=\"tabs\">\n<button id=\"tabN\" class=\"on\" onclick=\"mode('n')\">普通转换</button>\n<button id=\"tabC\" onclick=\"mode('c')\">链式代理</button>\n</div>\n\n<div id=\"secN\">\n<label>节点 / 订阅（每行一个，可任意混填）</label>\n<div class=\"ta-wrap\"><textarea id=\"u\" rows=\"6\" placeholder=\"ss://...&#10;trojan://...&#10;https://订阅地址\"></textarea><button class=\"clear\" onclick=\"clr('u')\">清空</button></div>\n<label>目标格式</label>\n<select id=\"t\">\n<option value=\"clash\">Clash / Mihomo</option>\n<option value=\"singbox\">sing-box</option>\n<option value=\"v2ray\">V2Ray</option>\n<option value=\"surge\">Surge</option>\n<option value=\"loon\">Loon</option>\n<option value=\"quanx\">Quantumult X</option>\n</select>\n<label>自定义后缀（可选，不填则随机）</label>\n<input id=\"codeN\" placeholder=\"如 home，只用字母、数字、-、_\">\n<button class=\"go\" id=\"goN\" onclick=\"genN()\">生成转换链接</button>\n<div class=\"err\" id=\"errN\"></div>\n<div class=\"out\" id=\"outN\"></div>\n</div>\n\n<div id=\"secC\" class=\"hide\">\n<label>入口（每行一个，可混填节点与订阅）</label>\n<div class=\"ta-wrap\"><textarea id=\"ein\" rows=\"4\" placeholder=\"链的第一站，如日本入口节点或入口订阅\"></textarea><button class=\"clear\" onclick=\"clr('ein')\">清空</button></div>\n<label>出口（每行一个，可混填节点与订阅）</label>\n<div class=\"ta-wrap\"><textarea id=\"eout\" rows=\"4\" placeholder=\"链的第二站，如美国出口节点或出口订阅\"></textarea><button class=\"clear\" onclick=\"clr('eout')\">清空</button></div>\n<label>目标格式</label>\n<select id=\"tc\">\n<option value=\"singbox\">sing-box</option>\n<option value=\"clash\">Mihomo / Clash</option>\n</select>\n<label>自定义后缀（可选，不填则随机）</label>\n<input id=\"codeC\" placeholder=\"如 chain，只用字母、数字、-、_\">\n<button class=\"go\" id=\"goC\" onclick=\"genC()\">生成链式订阅链接</button>\n<div class=\"err\" id=\"errC\"></div>\n<div class=\"out\" id=\"outC\"></div>\n<p class=\"note\">生成的链接可直接当订阅地址填进客户端，每次更新都会重新按入口到出口串好。短链里的字母代表格式：/m/ 是 Mihomo、/s/ 是 sing-box，同一个码改字母就能切换格式，不用重新生成。</p>\n</div>\n\n<footer>运行在你自己的 Cloudflare 账号上（Workers + KV），订阅内容只保存在你的 KV 中，不经过任何第三方。</footer>\n</div>\n<script>\nfunction $(id){return document.getElementById(id)}\nfunction mode(m){\n  $(\"secN\").className = m===\"n\" ? \"\" : \"hide\";\n  $(\"secC\").className = m===\"c\" ? \"\" : \"hide\";\n  $(\"tabN\").className = m===\"n\" ? \"on\" : \"\";\n  $(\"tabC\").className = m===\"c\" ? \"on\" : \"\";\n}\nfunction clr(id){$(id).value=\"\";$(id).focus()}\nfunction lines(id){\n  return $(id).value.split(/\\n+/).map(function(s){return s.trim()}).filter(function(s){return s.length>0});\n}\nfunction showErr(id,msg){var e=$(id);e.textContent=msg;e.style.display=\"block\"}\nfunction hideErr(id){$(id).style.display=\"none\"}\nfunction extractCode(s){\n  s=(s||\"\").trim();\n  if(!s) return \"\";\n  s=s.split(/[?#]/)[0];\n  var parts=s.split(\"/\").filter(function(p){return p.length>0});\n  return parts.length?parts[parts.length-1]:\"\";\n}\nfunction restore(){\n  var code=extractCode($(\"rcode\").value);\n  $(\"rerr\").style.display=\"none\";$(\"rok\").style.display=\"none\";\n  if(!code){$(\"rerr\").style.display=\"block\";return}\n  fetch(\"/api/link/\"+encodeURIComponent(code)).then(function(r){\n    if(!r.ok) throw new Error(\"nf\");\n    return r.json();\n  }).then(function(rec){\n    if(rec.kind===\"chain\"){\n      mode(\"c\");\n      $(\"ein\").value=(rec.entry||\"\").split(\"|\").join(\"\\n\");\n      $(\"eout\").value=(rec.exit||\"\").split(\"|\").join(\"\\n\");\n      if(rec.target) $(\"tc\").value=rec.target;\n      $(\"codeC\").value=code;\n    }else{\n      mode(\"n\");\n      $(\"u\").value=(rec.url||\"\").split(\"|\").join(\"\\n\");\n      if(rec.target) $(\"t\").value=rec.target;\n      $(\"codeN\").value=code;\n    }\n    $(\"rok\").style.display=\"block\";\n  }).catch(function(){\n    $(\"rerr\").style.display=\"block\";\n  });\n}\nfunction copyText(btn,txt){\n  function done(){var o=btn.textContent;btn.textContent=\"已复制\";setTimeout(function(){btn.textContent=o},1200)}\n  if(navigator.clipboard&&navigator.clipboard.writeText){\n    navigator.clipboard.writeText(txt).then(done).catch(function(){fallback()});\n  }else{fallback()}\n  function fallback(){\n    var ta=document.createElement(\"textarea\");\n    ta.value=txt;document.body.appendChild(ta);ta.select();\n    try{document.execCommand(\"copy\");done()}catch(e){}\n    document.body.removeChild(ta);\n  }\n}\nfunction linkRow(tag,url,imp){\n  var row=document.createElement(\"div\");row.className=\"link-row\";\n  var t=document.createElement(\"div\");t.className=\"tag\";t.textContent=tag;row.appendChild(t);\n  var u=document.createElement(\"div\");u.className=\"u\";u.textContent=url;row.appendChild(u);\n  var ops=document.createElement(\"div\");ops.className=\"ops\";\n  var cp=document.createElement(\"button\");cp.textContent=\"复制链接\";\n  cp.onclick=function(){copyText(cp,url)};\n  ops.appendChild(cp);\n  var op=document.createElement(\"button\");op.textContent=\"打开链接\";\n  op.onclick=function(){location.href=url};\n  ops.appendChild(op);\n  if(imp){\n    var a=document.createElement(\"a\");a.className=\"imp\";a.textContent=imp.label;a.href=imp.href;\n    ops.appendChild(a);\n  }\n  row.appendChild(ops);\n  return row;\n}\nfunction render(outId,rows,note){\n  var out=$(outId);out.innerHTML=\"\";\n  rows.forEach(function(r){out.appendChild(linkRow(r.tag,r.url,r.imp))});\n  if(note){\n    var n=document.createElement(\"div\");n.className=\"note\";n.textContent=note;out.appendChild(n);\n  }\n  out.style.display=\"block\";\n}\nfunction shorten(body){\n  return fetch(\"/shorten\",{method:\"POST\",headers:{\"Content-Type\":\"application/json\"},body:JSON.stringify(body)})\n    .then(function(r){return r.text().then(function(t){return {ok:r.ok,text:t}})});\n}\nfunction genN(){\n  var it=lines(\"u\");hideErr(\"errN\");\n  if(!it.length){showErr(\"errN\",\"先粘贴节点或订阅链接\");return}\n  var tg=$(\"t\").value, cd=$(\"codeN\").value.trim();\n  var body={target:tg,url:it.join(\"|\")}; if(cd)body.code=cd;\n  var btn=$(\"goN\");btn.disabled=true;btn.textContent=\"生成中…\";\n  shorten(body).then(function(res){\n    if(res.ok){\n      var url=res.text.trim(), code=extractCode(url);\n      if((tg===\"clash\"||tg===\"singbox\")&&code){\n        var rows=[\n          {tag:\"生成时格式\",url:location.origin+\"/c/\"+code},\n          {tag:\"Mihomo\",url:location.origin+\"/m/\"+code,imp:tg===\"clash\"?{label:\"一键导入 Clash\",href:\"clash://install-config?url=\"+encodeURIComponent(location.origin+\"/m/\"+code)}:null},\n          {tag:\"sing-box\",url:location.origin+\"/s/\"+code,imp:tg===\"singbox\"?{label:\"一键导入 sing-box\",href:\"sing-box://import-remote-profile?url=\"+encodeURIComponent(location.origin+\"/s/\"+code)}:null}\n        ];\n        render(\"outN\",rows,\"\");\n      }else{\n        render(\"outN\",[{tag:\"订阅链接\",url:url}],\"\");\n      }\n    }else if(cd){\n      showErr(\"errN\",res.text||\"生成失败\");\n    }else{\n      var base=(tg===\"clash\"||tg===\"singbox\")?\"/conv\":\"/sub\";\n      var u2=location.origin+base+\"?target=\"+tg+\"&url=\"+encodeURIComponent(it.join(\"|\"));\n      render(\"outN\",[{tag:\"订阅链接（长链接）\",url:u2}],\"短链服务暂不可用，已生成长链接\");\n    }\n  }).catch(function(){\n    if(cd){showErr(\"errN\",\"生成失败，请稍后再试\")}\n    else{\n      var base=(tg===\"clash\"||tg===\"singbox\")?\"/conv\":\"/sub\";\n      var u2=location.origin+base+\"?target=\"+tg+\"&url=\"+encodeURIComponent(it.join(\"|\"));\n      render(\"outN\",[{tag:\"订阅链接（长链接）\",url:u2}],\"短链服务暂不可用，已生成长链接\");\n    }\n  }).finally(function(){btn.disabled=false;btn.textContent=\"生成转换链接\"});\n}\nfunction genC(){\n  var a=lines(\"ein\"), b=lines(\"eout\");hideErr(\"errC\");\n  if(!a.length||!b.length){showErr(\"errC\",\"入口和出口都要填\");return}\n  var tg=$(\"tc\").value, cd=$(\"codeC\").value.trim();\n  var body={target:tg,entry:a.join(\"|\"),exit:b.join(\"|\")}; if(cd)body.code=cd;\n  var btn=$(\"goC\");btn.disabled=true;btn.textContent=\"生成中…\";\n  shorten(body).then(function(res){\n    if(res.ok){\n      var url=res.text.trim(), code=extractCode(url);\n      if(code){\n        var rows=[\n          {tag:\"生成时格式\",url:location.origin+\"/c/\"+code},\n          {tag:\"Mihomo\",url:location.origin+\"/m/\"+code,imp:tg===\"clash\"?{label:\"一键导入 Clash\",href:\"clash://install-config?url=\"+encodeURIComponent(location.origin+\"/m/\"+code)}:null},\n          {tag:\"sing-box\",url:location.origin+\"/s/\"+code,imp:tg===\"singbox\"?{label:\"一键导入 sing-box\",href:\"sing-box://import-remote-profile?url=\"+encodeURIComponent(location.origin+\"/s/\"+code)}:null}\n        ];\n        render(\"outC\",rows,\"\");\n      }else{\n        render(\"outC\",[{tag:\"订阅链接\",url:url}],\"\");\n      }\n    }else if(cd){\n      showErr(\"errC\",res.text||\"生成失败\");\n    }else{\n      var u2=location.origin+\"/chain?target=\"+tg+\"&entry=\"+encodeURIComponent(a.join(\"|\"))+\"&exit=\"+encodeURIComponent(b.join(\"|\"));\n      render(\"outC\",[{tag:\"订阅链接（长链接）\",url:u2}],\"短链服务暂不可用，已生成长链接\");\n    }\n  }).catch(function(){\n    if(cd){showErr(\"errC\",\"生成失败，请稍后再试\")}\n    else{\n      var u2=location.origin+\"/chain?target=\"+tg+\"&entry=\"+encodeURIComponent(a.join(\"|\"))+\"&exit=\"+encodeURIComponent(b.join(\"|\"));\n      render(\"outC\",[{tag:\"订阅链接（长链接）\",url:u2}],\"短链服务暂不可用，已生成长链接\");\n    }\n  }).finally(function(){btn.disabled=false;btn.textContent=\"生成链式订阅链接\"});\n}\n</script>\n</body>\n</html>\n";
+const PAGE = "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>订阅转换</title>\n<style>\n:root{color-scheme:dark}\n*{box-sizing:border-box}\nbody{font-family:system-ui,-apple-system,sans-serif;background:#111;color:#eee;margin:0;padding:24px 16px 40px}\n.wrap{max-width:600px;margin:0 auto}\nh1{font-size:22px;margin:0 0 4px}\n.sub{color:#999;font-size:14px;margin:0 0 20px}\n.card{background:#17181a;border:1px solid #2a2b2e;border-radius:12px;padding:16px;margin-bottom:16px}\n.card h2{font-size:15px;margin:0 0 10px;color:#ddd}\n.restore{display:flex;gap:8px}\n.restore input{flex:1}\n.tabs{display:flex;gap:8px;margin-bottom:16px}\n.tabs button{flex:1;padding:11px;border:1px solid #444;border-radius:10px;background:#1c1c1e;color:#bbb;font-size:15px;cursor:pointer}\n.tabs button.on{background:#0a84ff;color:#fff;border-color:#0a84ff}\nlabel{display:block;margin:16px 0 6px;color:#bbb;font-size:14px}\nlabel:first-of-type{margin-top:4px}\nselect,textarea,input{width:100%;padding:10px;border-radius:8px;border:1px solid #444;background:#1c1c1e;color:#eee;font-size:15px}\nselect:focus,textarea:focus,input:focus{outline:2px solid #0a84ff;border-color:#0a84ff}\ntextarea{resize:vertical;font-family:inherit;line-height:1.5}\n.ta-wrap{position:relative}\n.clear{position:absolute;top:6px;right:6px;padding:3px 10px;border:1px solid #444;border-radius:6px;background:#26262a;color:#aaa;font-size:12px;cursor:pointer}\n.go{margin-top:18px;width:100%;padding:13px;border:0;border-radius:10px;background:#0a84ff;color:#fff;font-size:16px;cursor:pointer}\n.go:disabled{opacity:.55;cursor:wait}\n.err{display:none;color:#ff6b60;font-size:14px;margin-top:10px}\n.ok{display:none;color:#4cc38a;font-size:14px;margin-top:10px}\n.out{margin-top:18px;display:none}\n.link-row{background:#1c1c1e;border:1px solid #333;border-radius:10px;padding:12px;margin-top:10px}\n.link-row .tag{font-size:12px;color:#0a84ff;margin-bottom:6px}\n.link-row .u{word-break:break-all;font-size:14px;color:#eee}\n.link-row .ops{display:flex;gap:8px;margin-top:10px}\n.link-row .ops button,.link-row .ops a{flex:1;padding:9px;border:0;border-radius:8px;background:#333;color:#eee;font-size:14px;text-align:center;text-decoration:none;cursor:pointer}\n.link-row .ops a.imp{background:#0a84ff;color:#fff}\n.note{color:#888;font-size:13px;margin-top:10px;line-height:1.6}\n.hide{display:none}\nfooter{color:#777;font-size:13px;margin-top:24px;line-height:1.6}\n</style>\n</head>\n<body>\n<div class=\"wrap\">\n<h1>订阅转换</h1>\n<p class=\"sub\">把节点、订阅转成客户端能直接用的订阅链接，支持普通转换与链式代理。</p>\n\n<div class=\"card\">\n<h2>已有短链？恢复上次的填写</h2>\n<div class=\"restore\">\n<input id=\"rcode\" placeholder=\"粘贴短码或完整链接\">\n<button class=\"go\" style=\"margin-top:0;width:auto;padding:10px 18px\" onclick=\"restore()\">恢复</button>\n</div>\n<div class=\"err\" id=\"rerr\">没找到这个短码</div>\n<div class=\"ok\" id=\"rok\">已恢复到下方表单，可修改后重新生成</div>\n</div>\n\n<div class=\"tabs\">\n<button id=\"tabN\" class=\"on\" onclick=\"mode('n')\">普通转换</button>\n<button id=\"tabC\" onclick=\"mode('c')\">链式代理</button>\n</div>\n\n<div id=\"secN\">\n<label>节点 / 订阅（每行一个，可任意混填）</label>\n<div class=\"ta-wrap\"><textarea id=\"u\" rows=\"6\" placeholder=\"ss://...&#10;trojan://...&#10;https://订阅地址\"></textarea><button class=\"clear\" onclick=\"clr('u')\">清空</button></div>\n<label>目标格式</label>\n<select id=\"t\">\n<option value=\"clash\">Clash / Mihomo</option>\n<option value=\"singbox\">sing-box</option>\n<option value=\"v2ray\">V2Ray</option>\n<option value=\"surge\">Surge</option>\n<option value=\"loon\">Loon</option>\n<option value=\"quanx\">Quantumult X</option>\n</select>\n<label>自定义后缀（可选，不填则随机）</label>\n<input id=\"codeN\" placeholder=\"如 home，只用字母、数字、-、_\">\n<button class=\"go\" id=\"goN\" onclick=\"genN()\">生成转换链接</button>\n<div class=\"err\" id=\"errN\"></div>\n<div class=\"out\" id=\"outN\"></div>\n</div>\n\n<div id=\"secC\" class=\"hide\">\n<label>入口（每行一个，可混填节点与订阅）</label>\n<div class=\"ta-wrap\"><textarea id=\"ein\" rows=\"4\" placeholder=\"链的第一站，如日本入口节点或入口订阅\"></textarea><button class=\"clear\" onclick=\"clr('ein')\">清空</button></div>\n<label>出口（每行一个，可混填节点与订阅）</label>\n<div class=\"ta-wrap\"><textarea id=\"eout\" rows=\"4\" placeholder=\"链的第二站，如美国出口节点或出口订阅\"></textarea><button class=\"clear\" onclick=\"clr('eout')\">清空</button></div>\n<label>目标格式</label>\n<select id=\"tc\">\n<option value=\"singbox\">sing-box</option>\n<option value=\"clash\">Mihomo / Clash</option>\n<option value=\"surge\">Surge</option>\n<option value=\"loon\">Loon</option>\n<option value=\"quanx\">Quantumult X</option>\n</select>\n<label>自定义后缀（可选，不填则随机）</label>\n<input id=\"codeC\" placeholder=\"如 chain，只用字母、数字、-、_\">\n<button class=\"go\" id=\"goC\" onclick=\"genC()\">生成链式订阅链接</button>\n<div class=\"err\" id=\"errC\"></div>\n<div class=\"out\" id=\"outC\"></div>\n<p class=\"note\">生成的链接可直接当订阅地址填进客户端，每次更新都会重新按入口到出口串好。短链里的字母代表格式：/m/ 是 Mihomo、/s/ 是 sing-box，同一个码改字母就能切换格式，不用重新生成。</p>\n</div>\n\n<footer>运行在你自己的 Cloudflare 账号上（Workers + KV），订阅内容只保存在你的 KV 中，不经过任何第三方。</footer>\n</div>\n<script>\nfunction $(id){return document.getElementById(id)}\nfunction mode(m){\n  $(\"secN\").className = m===\"n\" ? \"\" : \"hide\";\n  $(\"secC\").className = m===\"c\" ? \"\" : \"hide\";\n  $(\"tabN\").className = m===\"n\" ? \"on\" : \"\";\n  $(\"tabC\").className = m===\"c\" ? \"on\" : \"\";\n}\nfunction clr(id){$(id).value=\"\";$(id).focus()}\nfunction lines(id){\n  return $(id).value.split(/\\n+/).map(function(s){return s.trim()}).filter(function(s){return s.length>0});\n}\nfunction showErr(id,msg){var e=$(id);e.textContent=msg;e.style.display=\"block\"}\nfunction hideErr(id){$(id).style.display=\"none\"}\nfunction extractCode(s){\n  s=(s||\"\").trim();\n  if(!s) return \"\";\n  s=s.split(/[?#]/)[0];\n  var parts=s.split(\"/\").filter(function(p){return p.length>0});\n  return parts.length?parts[parts.length-1]:\"\";\n}\nfunction restore(){\n  var code=extractCode($(\"rcode\").value);\n  $(\"rerr\").style.display=\"none\";$(\"rok\").style.display=\"none\";\n  if(!code){$(\"rerr\").style.display=\"block\";return}\n  fetch(\"/api/link/\"+encodeURIComponent(code)).then(function(r){\n    if(!r.ok) throw new Error(\"nf\");\n    return r.json();\n  }).then(function(rec){\n    if(rec.kind===\"chain\"){\n      mode(\"c\");\n      $(\"ein\").value=(rec.entry||\"\").split(\"|\").join(\"\\n\");\n      $(\"eout\").value=(rec.exit||\"\").split(\"|\").join(\"\\n\");\n      if(rec.target) $(\"tc\").value=rec.target;\n      $(\"codeC\").value=code;\n    }else{\n      mode(\"n\");\n      $(\"u\").value=(rec.url||\"\").split(\"|\").join(\"\\n\");\n      if(rec.target) $(\"t\").value=rec.target;\n      $(\"codeN\").value=code;\n    }\n    $(\"rok\").style.display=\"block\";\n  }).catch(function(){\n    $(\"rerr\").style.display=\"block\";\n  });\n}\nfunction copyText(btn,txt){\n  function done(){var o=btn.textContent;btn.textContent=\"已复制\";setTimeout(function(){btn.textContent=o},1200)}\n  if(navigator.clipboard&&navigator.clipboard.writeText){\n    navigator.clipboard.writeText(txt).then(done).catch(function(){fallback()});\n  }else{fallback()}\n  function fallback(){\n    var ta=document.createElement(\"textarea\");\n    ta.value=txt;document.body.appendChild(ta);ta.select();\n    try{document.execCommand(\"copy\");done()}catch(e){}\n    document.body.removeChild(ta);\n  }\n}\nfunction linkRow(tag,url,imp){\n  var row=document.createElement(\"div\");row.className=\"link-row\";\n  var t=document.createElement(\"div\");t.className=\"tag\";t.textContent=tag;row.appendChild(t);\n  var u=document.createElement(\"div\");u.className=\"u\";u.textContent=url;row.appendChild(u);\n  var ops=document.createElement(\"div\");ops.className=\"ops\";\n  var cp=document.createElement(\"button\");cp.textContent=\"复制链接\";\n  cp.onclick=function(){copyText(cp,url)};\n  ops.appendChild(cp);\n  var op=document.createElement(\"button\");op.textContent=\"打开链接\";\n  op.onclick=function(){location.href=url};\n  ops.appendChild(op);\n  if(imp){\n    var a=document.createElement(\"a\");a.className=\"imp\";a.textContent=imp.label;a.href=imp.href;\n    ops.appendChild(a);\n  }\n  row.appendChild(ops);\n  return row;\n}\nfunction render(outId,rows,note){\n  var out=$(outId);out.innerHTML=\"\";\n  rows.forEach(function(r){out.appendChild(linkRow(r.tag,r.url,r.imp))});\n  if(note){\n    var n=document.createElement(\"div\");n.className=\"note\";n.textContent=note;out.appendChild(n);\n  }\n  out.style.display=\"block\";\n}\nfunction shorten(body){\n  return fetch(\"/shorten\",{method:\"POST\",headers:{\"Content-Type\":\"application/json\"},body:JSON.stringify(body)})\n    .then(function(r){return r.text().then(function(t){return {ok:r.ok,text:t}})});\n}\nfunction genN(){\n  var it=lines(\"u\");hideErr(\"errN\");\n  if(!it.length){showErr(\"errN\",\"先粘贴节点或订阅链接\");return}\n  var tg=$(\"t\").value, cd=$(\"codeN\").value.trim();\n  var body={target:tg,url:it.join(\"|\")}; if(cd)body.code=cd;\n  var btn=$(\"goN\");btn.disabled=true;btn.textContent=\"生成中…\";\n  shorten(body).then(function(res){\n    if(res.ok){\n      var url=res.text.trim(), code=extractCode(url);\n      if((tg===\"clash\"||tg===\"singbox\")&&code){\n        var rows=[\n          {tag:\"生成时格式\",url:location.origin+\"/c/\"+code},\n          {tag:\"Mihomo\",url:location.origin+\"/m/\"+code,imp:tg===\"clash\"?{label:\"一键导入 Clash\",href:\"clash://install-config?url=\"+encodeURIComponent(location.origin+\"/m/\"+code)}:null},\n          {tag:\"sing-box\",url:location.origin+\"/s/\"+code,imp:tg===\"singbox\"?{label:\"一键导入 sing-box\",href:\"sing-box://import-remote-profile?url=\"+encodeURIComponent(location.origin+\"/s/\"+code)}:null}\n        ];\n        render(\"outN\",rows,\"\");\n      }else{\n        render(\"outN\",[{tag:\"订阅链接\",url:url}],\"\");\n      }\n    }else if(cd){\n      showErr(\"errN\",res.text||\"生成失败\");\n    }else{\n      var base=(tg===\"clash\"||tg===\"singbox\")?\"/conv\":\"/sub\";\n      var u2=location.origin+base+\"?target=\"+tg+\"&url=\"+encodeURIComponent(it.join(\"|\"));\n      render(\"outN\",[{tag:\"订阅链接（长链接）\",url:u2}],\"短链服务暂不可用，已生成长链接\");\n    }\n  }).catch(function(){\n    if(cd){showErr(\"errN\",\"生成失败，请稍后再试\")}\n    else{\n      var base=(tg===\"clash\"||tg===\"singbox\")?\"/conv\":\"/sub\";\n      var u2=location.origin+base+\"?target=\"+tg+\"&url=\"+encodeURIComponent(it.join(\"|\"));\n      render(\"outN\",[{tag:\"订阅链接（长链接）\",url:u2}],\"短链服务暂不可用，已生成长链接\");\n    }\n  }).finally(function(){btn.disabled=false;btn.textContent=\"生成转换链接\"});\n}\nfunction genC(){\n  var a=lines(\"ein\"), b=lines(\"eout\");hideErr(\"errC\");\n  if(!a.length||!b.length){showErr(\"errC\",\"入口和出口都要填\");return}\n  var tg=$(\"tc\").value, cd=$(\"codeC\").value.trim();\n  var body={target:tg,entry:a.join(\"|\"),exit:b.join(\"|\")}; if(cd)body.code=cd;\n  var btn=$(\"goC\");btn.disabled=true;btn.textContent=\"生成中…\";\n  shorten(body).then(function(res){\n    if(res.ok){\n      var url=res.text.trim(), code=extractCode(url);\n      if(code){\n        var rows=[\n          {tag:\"生成时格式\",url:location.origin+\"/c/\"+code},\n          {tag:\"Mihomo\",url:location.origin+\"/m/\"+code,imp:tg===\"clash\"?{label:\"一键导入 Clash\",href:\"clash://install-config?url=\"+encodeURIComponent(location.origin+\"/m/\"+code)}:null},\n          {tag:\"sing-box\",url:location.origin+\"/s/\"+code,imp:tg===\"singbox\"?{label:\"一键导入 sing-box\",href:\"sing-box://import-remote-profile?url=\"+encodeURIComponent(location.origin+\"/s/\"+code)}:null}\n        ];\n        render(\"outC\",rows,\"\");\n      }else{\n        render(\"outC\",[{tag:\"订阅链接\",url:url}],\"\");\n      }\n    }else if(cd){\n      showErr(\"errC\",res.text||\"生成失败\");\n    }else{\n      var u2=location.origin+\"/chain?target=\"+tg+\"&entry=\"+encodeURIComponent(a.join(\"|\"))+\"&exit=\"+encodeURIComponent(b.join(\"|\"));\n      render(\"outC\",[{tag:\"订阅链接（长链接）\",url:u2}],\"短链服务暂不可用，已生成长链接\");\n    }\n  }).catch(function(){\n    if(cd){showErr(\"errC\",\"生成失败，请稍后再试\")}\n    else{\n      var u2=location.origin+\"/chain?target=\"+tg+\"&entry=\"+encodeURIComponent(a.join(\"|\"))+\"&exit=\"+encodeURIComponent(b.join(\"|\"));\n      render(\"outC\",[{tag:\"订阅链接（长链接）\",url:u2}],\"短链服务暂不可用，已生成长链接\");\n    }\n  }).finally(function(){btn.disabled=false;btn.textContent=\"生成链式订阅链接\"});\n}\n</script>\n</body>\n</html>\n";
 
 // ------------------------------------------------------------ utilities
 const _enc = new TextEncoder();
@@ -567,6 +567,774 @@ function clashEmit(node) {
   return p;
 }
 
+// ------------------------------------------- native text-format renderers
+// V2Ray share links, Surge, Loon and Quantumult X are rendered natively
+// here — no external subconverter is involved for any supported target.
+// The line formats are grounded in two public references, checked
+// 2026-11: subconverter's generators (src/generator/config/
+// subexport.cpp: proxyToSingle / proxyToSurge / proxyToLoon /
+// proxyToQuanX) and the clients' own sample configs (Quantumult X
+// sample.conf v1.5.5, the Surge manual, Loon sample configs). Where
+// the two disagree the client sample wins; every such call, and every
+// deliberate deviation, is noted at the site and in
+// NATIVE_FORMATS_REPORT.md.
+//
+// Node support follows the CLIENT, not the wish: a protocol a client
+// cannot express is skipped (never emitted as a broken line). Surge
+// has no VLESS and no TUIC (the Surge team's own statement; Mac users
+// are pointed at the External Proxy Program), Quantumult X has no
+// Hysteria2 / TUIC / Snell, share links have no Snell / SSR / SOCKS5 /
+// HTTP form. gRPC transport exists only in the share-link formats
+// (and clash / sing-box); Surge, Loon and Quantumult X skip gRPC
+// nodes.
+//
+// Quantumult X section names are the client's real ones —
+// [server_local] for server lines, [policy] for static /
+// url-latency-benchmark groups, [filter_local] for rules. (An earlier
+// design note called them [proxy_local] / [proxy_group]; Quantumult X
+// has no such sections and would silently ignore them.)
+const TEXT_TARGETS = new Set(["v2ray", "surge", "loon", "quanx"]);
+const ALL_TARGETS = new Set(["clash", "singbox", ...TEXT_TARGETS]);
+const TEST_URL = "https://www.gstatic.com/generate_204";
+const AUTO_GROUP = "自动测速";
+const CHAIN_GROUP = "⛓ 链式代理";
+
+function textToB64(s) {
+  const bytes = _enc.encode(s);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  }
+  return btoa(bin);
+}
+
+function b64UrlText(s) {
+  return textToB64(s).replace(/\+/g, "-").replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+function nodeType(node) {
+  const t = String(node.type || "").toLowerCase();
+  return t === "hy2" ? "hysteria2" : t;
+}
+
+function hostOf(node) {
+  return String(node.server ?? "");
+}
+
+function urlHost(host) {
+  return host.includes(":") && !host.startsWith("[")
+    ? `[${host}]` : host;
+}
+
+function sniOf(node) {
+  return node.servername || node.sni || "";
+}
+
+function wsHostOf(node) {
+  return ((node["ws-opts"] || {}).headers || {}).Host || "";
+}
+
+function wsPathOf(node) {
+  return (node["ws-opts"] || {}).path || "";
+}
+
+function grpcNameOf(node) {
+  return (node["grpc-opts"] || {})["grpc-service-name"] || "";
+}
+
+function netOf(node) {
+  return String(node.network || "tcp").toLowerCase();
+}
+
+function realityOf(node) {
+  return nonEmptyObj(node["reality-opts"]) ? node["reality-opts"] : null;
+}
+
+function txtName(name) {
+  // Remarks in the INI-style formats: '=' breaks Surge's parser
+  // (subconverter replaces it with '-') and ',' is the parameter
+  // separator, so both are neutralized. References are built from the
+  // same sanitized names, so groups and rules stay consistent.
+  return String(name ?? "").replace(/=/g, "-").replace(/,/g, " ")
+    .replace(/\s+/g, " ").trim();
+}
+
+// ------------------------------------------------------------ share links
+function ssPluginSip002(node) {
+  const pl = String(node.plugin || "");
+  const o = node["plugin-opts"] || {};
+  if (pl === "obfs") {
+    const parts = ["obfs-local", "obfs=" + (o.mode || "http")];
+    if (o.host) parts.push("obfs-host=" + o.host);
+    return parts.join(";");
+  }
+  if (pl === "v2ray-plugin") {
+    const parts = ["v2ray-plugin", "mode=" + (o.mode || "websocket")];
+    if (o.tls) parts.push("tls");
+    if (o.host) parts.push("host=" + o.host);
+    if (o.path) parts.push("path=" + o.path);
+    return parts.join(";");
+  }
+  return "";
+}
+
+function nodeToShareLink(node) {
+  const t = nodeType(node);
+  const host = urlHost(hostOf(node));
+  const port = portOf(node);
+  const frag = "#" + encodeURIComponent(String(node.name || t));
+  const sni = sniOf(node);
+  const scv = node["skip-cert-verify"] === true;
+  const net = netOf(node);
+  const q = (pairs) => {
+    const p = pairs.filter(([, v]) => v !== "" && v !== undefined &&
+      v !== null);
+    return p.length
+      ? "?" + p.map(([k, v]) => k + "=" + encodeURIComponent(v)).join("&")
+      : "";
+  };
+  if (t === "ss" || t === "shadowsocks") {
+    const cred = b64UrlText(
+      `${node.cipher || "aes-256-gcm"}:${node.password || ""}`);
+    const plugin = ssPluginSip002(node);
+    return `ss://${cred}@${host}:${port}` +
+      (plugin ? "/?plugin=" + encodeURIComponent(plugin) : "") + frag;
+  }
+  if (t === "vmess") {
+    const doc = {
+      v: "2", ps: String(node.name || "vmess"), add: hostOf(node),
+      port: String(port), id: node.uuid || "",
+      aid: String(intOr(node.alterId, 0)),
+      scy: node.cipher || "auto", net, type: "none",
+      host: wsHostOf(node), path: wsPathOf(node),
+      tls: node.tls ? "tls" : "",
+    };
+    if (net === "grpc") doc.path = grpcNameOf(node);
+    if (sni) doc.sni = sni;
+    if (Array.isArray(node.alpn) && node.alpn.length) {
+      doc.alpn = node.alpn.join(",");
+    }
+    if (node["client-fingerprint"]) doc.fp = node["client-fingerprint"];
+    return "vmess://" + textToB64(JSON.stringify(doc));
+  }
+  if (t === "vless") {
+    const ro = realityOf(node);
+    return `vless://${node.uuid || ""}@${host}:${port}` + q([
+      ["encryption", "none"],
+      ["security", ro ? "reality" : node.tls ? "tls" : "none"],
+      ["sni", sni], ["fp", node["client-fingerprint"] || ""],
+      ["pbk", ro ? ro["public-key"] || "" : ""],
+      ["sid", ro ? ro["short-id"] || "" : ""],
+      ["flow", node.flow || ""], ["type", net],
+      ["host", wsHostOf(node)], ["path", wsPathOf(node)],
+      ["serviceName", net === "grpc" ? grpcNameOf(node) : ""],
+      ["allowInsecure", scv ? "1" : ""],
+    ]) + frag;
+  }
+  if (t === "trojan") {
+    return `trojan://${encodeURIComponent(node.password || "")}` +
+      `@${host}:${port}` + q([
+        ["sni", sni], ["type", net], ["host", wsHostOf(node)],
+        ["path", wsPathOf(node)],
+        ["serviceName", net === "grpc" ? grpcNameOf(node) : ""],
+        ["allowInsecure", scv ? "1" : ""],
+      ]) + frag;
+  }
+  if (t === "hysteria2") {
+    return `hysteria2://${encodeURIComponent(node.password || "")}` +
+      `@${host}:${port}` + q([
+        ["sni", sni], ["obfs", node.obfs || ""],
+        ["obfs-password", node["obfs-password"] || ""],
+        ["insecure", scv ? "1" : ""],
+      ]) + frag;
+  }
+  if (t === "tuic") {
+    return `tuic://${node.uuid || ""}:` +
+      `${encodeURIComponent(node.password || "")}@${host}:${port}` + q([
+        ["sni", sni],
+        ["alpn", Array.isArray(node.alpn) ? node.alpn.join(",") : ""],
+        ["congestion_control", node["congestion-controller"] || ""],
+        ["udp_relay_mode", node["udp-relay-mode"] || ""],
+        ["allowInsecure", scv ? "1" : ""],
+      ]) + frag;
+  }
+  if (t === "anytls") {
+    return `anytls://${encodeURIComponent(node.password || "")}` +
+      `@${host}:${port}` + q([
+        ["sni", sni], ["insecure", scv ? "1" : ""],
+      ]) + frag;
+  }
+  // snell, ssr, socks5, http, wireguard, ... have no standard share
+  // link; skip rather than emit something no client can import.
+  return null;
+}
+
+function portOf(node) {
+  return toPort(node.port, 443);
+}
+
+// ------------------------------------------------------------------ Surge
+// Line style follows subconverter's proxyToSurge (", " separators,
+// key=value params). Per Surge's own manual the Hysteria2 type
+// keyword is "hysteria2" (subconverter's "hysteria" predates it).
+function surgeEmit(node) {
+  const t = nodeType(node);
+  const host = hostOf(node);
+  const port = portOf(node);
+  const sni = sniOf(node);
+  const scv = node["skip-cert-verify"] === true;
+  const net = netOf(node);
+  const parts = [];
+  const wsParams = () => {
+    parts.push("ws=true");
+    const p = wsPathOf(node);
+    if (p) parts.push("ws-path=" + p);
+    const h = wsHostOf(node);
+    if (h) parts.push("ws-headers=Host:" + h);
+  };
+  if (t === "ss" || t === "shadowsocks") {
+    parts.push("ss", host, String(port),
+      "encrypt-method=" + (node.cipher || "aes-256-gcm"),
+      "password=" + (node.password || ""));
+    const pl = String(node.plugin || "");
+    const o = node["plugin-opts"] || {};
+    if (pl === "obfs") {
+      parts.push("obfs=" + (o.mode || "http"));
+      if (o.host) parts.push("obfs-host=" + o.host);
+    } else if (pl) {
+      return null; // v2ray-plugin & friends: Surge cannot express them
+    }
+  } else if (t === "vmess") {
+    if (net !== "tcp" && net !== "ws") return null;
+    parts.push("vmess", host, String(port),
+      "username=" + (node.uuid || ""),
+      "tls=" + (node.tls ? "true" : "false"),
+      "vmess-aead=" + (intOr(node.alterId, 0) === 0 ? "true" : "false"));
+    if (net === "ws") wsParams();
+    const effSni = sni || wsHostOf(node);
+    if (node.tls && effSni) parts.push("sni=" + effSni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "trojan") {
+    if (net !== "tcp" && net !== "ws") return null;
+    parts.push("trojan", host, String(port),
+      "password=" + (node.password || ""));
+    if (net === "ws") wsParams();
+    const effSni = sni || wsHostOf(node);
+    if (effSni) parts.push("sni=" + effSni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "hysteria2") {
+    parts.push("hysteria2", host, String(port),
+      "password=" + (node.password || ""));
+    if (node.obfs) {
+      parts.push("obfs=" + node.obfs);
+      if (node["obfs-password"]) {
+        parts.push("obfs-password=" + node["obfs-password"]);
+      }
+    }
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "anytls") {
+    if (realityOf(node)) return null; // AnyTLS+Reality needs a kernel
+    parts.push("anytls", host, String(port),
+      "password=" + (node.password || ""));
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "snell") {
+    parts.push("snell", host, String(port),
+      "psk=" + (node.psk || node.password || ""));
+    const o = node["obfs-opts"] || {};
+    if (o.mode) {
+      parts.push("obfs=" + o.mode);
+      if (o.host) parts.push("obfs-host=" + o.host);
+    }
+    if (node.version) parts.push("version=" + node.version);
+  } else if (t === "socks5") {
+    parts.push(node.tls ? "socks5-tls" : "socks5", host, String(port));
+    if (node.username) parts.push("username=" + node.username);
+    if (node.password) parts.push("password=" + node.password);
+    if (node.tls && sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "http") {
+    parts.push("http", host, String(port));
+    if (node.username) parts.push("username=" + node.username);
+    if (node.password) parts.push("password=" + node.password);
+    parts.push("tls=" + (node.tls ? "true" : "false"));
+    if (scv) parts.push("skip-cert-verify=true");
+  } else {
+    // vless, tuic, ssr, wireguard, ... — Surge has no native syntax
+    // for them (see the header note); skip.
+    return null;
+  }
+  if (node.tfo === true) parts.push("tfo=true");
+  if (node.udp === true) parts.push("udp-relay=true");
+  return parts.join(", ");
+}
+
+// ------------------------------------------------------------------- Loon
+// Line style follows subconverter's proxyToLoon: "Name = type,host,
+// port,..." with positional credentials in double quotes. VLESS is
+// emitted in Loon 3.x's own syntax (transport / over-tls / flow /
+// public-key / short-id / sni), which subconverter does not generate.
+function loonEmit(node) {
+  const t = nodeType(node);
+  const host = hostOf(node);
+  const port = portOf(node);
+  const sni = sniOf(node);
+  const scv = node["skip-cert-verify"] === true;
+  const net = netOf(node);
+  const parts = [];
+  const quoted = (v) => `"${String(v ?? "")}"`;
+  if (t === "ss" || t === "shadowsocks") {
+    parts.push("Shadowsocks", host, String(port),
+      node.cipher || "aes-256-gcm", quoted(node.password || ""));
+    const pl = String(node.plugin || "");
+    const o = node["plugin-opts"] || {};
+    if (pl === "obfs") {
+      parts.push(String(o.mode || "http"));
+      if (o.host) parts.push(String(o.host));
+    } else if (pl) {
+      return null;
+    }
+  } else if (t === "ssr") {
+    parts.push("ShadowsocksR", host, String(port),
+      node.cipher || "aes-256-cfb", quoted(node.password || ""),
+      "protocol=" + (node.protocol || "origin"),
+      "protocol-param=" + (node["protocol-param"] || ""),
+      "obfs=" + (node.obfs || "plain"),
+      "obfs-param=" + (node["obfs-param"] || ""));
+  } else if (t === "vmess") {
+    if (net !== "tcp" && net !== "ws") return null;
+    const method = !node.cipher || node.cipher === "auto"
+      ? "chacha20-ietf-poly1305" : node.cipher;
+    parts.push("vmess", host, String(port), method,
+      quoted(node.uuid || ""),
+      "over-tls=" + (node.tls ? "true" : "false"));
+    if (node.tls && sni) parts.push("tls-name=" + sni);
+    if (net === "ws") {
+      parts.push("transport=ws");
+      if (wsPathOf(node)) parts.push("path=" + wsPathOf(node));
+      if (wsHostOf(node)) parts.push("host=" + wsHostOf(node));
+    } else {
+      parts.push("transport=tcp");
+    }
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "vless") {
+    if (net !== "tcp" && net !== "ws") return null;
+    parts.push("VLESS", host, String(port), quoted(node.uuid || ""));
+    if (net === "ws") {
+      parts.push("transport=ws");
+      if (wsPathOf(node)) parts.push("path=" + wsPathOf(node));
+      if (wsHostOf(node)) parts.push("host=" + wsHostOf(node));
+    } else {
+      parts.push("transport=tcp");
+    }
+    if (node.flow) parts.push("flow=" + node.flow);
+    const ro = realityOf(node);
+    if (ro) {
+      parts.push("public-key=" + quoted(ro["public-key"] || ""));
+      if (ro["short-id"]) parts.push("short-id=" + ro["short-id"]);
+    }
+    parts.push("over-tls=" + (node.tls || ro ? "true" : "false"));
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "trojan") {
+    parts.push("trojan", host, String(port), quoted(node.password || ""));
+    if (net === "ws") {
+      parts.push("transport=ws");
+      if (wsPathOf(node)) parts.push("path=" + wsPathOf(node));
+      if (wsHostOf(node)) parts.push("host=" + wsHostOf(node));
+    }
+    if (sni) parts.push("tls-name=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "hysteria2") {
+    parts.push("hysteria2", host, String(port), quoted(node.password || ""));
+    if (node.obfs) {
+      parts.push("obfs=" + node.obfs);
+      if (node["obfs-password"]) {
+        parts.push("obfs-password=" + node["obfs-password"]);
+      }
+    }
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "tuic") {
+    parts.push("tuic", host, String(port), quoted(node.uuid || ""),
+      quoted(node.password || ""));
+    const alpn = Array.isArray(node.alpn) && node.alpn.length
+      ? node.alpn[0] : "h3";
+    parts.push("alpn=" + alpn);
+    if (node["congestion-controller"]) {
+      parts.push("congestion-controller=" + node["congestion-controller"]);
+    }
+    if (node["udp-relay-mode"]) {
+      parts.push("udp-relay-mode=" + node["udp-relay-mode"]);
+    }
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "anytls") {
+    parts.push("anytls", host, String(port), quoted(node.password || ""));
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "snell") {
+    parts.push("snell", host, String(port),
+      "psk=" + (node.psk || node.password || ""));
+    const o = node["obfs-opts"] || {};
+    if (o.mode) {
+      parts.push("obfs=" + o.mode);
+      if (o.host) parts.push("obfs-host=" + o.host);
+    }
+    if (node.version) parts.push("version=" + node.version);
+  } else if (t === "socks5") {
+    parts.push("socks5", host, String(port));
+    if (node.username || node.password) {
+      parts.push(String(node.username || ""), quoted(node.password || ""));
+    }
+    parts.push("over-tls=" + (node.tls ? "true" : "false"));
+    if (node.tls && sni) parts.push("tls-name=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "http") {
+    parts.push(node.tls ? "https" : "http", host, String(port));
+    if (node.username || node.password) {
+      parts.push(String(node.username || ""), quoted(node.password || ""));
+    }
+    if (node.tls && sni) parts.push("tls-name=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else {
+    return null;
+  }
+  if (node.tfo === true) parts.push("fast-open=true");
+  if (node.udp === true) parts.push("udp=true");
+  return parts.join(",");
+}
+
+// ------------------------------------------------------------------ QuanX
+// Line style follows the official sample.conf: "type=host:port,
+// key=value, ..., tag=Name" in [server_local]; groups are [policy]
+// lines. Reality uses reality-base64-pubkey / reality-hex-shortid
+// (sample.conf), which subconverter's older QuanX generator lacks.
+function quanxEmit(node) {
+  const t = nodeType(node);
+  const host = hostOf(node);
+  const port = portOf(node);
+  const sni = sniOf(node);
+  const scv = node["skip-cert-verify"] === true;
+  const net = netOf(node);
+  const ro = realityOf(node);
+  const parts = [];
+  const realityParams = () => {
+    if (!ro) return;
+    parts.push("reality-base64-pubkey=" + (ro["public-key"] || ""));
+    if (ro["short-id"]) {
+      parts.push("reality-hex-shortid=" + ro["short-id"]);
+    }
+  };
+  // Shared vmess/vless transport mapping (sample.conf): ws -> obfs=
+  // ws|wss, plain TLS -> obfs=over-tls; obfs-host carries the SNI /
+  // WS host. gRPC has no QuanX form.
+  const obfsParams = (withTls) => {
+    if (net === "grpc") return false;
+    if (net === "ws") {
+      parts.push("obfs=" + (withTls ? "wss" : "ws"));
+      const h = wsHostOf(node) || sni;
+      if (h) parts.push("obfs-host=" + h);
+      if (wsPathOf(node)) parts.push("obfs-uri=" + wsPathOf(node));
+    } else if (withTls) {
+      parts.push("obfs=over-tls");
+      if (sni) parts.push("obfs-host=" + sni);
+    }
+    return true;
+  };
+  if (t === "ss" || t === "shadowsocks") {
+    parts.push(`shadowsocks=${host}:${port}`,
+      "method=" + (node.cipher || "aes-256-gcm"),
+      "password=" + (node.password || ""));
+    const pl = String(node.plugin || "");
+    const o = node["plugin-opts"] || {};
+    if (pl === "obfs") {
+      parts.push("obfs=" + (o.mode || "http"));
+      if (o.host) parts.push("obfs-host=" + o.host);
+    } else if (pl === "v2ray-plugin") {
+      parts.push("obfs=" + (o.tls ? "wss" : "ws"));
+      if (o.host) parts.push("obfs-host=" + o.host);
+      if (o.path) parts.push("obfs-uri=" + o.path);
+    } else if (pl) {
+      return null;
+    }
+  } else if (t === "ssr") {
+    parts.push(`shadowsocks=${host}:${port}`,
+      "method=" + (node.cipher || "aes-256-cfb"),
+      "password=" + (node.password || ""),
+      "ssr-protocol=" + (node.protocol || "origin"));
+    if (node["protocol-param"]) {
+      parts.push("ssr-protocol-param=" + node["protocol-param"]);
+    }
+    parts.push("obfs=" + (node.obfs || "plain"));
+    if (node["obfs-param"]) parts.push("obfs-host=" + node["obfs-param"]);
+  } else if (t === "vmess") {
+    const method = !node.cipher || node.cipher === "auto"
+      ? "chacha20-ietf-poly1305" : node.cipher;
+    parts.push(`vmess=${host}:${port}`, "method=" + method,
+      "password=" + (node.uuid || ""));
+    if (intOr(node.alterId, 0) !== 0) parts.push("aead=false");
+    if (!obfsParams(!!node.tls || !!ro)) return null;
+    realityParams();
+    if (scv) parts.push("tls-verification=false");
+  } else if (t === "vless") {
+    parts.push(`vless=${host}:${port}`, "method=none",
+      "password=" + (node.uuid || ""));
+    if (!obfsParams(!!node.tls || !!ro)) return null;
+    realityParams();
+    if (node.flow) parts.push("vless-flow=" + node.flow);
+    if (scv) parts.push("tls-verification=false");
+  } else if (t === "trojan") {
+    parts.push(`trojan=${host}:${port}`,
+      "password=" + (node.password || ""));
+    if (net === "ws") {
+      // sample.conf: trojan over WS uses obfs=wss and must not also
+      // carry over-tls / tls-host.
+      parts.push("obfs=wss");
+      const h = wsHostOf(node) || sni;
+      if (h) parts.push("obfs-host=" + h);
+      if (wsPathOf(node)) parts.push("obfs-uri=" + wsPathOf(node));
+      realityParams();
+    } else if (net === "tcp") {
+      parts.push("over-tls=true");
+      if (sni) parts.push("tls-host=" + sni);
+      realityParams();
+      if (scv) parts.push("tls-verification=false");
+    } else {
+      return null;
+    }
+  } else if (t === "anytls") {
+    parts.push(`anytls=${host}:${port}`,
+      "password=" + (node.password || ""), "over-tls=true");
+    if (sni) parts.push("tls-host=" + sni);
+    realityParams();
+    if (scv) parts.push("tls-verification=false");
+  } else if (t === "socks5") {
+    parts.push(`socks5=${host}:${port}`);
+    if (node.username) parts.push("username=" + node.username);
+    if (node.password) parts.push("password=" + node.password);
+    if (node.tls) {
+      parts.push("over-tls=true");
+      if (sni) parts.push("tls-host=" + sni);
+      realityParams();
+      if (scv) parts.push("tls-verification=false");
+    }
+  } else if (t === "http") {
+    parts.push(`http=${host}:${port}`);
+    if (node.username) parts.push("username=" + node.username);
+    if (node.password) parts.push("password=" + node.password);
+    if (node.tls) {
+      parts.push("over-tls=true");
+      if (sni) parts.push("tls-host=" + sni);
+      realityParams();
+      if (scv) parts.push("tls-verification=false");
+    }
+  } else {
+    // hysteria2, tuic, snell, wireguard, ... — Quantumult X cannot
+    // express them; skip.
+    return null;
+  }
+  if (node.tfo === true) parts.push("fast-open=true");
+  if (node.udp === true) parts.push("udp-relay=true");
+  return parts.join(", ");
+}
+
+// ------------------------------------------------------- text assembling
+const TEXT_EMITTERS = { surge: surgeEmit, loon: loonEmit, quanx: quanxEmit };
+
+function renderPairs(target, nodes, rename) {
+  const emit = TEXT_EMITTERS[target];
+  const out = [];
+  for (const n of nodes) {
+    const body = emit(n);
+    if (body === null) continue;
+    out.push({ name: txtName(rename ? rename(n.name) : n.name), body });
+  }
+  return out;
+}
+
+const PRIVATE_RULES = [
+  ["10.0.0.0/8"], ["100.64.0.0/10"], ["127.0.0.0/8"],
+  ["172.16.0.0/12"], ["192.168.0.0/16"],
+];
+
+function assembleSurge(entries, exits) {
+  const lines = [
+    "# Generated by subscription-chain-converter (native Surge renderer)",
+    "[General]", "loglevel = notify", "", "[Proxy]", "DIRECT = direct",
+  ];
+  for (const p of entries || []) lines.push(`${p.name} = ${p.body}`);
+  for (const p of exits) {
+    lines.push(`${p.name} = ${p.body}` +
+      (entries ? `, underlying-proxy=${ENTRY_AUTO}` : ""));
+  }
+  const en = (entries || []).map((p) => p.name);
+  const xn = exits.map((p) => p.name);
+  const all = [...en, ...xn];
+  lines.push("", "[Proxy Group]");
+  if (entries) {
+    lines.push(`${ENTRY_AUTO} = url-test, ${en.join(", ")}, ` +
+      `url=${TEST_URL}, interval=30, tolerance=100`);
+    lines.push(`${EXIT_AUTO} = url-test, ${xn.join(", ")}, ` +
+      `url=${TEST_URL}, interval=30, tolerance=100`);
+  }
+  lines.push("Proxy = select, " +
+    (entries ? `${EXIT_AUTO}, ${ENTRY_AUTO}, ` : "") +
+    `${AUTO_GROUP}, ${all.join(", ")}, DIRECT`);
+  lines.push(`${AUTO_GROUP} = url-test, ${xn.join(", ")}, ` +
+    `url=${TEST_URL}, interval=30, tolerance=100`);
+  lines.push("", "[Rule]");
+  for (const [cidr] of PRIVATE_RULES) {
+    lines.push(`IP-CIDR,${cidr},DIRECT,no-resolve`);
+  }
+  lines.push("IP-CIDR6,::1/128,DIRECT,no-resolve",
+    "GEOIP,CN,DIRECT", "FINAL,Proxy");
+  return lines.join("\n") + "\n";
+}
+
+function assembleLoon(entries, exits) {
+  const lines = [
+    "# Generated by subscription-chain-converter (native Loon renderer)",
+    "[Proxy]",
+  ];
+  for (const p of entries || []) lines.push(`${p.name} = ${p.body}`);
+  for (const p of exits) lines.push(`${p.name} = ${p.body}`);
+  const en = (entries || []).map((p) => p.name);
+  const xn = exits.map((p) => p.name);
+  const all = [...en, ...xn];
+  if (entries) {
+    // Loon's native chaining is a Chain policy (Loon 3.1+): the
+    // hops are traversed in listed order, entry group first, exit
+    // group second — the same shape as the clash dialer-proxy
+    // layout, expressed with Loon's own mechanism.
+    lines.push("", "[Proxy Chain]",
+      `${CHAIN_GROUP} = ${ENTRY_AUTO},${EXIT_AUTO},udp=true`);
+  }
+  lines.push("", "[Proxy Group]");
+  if (entries) {
+    lines.push(`${ENTRY_AUTO} = url-test,${en.join(",")},` +
+      `url=${TEST_URL},interval=30,tolerance=100`);
+    lines.push(`${EXIT_AUTO} = url-test,${xn.join(",")},` +
+      `url=${TEST_URL},interval=30,tolerance=100`);
+  }
+  lines.push("Proxy = select," +
+    (entries ? `${CHAIN_GROUP},${EXIT_AUTO},${ENTRY_AUTO},` : "") +
+    `${AUTO_GROUP},${all.join(",")},DIRECT`);
+  lines.push(`${AUTO_GROUP} = url-test,${xn.join(",")},` +
+    `url=${TEST_URL},interval=30,tolerance=100`);
+  lines.push("", "[Rule]");
+  for (const [cidr] of PRIVATE_RULES) {
+    lines.push(`IP-CIDR,${cidr},DIRECT,no-resolve`);
+  }
+  lines.push("IP-CIDR6,::1/128,DIRECT,no-resolve",
+    "GEOIP,CN,DIRECT", "FINAL,Proxy");
+  return lines.join("\n") + "\n";
+}
+
+function assembleQuanx(entries, exits) {
+  const lines = [
+    "# Generated by subscription-chain-converter (native Quantumult X renderer)",
+    "[general]", `server_check_url = ${TEST_URL}`, "", "[server_local]",
+  ];
+  for (const p of entries || []) lines.push(`${p.body}, tag=${p.name}`);
+  for (const p of exits) {
+    lines.push(`${p.body}` +
+      (entries ? `, via-server=${ENTRY_AUTO}` : "") +
+      `, tag=${p.name}`);
+  }
+  const en = (entries || []).map((p) => p.name);
+  const xn = exits.map((p) => p.name);
+  const all = [...en, ...xn];
+  lines.push("", "[policy]");
+  if (entries) {
+    lines.push(`url-latency-benchmark=${ENTRY_AUTO}, ${en.join(", ")}, ` +
+      "check-interval=30, tolerance=100");
+    lines.push(`url-latency-benchmark=${EXIT_AUTO}, ${xn.join(", ")}, ` +
+      "check-interval=30, tolerance=100");
+  }
+  lines.push("static=Proxy, " +
+    (entries ? `${EXIT_AUTO}, ${ENTRY_AUTO}, ` : "") +
+    `${AUTO_GROUP}, ${all.join(", ")}, direct`);
+  lines.push(`url-latency-benchmark=${AUTO_GROUP}, ${xn.join(", ")}, ` +
+    "check-interval=30, tolerance=100");
+  lines.push("", "[filter_local]");
+  for (const [cidr] of PRIVATE_RULES) {
+    lines.push(`ip-cidr, ${cidr}, direct`);
+  }
+  lines.push("ip6-cidr, ::1/128, direct", "geoip, cn, direct",
+    "final, Proxy");
+  return lines.join("\n") + "\n";
+}
+
+const TEXT_ASSEMBLERS = {
+  surge: assembleSurge, loon: assembleLoon, quanx: assembleQuanx,
+};
+
+const TEXT_FORMAT_NAMES = {
+  surge: "Surge", loon: "Loon", quanx: "Quantumult X",
+};
+
+function buildTextPlain(target, nodes) {
+  if (target === "v2ray") {
+    const links = [];
+    for (const n of nodes) {
+      const link = nodeToShareLink(n);
+      if (link) links.push(link);
+    }
+    if (!links.length) {
+      throw new Error("没有可输出为分享链接的节点");
+    }
+    return [textToB64(links.join("\n") + "\n"),
+      "text/plain; charset=utf-8"];
+  }
+  const pairs = renderPairs(target, nodes, null);
+  if (!pairs.length) {
+    throw new Error(`没有 ${TEXT_FORMAT_NAMES[target]} 可用的节点` +
+      "（该客户端不支持所给协议）");
+  }
+  return [TEXT_ASSEMBLERS[target](null, pairs),
+    "text/plain; charset=utf-8"];
+}
+
+async function mergeTextChain(target, entryItems, exitItems) {
+  if (target === "v2ray") {
+    // Share links have no chaining concept (no dialer-proxy, no
+    // group indirection): a chain request degrades to the plain
+    // link set of the EXIT tier — the entry hop is dropped, the
+    // exit endpoints stay reachable. Entries are not even fetched.
+    STAGE.cur = "exit-convert";
+    const xnodes = await gather(exitItems);
+    if (!xnodes.length) throw new Error("没有可用节点");
+    STAGE.cur = "merge";
+    return buildTextPlain("v2ray", xnodes);
+  }
+  STAGE.cur = "entry-convert";
+  const enodes = await gather(entryItems);
+  if (!enodes.length) throw new Error("没有可用节点");
+  STAGE.cur = "exit-convert";
+  const xnodes = await gather(exitItems);
+  if (!xnodes.length) throw new Error("没有可用节点");
+  STAGE.cur = "merge";
+  const entries = renderPairs(target, enodes,
+    (name) => clashPrefixedName("入口-", name));
+  const exits = renderPairs(target, xnodes,
+    (name) => clashPrefixedName("出口-", name));
+  if (!entries.length || !exits.length) {
+    throw new Error(`没有 ${TEXT_FORMAT_NAMES[target]} 可用的` +
+      "入口或出口节点（该客户端不支持所给协议）");
+  }
+  return [TEXT_ASSEMBLERS[target](entries, exits),
+    "text/plain; charset=utf-8"];
+}
+
+function buildChainFor(target, entry, exit_, origin) {
+  if (target === "singbox") return mergeSingbox(entry, exit_, origin);
+  if (target === "clash") return mergeClash(entry, exit_, origin);
+  return mergeTextChain(target, entry, exit_);
+}
+
 // ------------------------------------------------------- own rule system
 // The chain configs are assembled from the bundled skeletons (copied
 // verbatim from the VPS backend): groups, rules, DNS and sniffer are
@@ -1029,14 +1797,16 @@ async function mergeClash(entryItems, exitItems, origin) {
 }
 
 // ------------------------------------------------------- plain conversion
-// The VPS service builds plain (non-chain) conversions from its
-// captured subconverter templates, which are not part of this port.
-// Here a plain conversion is assembled from the same own skeleton
-// with the entry tier removed: nodes form the exit/manual tiers and
-// the ⛓ 入口优选 group (and every reference to it) is dropped.
+// Plain (non-chain) clash / sing-box conversions are assembled from
+// the same own skeleton with the entry tier removed: nodes form the
+// exit/manual tiers and the ⛓ 入口优选 group (and every reference to
+// it) is dropped. The four text targets are rendered natively by the
+// renderers above (buildTextPlain), so no target needs an external
+// subconverter anymore.
 async function buildConfig(target, items, origin) {
   const nodes = await gather(items);
   if (!nodes.length) throw new Error("没有可用节点");
+  if (TEXT_TARGETS.has(target)) return buildTextPlain(target, nodes);
   if (target === "singbox") {
     const emitted = nodes.map((n) => {
       const o = sbLeafFix(sbEmit(n));
@@ -1374,10 +2144,10 @@ async function proxyToConverter(env, pathAndQuery, ua) {
   const base = (env.EXTERNAL_SUBCONVERTER_URL || "").replace(/\/+$/, "");
   if (!base) {
     return send(
-      "This Cloudflare Workers variant has no built-in subconverter " +
-      "for targets other than clash/singbox. Set the " +
-      "EXTERNAL_SUBCONVERTER_URL variable to an external subconverter " +
-      "base URL to enable those formats.", { status: 501 });
+      "Unknown target format. clash, singbox, v2ray, surge, loon " +
+      "and quanx are rendered natively by this converter; any other " +
+      "target needs the EXTERNAL_SUBCONVERTER_URL variable set to " +
+      "an external subconverter base URL.", { status: 501 });
   }
   try {
     const resp = await fetch(base + pathAndQuery, {
@@ -1416,7 +2186,7 @@ async function handleShorten(request, env) {
   }
   let record;
   if (entry || exit_) {
-    if (!["singbox", "clash"].includes(target) || !entry || !exit_) {
+    if (!ALL_TARGETS.has(target) || !entry || !exit_) {
       return send("bad request", { status: 400 });
     }
     record = { kind: "chain", target, entry, exit: exit_ };
@@ -1527,9 +2297,8 @@ async function handleFetch(request, env, ctx) {
     if (rec.kind === "chain") {
       STAGE.cur = "start";
       try {
-        const [body, ctype] = want === "singbox"
-          ? await mergeSingbox(rec.entry, rec.exit, origin)
-          : await mergeClash(rec.entry, rec.exit, origin);
+        const [body, ctype] = await buildChainFor(
+          want, rec.entry, rec.exit, origin);
         return send(body, { ctype });
       } catch (e) {
         return send(`chain generate failed at ${STAGE.cur}: ${errMsg(e)}`,
@@ -1538,7 +2307,7 @@ async function handleFetch(request, env, ctx) {
     }
     const target = want;
     const items = rec.url || "";
-    if ((target === "singbox" || target === "clash") && items) {
+    if (ALL_TARGETS.has(target) && items) {
       try {
         const [body, ctype] = await buildConfig(target, items, origin);
         return send(body, { ctype });
@@ -1556,7 +2325,7 @@ async function handleFetch(request, env, ctx) {
   if (path === "/sub") {
     const target = url.searchParams.get("target") || "";
     const items = url.searchParams.get("url") || "";
-    if ((target === "singbox" || target === "clash") && items) {
+    if (ALL_TARGETS.has(target) && items) {
       try {
         const [body, ctype] = await buildConfig(target, items, origin);
         return send(body, { ctype });
@@ -1570,7 +2339,7 @@ async function handleFetch(request, env, ctx) {
   if (path === "/conv") {
     const target = url.searchParams.get("target") || "";
     const items = url.searchParams.get("url") || "";
-    if (!["singbox", "clash"].includes(target) || !items) {
+    if (!ALL_TARGETS.has(target) || !items) {
       return send("bad request", { status: 400 });
     }
     try {
@@ -1584,15 +2353,15 @@ async function handleFetch(request, env, ctx) {
     const target = url.searchParams.get("target") || "";
     const entry = url.searchParams.get("entry") || "";
     const exit_ = url.searchParams.get("exit") || "";
-    if (!["singbox", "clash"].includes(target) || !entry || !exit_) {
-      return send("bad request: need target=singbox|clash, entry, exit",
+    if (!ALL_TARGETS.has(target) || !entry || !exit_) {
+      return send(
+        "bad request: need target=clash|singbox|v2ray|surge|loon|quanx, entry, exit",
         { status: 400 });
     }
     STAGE.cur = "start";
     try {
-      const [body, ctype] = target === "singbox"
-        ? await mergeSingbox(entry, exit_, origin)
-        : await mergeClash(entry, exit_, origin);
+      const [body, ctype] = await buildChainFor(target, entry, exit_,
+        origin);
       return send(body, { ctype });
     } catch (e) {
       return send(`chain generate failed at ${STAGE.cur}: ${errMsg(e)}`,
