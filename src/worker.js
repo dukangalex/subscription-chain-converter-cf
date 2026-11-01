@@ -871,6 +871,26 @@ function markChainGroupsClash(cfg) {
       existing.add(nw);
     }
   }
+  const chainParams = { url: "https://www.gstatic.com/generate_204",
+    interval: 60, tolerance: 100, lazy: false, timeout: 5000,
+    "max-failed-times": 3 };
+  const entriesC = new Set((cfg.proxies || [])
+    .filter((p) => isObj(p) && !p["dialer-proxy"]).map((p) => p.name));
+  for (const g of groups) {
+    if (!isObj(g)) continue;
+    const mem = (g.proxies || []).filter((m) => typeof m === "string");
+    if (["url-test", "fallback", "load-balance"].includes(g.type) &&
+        mem.length &&
+        (mem.every((m) => exits.has(m)) ||
+         mem.every((m) => entriesC.has(m)))) {
+      Object.assign(g, chainParams);
+    }
+    if (g.name === "默认代理" && Array.isArray(g.proxies) &&
+        g.proxies.includes(EXIT_AUTO)) {
+      g.proxies = [EXIT_AUTO,
+        ...g.proxies.filter((m) => m !== EXIT_AUTO)];
+    }
+  }
   if (!ren.size) return cfg;
   for (const g of groups) {
     if (isObj(g) && Array.isArray(g.proxies)) {
@@ -925,6 +945,24 @@ function markChainGroupsSingbox(cfg) {
       ren.set(tag, nw);
       o.tag = nw;
       existing.add(nw);
+    }
+  }
+  const entriesS = new Set(obs
+    .filter((o) => isObj(o) && !o.detour && !("outbounds" in o))
+    .map((o) => o.tag));
+  for (const o of obs) {
+    if (!isObj(o)) continue;
+    const mem = (o.outbounds || []).filter((m) => typeof m === "string");
+    if (o.type === "urltest" && mem.length &&
+        (mem.every((m) => exits.has(m)) ||
+         mem.every((m) => entriesS.has(m)))) {
+      o.interval = "1m";
+      o.tolerance = 100;
+    }
+    if (o.tag === "默认代理" && Array.isArray(o.outbounds) &&
+        o.outbounds.includes(EXIT_AUTO)) {
+      o.outbounds = [EXIT_AUTO,
+        ...o.outbounds.filter((m) => m !== EXIT_AUTO)];
     }
   }
   if (!ren.size) return cfg;
