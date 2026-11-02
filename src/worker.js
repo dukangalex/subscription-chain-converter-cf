@@ -2092,7 +2092,7 @@ async function buildConfig(target, items, origin) {
       });
       sbPairs.push({
         type: "selector", tag: rname,
-        outbounds: [...members, autoTag],
+        outbounds: [autoTag, ...members],
         interrupt_exist_connections: false,
       });
       sbSelectTags.push(rname);
@@ -2155,7 +2155,7 @@ async function buildConfig(target, items, origin) {
       name: rname, type: "select", interval: 600, timeout: 3000,
       url: "https://www.apple.com/library/test/success.html",
       lazy: true, "max-failed-times": 3, "empty-fallback": "REJECT",
-      proxies: [...members, autoName],
+      proxies: [autoName, ...members],
     });
     regionSelectNames.push(rname);
   };
