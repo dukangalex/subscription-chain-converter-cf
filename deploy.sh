@@ -40,8 +40,12 @@ npm install --no-audit --no-fund
 WR="npx wrangler"
 
 # --------------------------------------------------------- KV namespace
-# Create the KV namespace (and its preview sibling) unless the real
-# ids are already written into wrangler.toml.
+# Create the KV namespace (and its preview sibling) unless the ids
+# are already filled in in wrangler.toml. The shipped file keeps
+# the id lines commented out so the one-click deploy flow can
+# provision the namespace itself (real placeholder ids are
+# rejected by the deploy API); this script uncomments them with
+# the real ids.
 if grep -q "REPLACE_WITH_KV_ID" wrangler.toml; then
   log "creating KV namespace"
   OUT="$($WR kv namespace create KV 2>&1)" \
@@ -50,17 +54,17 @@ $OUT"
   KV_ID="$(printf '%s' "$OUT" | grep -oE '"[0-9a-f]{32}"' | head -1 | tr -d '"')"
   [ -n "$KV_ID" ] || die "could not parse KV id from wrangler output:
 $OUT"
-  sed -i.bak "s/REPLACE_WITH_KV_ID/$KV_ID/" wrangler.toml
+  sed -i.bak "s|# id = \"REPLACE_WITH_KV_ID\"|id = \"$KV_ID\"|" wrangler.toml
   log "KV id written to wrangler.toml"
 fi
 if grep -q "REPLACE_WITH_KV_PREVIEW_ID" wrangler.toml; then
   OUT="$($WR kv namespace create KV --preview 2>&1 || true)"
   PV_ID="$(printf '%s' "$OUT" | grep -oE '"[0-9a-f]{32}"' | head -1 | tr -d '"')"
   if [ -n "$PV_ID" ]; then
-    sed -i.bak "s/REPLACE_WITH_KV_PREVIEW_ID/$PV_ID/" wrangler.toml
+    sed -i.bak "s|# preview_id = \"REPLACE_WITH_KV_PREVIEW_ID\"|preview_id = \"$PV_ID\"|" wrangler.toml
     log "KV preview id written to wrangler.toml"
   else
-    sed -i.bak "s/REPLACE_WITH_KV_PREVIEW_ID/$KV_ID/" wrangler.toml
+    sed -i.bak "s|# preview_id = \"REPLACE_WITH_KV_PREVIEW_ID\"|preview_id = \"$KV_ID\"|" wrangler.toml
     log "no separate preview namespace; reusing the production id"
   fi
 fi
@@ -86,7 +90,7 @@ if grep -q "REPLACE_WITH_D1_ID" wrangler.toml; then
   fi
   [ -n "$D1_ID" ] || die "could not create or find the D1 database:
 $OUT"
-  sed -i.bak "s/REPLACE_WITH_D1_ID/$D1_ID/" wrangler.toml
+  sed -i.bak "s|# database_id = \"REPLACE_WITH_D1_ID\"|database_id = \"$D1_ID\"|" wrangler.toml
   rm -f wrangler.toml.bak
   log "D1 id written to wrangler.toml"
 fi

@@ -17,8 +17,9 @@ automatically. If you prefer a fork you can push changes back to,
 fork the repo first and deploy from your fork instead — every
 path below works identically from a fork: change the clone URL,
 or select your fork in the Pages Git integration. Nothing in the
-repo is tied to the original account (all ids in `wrangler.toml`
-are placeholders the deploy flows replace).
+repo is tied to the original account (no account-specific ids
+are baked into `wrangler.toml`; the deploy flows provision the
+storage and fill the ids in).
 
 ## Quick start
 

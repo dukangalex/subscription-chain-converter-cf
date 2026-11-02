@@ -28,14 +28,18 @@ pages_build_output_dir = "dist-pages"
 crons = ["35 20 * * *"]
 
 # KV namespace holding link:<code>, idx:<hash>, rule:<dst> and
-# meta:rules_status. deploy.sh creates the namespaces and replaces
-# the placeholder ids below with the real ones; to do it by hand:
+# meta:rules_status. The id lines below stay commented out: the
+# one-click deploy flow provisions a namespace for this binding
+# itself, and real placeholder ids would be rejected by the
+# deploy API (error 10042). deploy.sh creates the namespaces and
+# uncomments these lines with the real ids filled in; to do it by
+# hand instead:
 #   npx wrangler kv namespace create KV
 #   npx wrangler kv namespace create KV --preview
 [[kv_namespaces]]
 binding = "KV"
-id = "REPLACE_WITH_KV_ID"
-preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
+# id = "REPLACE_WITH_KV_ID"
+# preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
 
 # Advanced storage (optional but recommended; used automatically
 # when bound, everything falls back to KV when absent):
@@ -52,4 +56,6 @@ bucket_name = "subscription-chain-converter-rules"
 [[d1_databases]]
 binding = "DB"
 database_name = "subscription-chain-converter"
-database_id = "REPLACE_WITH_D1_ID"
+# database_id commented out for the same reason as the KV ids
+# above: provisioned by the one-click flow, filled in by deploy.sh.
+# database_id = "REPLACE_WITH_D1_ID"
