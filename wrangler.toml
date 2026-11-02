@@ -13,13 +13,15 @@ compatibility_date = "2026-10-01"
 # refresh options.
 pages_build_output_dir = "dist-pages"
 
-[vars]
-# Optional: base URL of an external subconverter, used only to proxy
-# /sub requests whose target is neither clash nor singbox (the formats
-# this variant cannot build itself). Leave empty to answer those
-# requests with 501. REFRESH_TOKEN is NOT a var: it is a secret, set
-# with `npx wrangler secret put REFRESH_TOKEN` (deploy.sh does it).
-EXTERNAL_SUBCONVERTER_URL = ""
+# Optional variable (intentionally NOT declared, so the one-click
+# deploy flow never demands a value for it): setting
+# EXTERNAL_SUBCONVERTER_URL to the base URL of your own external
+# subconverter makes /sub proxy requests whose target is none of
+# the six natively rendered formats (clash, singbox, v2ray, surge,
+# loon, quanx); unset, those requests return 501. Declare it under
+# a [vars] section or in the dashboard only if you need it.
+# REFRESH_TOKEN is NOT a var either: it is a secret, set with
+# `npx wrangler secret put REFRESH_TOKEN` (deploy.sh does it).
 
 # Daily rule-mirror refresh, 04:35 CST (20:35 UTC).
 [triggers]

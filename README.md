@@ -265,10 +265,13 @@ fits comfortably in the free tier.
 
 ## Differences and limits
 
-- **Two formats are built natively** (clash, sing-box). The
-  v2ray/surge/loon/quanx targets of `/sub` are proxied to an
-  external subconverter you provide via
-  `EXTERNAL_SUBCONVERTER_URL`; unset, those requests return 501.
+- **All six formats are built natively** (clash, sing-box,
+  v2ray, surge, loon, quanx) — no external converter is involved.
+  A `/sub` target outside those six can optionally be proxied to
+  your own external subconverter by setting the
+  `EXTERNAL_SUBCONVERTER_URL` variable; unset, those requests
+  return 501. The variable is deliberately not predeclared, so
+  the one-click deploy never asks for it.
 - **No script fallback.** If the built-in builder cannot build a
   config, the request fails with 502 instead of degrading to a
   secondary path.
