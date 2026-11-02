@@ -264,19 +264,167 @@ const REGION_RES = REGION_DEFS.map(([name, , src]) => [name, new RegExp(src, "i"
 // strongExcludeFilter).
 const STRONG_INFO =
   /剩余|已用|距离下次|下次重置|套餐|到期|过期|官网|官址|客服|订阅|工单|邮箱|网址|流量\s*[:：]|traffic\s*[:：]|\bexpire\b|\bhttps?:\/\/|t\.me\//iu;
-function regionPlan(names) {
-  const matched = new Set();
-  const regions = [];
-  for (const [rname, re] of REGION_RES) {
-    const members = names.filter(
-      (n) => !STRONG_INFO.test(n) && re.test(n));
-    if (members.length) {
-      regions.push({ name: rname, members });
-      for (const m of members) matched.add(m);
+// Full info-node filter (HiClash excludeFilter): names matching it
+// are dropped from plain conversions unless they match a region.
+const EXCLUDE_FILTER = new RegExp("\u7fa4|\u8fd4\u5229|\u5faa\u73af|\u5b98\u7f51|\u5ba2\u670d|\u7f51\u7ad9|\u7f51\u5740|\u83b7\u53d6|\u8ba2\u9605|\u6d41\u91cf|\u5230\u671f|\u673a\u573a|\u4e0b\u6b21|\u7248\u672c|\u5b98\u5740|\u5907\u7528|\u8fc7\u671f|\u5df2\u7528|\u8054\u7cfb|\u90ae\u7bb1|\u5de5\u5355|\u8d29\u5356|\u901a\u77e5|\u5012\u5356|\u9632\u6b62|\u56fd\u5185|\u5730\u5740|\u9891\u9053|\u7535\u62a5|\u65e0\u6cd5|\u8bf4\u660e|\u4f7f\u7528|\u63d0\u793a|\u8bbf\u95ee|\u652f\u6301|\u6559\u7a0b|\u5173\u6ce8|\u66f4\u65b0|\u4f5c\u8005|\u52a0\u5165|\u8d85\u65f6|\u6536\u85cf|\u4f18\u60e0|\u798f\u5229|\u9080\u8bf7|\u597d\u53cb|\u5931\u8054|\u9009\u62e9|\u5269\u4f59|\u516c\u76ca|\u53d1\u5e03|DIZTNA|\u901a\u8def|\u767b\u5f55|\u7981\u6b62|\u5b9a\u65f6|\u6e20\u9053|\u7262\u8bb0|\u6c38\u4e45|\u4f59\u989d|\u9601\u4e0b|\u672c\u7ad9|\u5237\u65b0|\u5bfc\u822a|\u5efa\u8bae|\u91cd\u7f6e|\u4ee5\u4e0b|\u8fc7\u6ee4|\u26a0\ufe0f|@|t\\.me\\/\\+|\\bexpire\\b|\\bhttps?:\\/\\/|\\btraffic\\b", "iu");
+// Traditional → Simplified folding for region matching only (names
+// themselves are never rewritten), ported from the script's
+// traditionalToSimplified map: airport names often use Traditional
+// forms while the region regexes are Simplified.
+const TRAD2SIMP = {
+  "灣": "湾", "國": "国", "臺": "台", "東": "东", "島": "岛",
+  "亞": "亚", "倫": "伦", "蘭": "兰", "馬": "马", "賓": "宾",
+  "紐": "纽", "約": "约", "達": "达", "磯": "矶", "聖": "圣",
+  "門": "门", "韓": "韩", "羅": "罗", "蘇": "苏", "聯": "联",
+  "愛": "爱", "爾": "尔", "烏": "乌", "薩": "萨", "華": "华",
+  "頓": "顿", "維": "维", "緬": "缅", "廣": "广",
+};
+const TRAD_RE = new RegExp(`[${Object.keys(TRAD2SIMP).join("")}]`, "g");
+function foldTrad(text) {
+  return String(text).replace(TRAD_RE, (ch) => TRAD2SIMP[ch]);
+}
+// Rate / residential pseudo-regions (HiClash rateRegionDefinitions +
+// homeRegionDefinitions): a node may join one of these IN ADDITION
+// to its geographic region.
+const ICON_BASE =
+  "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/";
+const EXTRA_DEFS = [
+  { name: "低倍率节点", icon: ICON_BASE + "Available.svg",
+    re: new RegExp("^(?!.*(?:\u5269|\u671f)).*(?:(?<!\\d)0\\.[0-5]|(?<=[ \\[\\(|\uff5c\u4e28\u2223\u2503\\-\u2010\u2013\u2014\u2212\uff0d\ufe63])0[*\u00d7\u2715\u2716\u2a2f\u2a09x\u500d])|(?:(?<=[ \\[\\(|\uff5c\u4e28\u2223\u2503\\-\u2010\u2013\u2014\u2212\uff0d\ufe63])[*\u00d7\u2715\u2716\u2a2f\u2a09x]0(?=[ \\)\\]]|\u500d|$))|^(?!.*(?:\u5ba2\u6237\u7aef|\u8f6f\u4ef6)).*\u4e0b\u8f7d|\u4f4e\u500d|\u514d\u8d39|(?<![A-Za-z])free(?![A-Za-z])", "i") },
+  { name: "高倍率节点", icon: ICON_BASE + "Airport.svg",
+    re: new RegExp("(?<=[ \\[\\(|\uff5c\u4e28\u2223\u2503\\-\u2010\u2013\u2014\u2212\uff0d\ufe63])((?:[*\u00d7\u2715\u2716\u2a2f\u2a09x]\\s*(?:[2-9]\\d*|[1-9]\\d+)(?:\\.\\d+)?)|(?:(?<![\\d.])(?:[2-9]\\d*|[1-9]\\d+)(?:\\.\\d+)?\\s*(?:\u500d|[*\u00d7\u2715\u2716\u2a2f\u2a09x])))", "i") },
+  { name: "家宽节点", icon: ICON_BASE + "Server.svg",
+    re: new RegExp("\u5bb6\u5bbd|\u4f4f\u5b85|\u539f\u751f\\s*IP|\u5bb6\u5ead\u5bbd\u5e26|\\bISP\\b|\\bRES\\b|residential", "i") },
+];
+const AUTO_ICON = ICON_BASE + "Auto.svg";
+const OTHER_ICON = ICON_BASE + "WorldMap.svg";
+// Region assignment follows the script's getMatchedRegions: matches
+// are computed on the folded name; when several geographic regions
+// match, only the longest match(es) win. Rate / home matches are
+// independent and always kept.
+function matchedRegions(name) {
+  const text = foldTrad(name);
+  let best = -1;
+  const hits = [];
+  for (let i = 0; i < REGION_RES.length; i++) {
+    const m = text.match(REGION_RES[i][1]);
+    if (m) {
+      hits.push([i, m[0].length]);
+      if (m[0].length > best) best = m[0].length;
     }
   }
-  const other = names.filter((n) => !matched.has(n) && !STRONG_INFO.test(n));
-  return { regions, other };
+  const geo = hits.filter(([, len]) => len === best).map(([i]) => i);
+  const extras = [];
+  for (let i = 0; i < EXTRA_DEFS.length; i++) {
+    if (EXTRA_DEFS[i].re.test(text)) extras.push(i);
+  }
+  return { geo, extras };
+}
+// Ordered region pairs for a node list: geographic pairs in
+// definition order, then rate / home pairs, then the catch-all
+// "其他节点" pair for nodes with no geographic match. Strong info
+// names join no pair at all.
+function regionPlan(names) {
+  const buckets = new Map();
+  const add = (key, pname, icon, n) => {
+    if (!buckets.has(key)) {
+      buckets.set(key, { name: pname, icon, members: [] });
+    }
+    buckets.get(key).members.push(n);
+  };
+  const matched = new Set();
+  for (const n of names) {
+    if (STRONG_INFO.test(n)) continue;
+    const { geo, extras } = matchedRegions(n);
+    for (const i of geo) add("g" + i, REGION_DEFS[i][0], "", n);
+    for (const i of extras) add("x" + i, EXTRA_DEFS[i].name, EXTRA_DEFS[i].icon, n);
+    if (geo.length) matched.add(n);
+  }
+  const pairs = [];
+  for (let i = 0; i < REGION_DEFS.length; i++) {
+    const b = buckets.get("g" + i);
+    if (b) pairs.push(b);
+  }
+  for (let i = 0; i < EXTRA_DEFS.length; i++) {
+    const b = buckets.get("x" + i);
+    if (b) pairs.push(b);
+  }
+  const other = names.filter(
+    (n) => !matched.has(n) && !STRONG_INFO.test(n));
+  if (other.length) {
+    pairs.push({ name: "其他节点", icon: OTHER_ICON, members: other });
+  }
+  const selectNames = pairs.map((q) => q.name);
+  const pairNames = [];
+  for (const q of pairs) pairNames.push(q.name + "-自动选择", q.name);
+  return { pairs, selectNames, pairNames };
+}
+// The script's node filter for plain conversions: strong info names
+// are dropped outright; other info-style names are dropped unless
+// they match a region; real nodes always pass.
+function keepPlainNode(name) {
+  if (STRONG_INFO.test(name)) return false;
+  if (matchedRegions(name).geo.length) return true;
+  return !EXCLUDE_FILTER.test(name);
+}
+const INVISIBLE_CHARS =
+  /[\u00AD\u180E\u200B\u200E\u200F\u202A-\u202E\u2060-\u206F\uFEFF\u115F\u1160\u3164\uFFA0]/g;
+const FLAG_RE = /[\u{1F1E6}-\u{1F1FF}]{2}/u;
+// The script's normalizeProxyName: strip invisible characters, then
+// move (or complete) the region flag to the front of the name.
+function normalizePlainName(name) {
+  const clean = String(name).replace(INVISIBLE_CHARS, "");
+  const flag = clean.match(FLAG_RE)?.[0];
+  const rest = (flag ? clean.replace(flag, "") : clean)
+    .replace(/\s+/g, " ").trim();
+  const { geo } = matchedRegions(clean);
+  const regionFlag = flag || (geo.length ? REGION_DEFS[geo[0]][1] : undefined);
+  return regionFlag ? `${regionFlag} ${rest}` : rest;
+}
+const RESERVED_NAMES = new Set([
+  "默认代理", "GLOBAL", "手动选择", "自动选择", "负载均衡", "故障转移",
+  "直连", "漏网之鱼", "远控工具", "AdBlock", "FCM", "YouTube", "Google",
+  "Claude", "ClaudeAI", "GitHub", "AI", "Microsoft", "Apple", "Telegram",
+  "Steam", "TikTok", "Twitter", "Meta", "Line", "Netflix", "Emby",
+  "PikPak", "Spotify", "Crypto", "EHentai", "链式中转", "其他节点",
+  "REJECT", "REJECT-DROP", "PASS", "DIRECT",
+  "🇨🇳 直连 | 双栈", "🇨🇳 直连 | IPv4优先", "🇨🇳 直连 | IPv6优先",
+  "🇨🇳 直连 | 仅IPv4", "🇨🇳 直连 | 仅IPv6",
+  ...REGION_DEFS.map(([n]) => n),
+  ...REGION_DEFS.map(([n]) => n + "-自动选择"),
+  ...EXTRA_DEFS.map((d) => d.name),
+  ...EXTRA_DEFS.map((d) => d.name + "-自动选择"),
+  "其他节点-自动选择",
+]);
+// Plain-conversion node preparation, mirroring the script's
+// filterAndNormalizeProxies: drop built-in / info nodes, normalize
+// names, guard reserved names, dedupe keeping the first occurrence.
+// Returns the kept nodes plus the original → final name map (for
+// dialer-proxy reference repair).
+function preparePlainNodes(nodes) {
+  const kept = [];
+  const renameMap = new Map();
+  const used = new Set();
+  for (const node of nodes) {
+    const raw = String(node.name ?? "");
+    const t = String(node.type ?? "").toLowerCase();
+    if (t === "direct" || t === "reject") continue;
+    if (!keepPlainNode(raw)) continue;
+    let nn = normalizePlainName(raw);
+    if (RESERVED_NAMES.has(nn)) {
+      let cand = "节点-" + nn;
+      let i = 2;
+      while (used.has(cand) || RESERVED_NAMES.has(cand)) {
+        cand = "节点-" + nn + "-" + i++;
+      }
+      nn = cand;
+    }
+    if (!renameMap.has(raw)) renameMap.set(raw, nn);
+    if (used.has(nn)) continue;
+    used.add(nn);
+    kept.push(nn === raw ? node : { ...node, name: nn });
+  }
+  return { nodes: kept, renameMap };
 }
 const MEMBER_TOKENS = new Set(["@ENTRIES@", "@EXITS@", "@ALL@"]);
 const LINK_ALPHABET =
@@ -2048,8 +2196,13 @@ async function buildConfig(target, items, origin) {
   const nodes = await gather(items);
   if (!nodes.length) throw new Error("没有可用节点");
   if (TEXT_TARGETS.has(target)) return buildTextPlain(target, nodes);
+  // Plain clash / sing-box conversions follow the HiClash script's
+  // design: info nodes are filtered out and names normalized before
+  // anything is emitted (chain conversions keep their own pipeline).
+  const plain = preparePlainNodes(nodes);
+  if (!plain.nodes.length) throw new Error("没有可用节点");
   if (target === "singbox") {
-    const emitted = nodes.map((n) => {
+    const emitted = plain.nodes.map((n) => {
       const o = sbLeafFix(sbEmit(n));
       delete o.detour;
       return o;
@@ -2065,24 +2218,27 @@ async function buildConfig(target, items, origin) {
       if ("outbounds" in o) o.outbounds = fillMembers(o.outbounds, [], tags);
       out.push(o);
     }
-    const sbOut = out.filter((o) => o.tag !== ENTRY_AUTO);
+    // Plain mode has no chain tiers at all (the script design has
+    // none): both tier outbounds are dropped and every reference to
+    // them is stripped; a selector whose default pointed at a tier
+    // falls back to its first member.
+    const sbOut = out.filter(
+      (o) => o.tag !== ENTRY_AUTO && o.tag !== EXIT_AUTO);
     for (const g of sbOut) {
       if (Array.isArray(g.outbounds)) {
-        g.outbounds = g.outbounds.filter((m) => m !== ENTRY_AUTO);
+        g.outbounds = g.outbounds.filter(
+          (m) => m !== ENTRY_AUTO && m !== EXIT_AUTO);
       }
-      // Plain mode has no chain: the exit tier must not carry the
-      // chain mark. Rename ⛓ 出口优选 → 出口优选 (tag + references).
-      if (g.tag === EXIT_AUTO) g.tag = PLAIN_EXIT;
-      if (g.default === EXIT_AUTO) g.default = PLAIN_EXIT;
-      if (Array.isArray(g.outbounds)) {
-        g.outbounds = g.outbounds.map(
-          (m) => (m === EXIT_AUTO ? PLAIN_EXIT : m));
+      if ((g.default === ENTRY_AUTO || g.default === EXIT_AUTO) &&
+          Array.isArray(g.outbounds) && g.outbounds.length) {
+        g.default = g.outbounds[0];
       }
     }
-    // Automatic per-region urltest groups for the regions present.
+    // Region pairs (geographic + rate / home + catch-all), appended
+    // after the functional outbounds; region selectors lead 默认代理,
+    // join every service selector, and join GLOBAL as pairs.
     const sbPlan = regionPlan(tags);
     const sbPairs = [];
-    const sbSelectTags = [];
     const addSbPair = (rname, members) => {
       const autoTag = `${rname}-自动选择`;
       sbPairs.push({
@@ -2095,83 +2251,98 @@ async function buildConfig(target, items, origin) {
         outbounds: [autoTag, ...members],
         interrupt_exist_connections: false,
       });
-      sbSelectTags.push(rname);
     };
-    for (const r of sbPlan.regions) addSbPair(r.name, r.members);
-    if (sbPlan.other.length) addSbPair("其他节点", sbPlan.other);
+    for (const p of sbPlan.pairs) addSbPair(p.name, p.members);
     if (sbPairs.length) {
-      let at = sbOut.findIndex((o) => o.tag === "故障转移");
-      sbOut.splice(at < 0 ? sbOut.length : at + 1, 0, ...sbPairs);
+      sbOut.push(...sbPairs);
+      const SB_NO_APPEND = new Set(["GLOBAL", "默认代理", "手动选择",
+        "自动选择", "AdBlock", "远控工具", "直连"]);
       for (const g of sbOut) {
-        if (g.tag === "默认代理" && Array.isArray(g.outbounds)) {
-          g.outbounds = [...sbSelectTags, ...g.outbounds];
-        }
-        if (g.tag === "GLOBAL" && Array.isArray(g.outbounds)) {
+        if (!Array.isArray(g.outbounds)) continue;
+        if (g.tag === "默认代理") {
+          g.outbounds = [...sbPlan.selectNames, ...g.outbounds];
+        } else if (g.tag === "GLOBAL") {
           g.outbounds = [...g.outbounds,
-            ...sbSelectTags.filter((t) => !g.outbounds.includes(t))];
+            ...sbPlan.pairNames.filter((t) => !g.outbounds.includes(t))];
+        } else if (!SB_NO_APPEND.has(g.tag) &&
+                   !sbPlan.pairNames.includes(g.tag) &&
+                   g.type === "selector") {
+          g.outbounds = [...g.outbounds,
+            ...sbPlan.selectNames.filter((t) => !g.outbounds.includes(t))];
+        }
+        if (g.default && !g.outbounds.includes(g.default)) {
+          g.default = g.outbounds[0];
         }
       }
     }
     sk.outbounds = sbOut;
     return [JSON.stringify(sk, null, 2), "application/json; charset=utf-8"];
   }
-  const proxies = nodes.map(clashEmit);
+  const proxies = plain.nodes.map((n) => {
+    const p = clashEmit(n);
+    // Repair dialer-proxy references that pointed at renamed nodes.
+    if (p["dialer-proxy"] && plain.renameMap.has(p["dialer-proxy"])) {
+      p["dialer-proxy"] = plain.renameMap.get(p["dialer-proxy"]);
+    }
+    return p;
+  });
   const names = proxies.map((p) => String(p.name));
   const sk = materialize(skeletonClash, origin);
   const specials = (sk.proxies || []).filter((x) => x !== "@NODES@");
   sk.proxies = [...proxies, ...specials];
   const groups = [];
   for (const g of sk["proxy-groups"] || []) {
-    if (g.name === ENTRY_AUTO) continue;
+    // Plain mode has no chain tiers (the script design has none):
+    // both tier groups are dropped and references stripped.
+    if (g.name === ENTRY_AUTO || g.name === EXIT_AUTO) continue;
     g.proxies = fillMembers(g.proxies, [], names);
     if (Array.isArray(g.proxies)) {
-      g.proxies = g.proxies.filter((m) => m !== ENTRY_AUTO);
+      g.proxies = g.proxies.filter(
+        (m) => m !== ENTRY_AUTO && m !== EXIT_AUTO);
     }
     groups.push(g);
   }
-  // Plain mode has no chain: the exit tier must not carry the chain
-  // mark. Rename ⛓ 出口优选 → 出口优选 (group + every reference).
-  for (const g of groups) {
-    if (g.name === EXIT_AUTO) g.name = PLAIN_EXIT;
-    if (Array.isArray(g.proxies)) {
-      g.proxies = g.proxies.map((m) => (m === EXIT_AUTO ? PLAIN_EXIT : m));
-    }
-  }
-  // Automatic per-region url-test groups for the regions present,
-  // placed after the global auto family and offered from 默认代理
-  // and GLOBAL.
+  // Region pairs (geographic + rate / home + catch-all) in the
+  // script's createRegionGroup shape, placed after 直连; region
+  // selectors lead 默认代理, join every service group and 漏网之鱼,
+  // and join GLOBAL as auto+select pairs. (Per the user's standing
+  // instruction the auto group is each region selector's default —
+  // first member — where the script lists it last.)
   const plan = regionPlan(names);
-  const regionPairs = [];
-  const regionSelectNames = [];
-  const addRegionPair = (rname, members) => {
-    const autoName = `${rname}-自动选择`;
-    regionPairs.push({
-      name: autoName, type: "url-test",
-      url: "https://www.gstatic.com/generate_204", interval: 60,
-      tolerance: 100, lazy: false, timeout: 5000,
-      "max-failed-times": 3, hidden: true, proxies: members,
-    });
-    regionPairs.push({
-      name: rname, type: "select", interval: 600, timeout: 3000,
+  const regionGroups = [];
+  for (const p of plan.pairs) {
+    const autoName = `${p.name}-自动选择`;
+    regionGroups.push({
+      name: autoName, type: "url-test", interval: 600, timeout: 3000,
       url: "https://www.apple.com/library/test/success.html",
       lazy: true, "max-failed-times": 3, "empty-fallback": "REJECT",
-      proxies: [autoName, ...members],
+      tolerance: 50, "exclude-type": "DIRECT", icon: AUTO_ICON,
+      hidden: true, proxies: p.members,
     });
-    regionSelectNames.push(rname);
-  };
-  for (const r of plan.regions) addRegionPair(r.name, r.members);
-  if (plan.other.length) addRegionPair("其他节点", plan.other);
-  if (regionPairs.length) {
-    let at = groups.findIndex((g) => g.name === "故障转移");
-    groups.splice(at < 0 ? groups.length : at + 1, 0, ...regionPairs);
+    const sel = {
+      name: p.name, type: "select", interval: 600, timeout: 3000,
+      url: "https://www.apple.com/library/test/success.html",
+      lazy: true, "max-failed-times": 3, "empty-fallback": "REJECT",
+      proxies: [autoName, ...p.members],
+    };
+    if (p.icon) sel.icon = p.icon;
+    regionGroups.push(sel);
+  }
+  if (regionGroups.length) {
+    groups.push(...regionGroups);
+    const NO_APPEND = new Set(["GLOBAL", "默认代理", "手动选择",
+      "自动选择", "负载均衡", "故障转移", "直连", "AdBlock", "远控工具"]);
     for (const g of groups) {
-      if (g.name === "默认代理" && Array.isArray(g.proxies)) {
-        // HiClash design: region groups lead the default group.
-        g.proxies = [...regionSelectNames, ...g.proxies];
-      }
-      if (g.name === "GLOBAL" && Array.isArray(g.proxies)) {
+      if (!Array.isArray(g.proxies)) continue;
+      if (g.name === "默认代理") {
+        g.proxies = [...plan.selectNames, ...g.proxies];
+      } else if (g.name === "GLOBAL") {
         g.proxies = [...g.proxies,
-          ...regionSelectNames.filter((n) => !g.proxies.includes(n))];
+          ...plan.pairNames.filter((n) => !g.proxies.includes(n))];
+      } else if (!NO_APPEND.has(g.name) &&
+                 !plan.pairNames.includes(g.name)) {
+        g.proxies = [...g.proxies,
+          ...plan.selectNames.filter((n) => !g.proxies.includes(n))];
       }
     }
   }

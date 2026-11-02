@@ -351,9 +351,9 @@ let code = null;
     served.status === 200, `got ${served.status}`);
 }
 
-// (h) plain mode: no chain marks anywhere, exit tier renamed, and
-// HiClash-style region groups (select + "-自动选择" url-test pairs,
-// regions lead 默认代理, strong-info names prove no region)
+// (h) plain mode: full HiClash script design — no chain tier groups
+// at all, info nodes filtered out, and region groups (select +
+// "-自动选择" url-test pairs, regions lead 默认代理)
 {
   const yamlMod = await import("js-yaml");
   const yamlLoad = yamlMod.load || (yamlMod.default && yamlMod.default.load);
@@ -378,7 +378,14 @@ let code = null;
   const doc = yamlLoad(body);
   const groups = doc["proxy-groups"] || [];
   const byName = Object.fromEntries(groups.map((x) => [x.name, x]));
-  check("plain clash exit tier renamed", !!byName["出口优选"]);
+  check("plain clash has no plain exit tier either", !byName["出口优选"]);
+  check("plain clash has GitHub service group", !!byName["GitHub"]);
+  check("plain clash info node filtered out",
+    !(doc.proxies || []).some((p) => String(p.name).includes("剩余流量")));
+  check("plain clash region auto uses script test params",
+    byName["日本-自动选择"]?.url ===
+      "https://www.apple.com/library/test/success.html" &&
+    byName["日本-自动选择"]?.tolerance === 50);
   check("plain clash has JP region select", !!byName["日本"]);
   check("plain clash has JP auto group", !!byName["日本-自动选择"]);
   check("plain clash has SG region pair", !!byName["新加坡"] && !!byName["新加坡-自动选择"]);
@@ -395,7 +402,8 @@ let code = null;
   check("plain sing-box has no chain-marked exit group", !body2.includes("⛓ 出口优选"));
   const doc2 = JSON.parse(body2);
   const tags = Object.fromEntries((doc2.outbounds || []).map((o) => [o.tag, o]));
-  check("plain sing-box exit tier renamed", !!tags["出口优选"]);
+  check("plain sing-box has no plain exit tier either", !tags["出口优选"]);
+  check("plain sing-box info node filtered out", !body2.includes("剩余流量"));
   check("plain sing-box has JP region pair", !!tags["日本"] && !!tags["日本-自动选择"]);
   check("plain sing-box JP select defaults to its auto group",
     tags["日本"]?.outbounds?.[0] === "日本-自动选择");

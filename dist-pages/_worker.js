@@ -3173,11 +3173,11 @@ var skeleton_clash_default = {
       "rule-set:googlefcm"
     ],
     "default-nameserver": [
-      "https://223.5.5.5/dns-query#DIRECT",
+      "tls://223.5.5.5#DIRECT",
       "https://1.12.12.12/dns-query#DIRECT"
     ],
     "proxy-server-nameserver": [
-      "https://223.5.5.5/dns-query#DIRECT",
+      "tls://223.5.5.5#DIRECT",
       "https://doh.pub/dns-query#DIRECT"
     ],
     nameserver: [
@@ -3532,6 +3532,7 @@ var skeleton_clash_default = {
         "Google",
         "Claude",
         "AI",
+        "GitHub",
         "Microsoft",
         "Apple",
         "Telegram",
@@ -3550,7 +3551,8 @@ var skeleton_clash_default = {
         "AdBlock",
         "\u6F0F\u7F51\u4E4B\u9C7C",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Global.svg"
     },
     {
       interval: 600,
@@ -3568,7 +3570,8 @@ var skeleton_clash_default = {
         "\u81EA\u52A8\u9009\u62E9",
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Proxy.svg"
     },
     {
       interval: 600,
@@ -3581,7 +3584,8 @@ var skeleton_clash_default = {
       name: "\u624B\u52A8\u9009\u62E9",
       proxies: [
         "@ALL@"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Static.svg"
     },
     {
       interval: 600,
@@ -3597,7 +3601,8 @@ var skeleton_clash_default = {
       name: "\u81EA\u52A8\u9009\u62E9",
       proxies: [
         "@EXITS@"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Auto.svg"
     },
     {
       interval: 600,
@@ -3613,7 +3618,8 @@ var skeleton_clash_default = {
       name: "\u8D1F\u8F7D\u5747\u8861",
       proxies: [
         "@EXITS@"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/RoundRobin.svg"
     },
     {
       interval: 600,
@@ -3627,7 +3633,8 @@ var skeleton_clash_default = {
       name: "\u6545\u969C\u8F6C\u79FB",
       proxies: [
         "@EXITS@"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Auto.svg"
     },
     {
       interval: 600,
@@ -3645,7 +3652,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Fcm.svg"
     },
     {
       interval: 600,
@@ -3663,7 +3671,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/YouTube.svg"
     },
     {
       interval: 600,
@@ -3681,7 +3690,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Google.svg"
     },
     {
       interval: 600,
@@ -3700,7 +3710,8 @@ var skeleton_clash_default = {
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
       ],
-      "default-selected": "\u7F8E\u56FD"
+      "default-selected": "\u7F8E\u56FD",
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Proxy.svg"
     },
     {
       interval: 600,
@@ -3719,7 +3730,27 @@ var skeleton_clash_default = {
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
       ],
-      "default-selected": "\u7F8E\u56FD"
+      "default-selected": "\u7F8E\u56FD",
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/ChatGPT.svg"
+    },
+    {
+      interval: 600,
+      timeout: 3e3,
+      url: "https://www.apple.com/library/test/success.html",
+      lazy: true,
+      "max-failed-times": 3,
+      "empty-fallback": "REJECT",
+      type: "select",
+      name: "GitHub",
+      proxies: [
+        "\u9ED8\u8BA4\u4EE3\u7406",
+        "\u624B\u52A8\u9009\u62E9",
+        "\u81EA\u52A8\u9009\u62E9",
+        "\u8D1F\u8F7D\u5747\u8861",
+        "\u6545\u969C\u8F6C\u79FB",
+        "\u26D3 \u51FA\u53E3\u4F18\u9009"
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/GitHub.svg"
     },
     {
       interval: 600,
@@ -3737,7 +3768,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Microsoft.svg"
     },
     {
       interval: 600,
@@ -3755,7 +3787,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Apple.svg"
     },
     {
       interval: 600,
@@ -3773,7 +3806,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Telegram.svg"
     },
     {
       interval: 600,
@@ -3791,7 +3825,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Steam.svg"
     },
     {
       interval: 600,
@@ -3810,7 +3845,8 @@ var skeleton_clash_default = {
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
       ],
-      "default-selected": "\u65E5\u672C"
+      "default-selected": "\u65E5\u672C",
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/TikTok.svg"
     },
     {
       interval: 600,
@@ -3828,7 +3864,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Twitter.svg"
     },
     {
       interval: 600,
@@ -3846,7 +3883,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Meta.svg"
     },
     {
       interval: 600,
@@ -3864,7 +3902,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Line.svg"
     },
     {
       interval: 600,
@@ -3882,7 +3921,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Netflix.svg"
     },
     {
       interval: 600,
@@ -3900,7 +3940,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Emby.svg"
     },
     {
       interval: 600,
@@ -3918,7 +3959,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Pikpak.svg"
     },
     {
       interval: 600,
@@ -3936,7 +3978,8 @@ var skeleton_clash_default = {
         "\u8D1F\u8F7D\u5747\u8861",
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Spotify.svg"
     },
     {
       interval: 600,
@@ -3955,7 +3998,8 @@ var skeleton_clash_default = {
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
       ],
-      "default-selected": "\u65E5\u672C"
+      "default-selected": "\u65E5\u672C",
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Bitcoin.svg"
     },
     {
       interval: 600,
@@ -3974,7 +4018,8 @@ var skeleton_clash_default = {
         "\u6545\u969C\u8F6C\u79FB",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
       ],
-      "default-selected": "\u7F8E\u56FD"
+      "default-selected": "\u7F8E\u56FD",
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Ehentai.svg"
     },
     {
       interval: 600,
@@ -3988,7 +4033,8 @@ var skeleton_clash_default = {
       proxies: [
         "\u9ED8\u8BA4\u4EE3\u7406",
         "REJECT-DROP"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Remote.svg"
     },
     {
       interval: 600,
@@ -4003,7 +4049,8 @@ var skeleton_clash_default = {
         "REJECT",
         "REJECT-DROP",
         "PASS"
-      ]
+      ],
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/AdBlock.svg"
     },
     {
       interval: 600,
@@ -4018,7 +4065,8 @@ var skeleton_clash_default = {
         "\u9ED8\u8BA4\u4EE3\u7406",
         "\u26D3 \u51FA\u53E3\u4F18\u9009"
       ],
-      "default-selected": "\u9ED8\u8BA4\u4EE3\u7406"
+      "default-selected": "\u9ED8\u8BA4\u4EE3\u7406",
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Stack.svg"
     },
     {
       interval: 600,
@@ -4036,7 +4084,8 @@ var skeleton_clash_default = {
         "\u{1F1E8}\u{1F1F3} \u76F4\u8FDE | \u4EC5IPv4",
         "\u{1F1E8}\u{1F1F3} \u76F4\u8FDE | \u4EC5IPv6"
       ],
-      hidden: false
+      hidden: false,
+      icon: "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/China.svg"
     }
   ],
   "rule-providers": {
@@ -4674,7 +4723,7 @@ var skeleton_clash_default = {
     "IP-CIDR6,2607:6bc0:11::/48,Claude,no-resolve",
     "IP-ASN,399358,Claude,no-resolve",
     "RULE-SET,ai,AI",
-    "RULE-SET,github,\u9ED8\u8BA4\u4EE3\u7406",
+    "RULE-SET,github,GitHub",
     "RULE-SET,microsoft,Microsoft",
     "RULE-SET,apple,Apple",
     "RULE-SET,telegram,Telegram",
@@ -6216,6 +6265,420 @@ var GROUP_TYPES = /* @__PURE__ */ new Set(["selector", "urltest"]);
 var BUILTIN_TYPES = /* @__PURE__ */ new Set(["direct", "block", "dns"]);
 var ENTRY_AUTO = "\u26D3 \u5165\u53E3\u4F18\u9009";
 var EXIT_AUTO = "\u26D3 \u51FA\u53E3\u4F18\u9009";
+var REGION_DEFS = [
+  ["\u9999\u6E2F", "\u{1F1ED}\u{1F1F0}", "\u{1F1ED}\u{1F1F0}|\u9999\u6E2F|\\bHKG?\\b|hong[\\s_-]*kong"],
+  ["\u53F0\u6E7E", "\u{1F1F9}\u{1F1FC}", "\u{1F1F9}\u{1F1FC}|\u53F0\u6E7E|\u53F0\u5317|\u9AD8\u96C4|\u65B0\u5317|\u6843\u56ED|\u65B0\u7AF9|\\bTWN?\\b|taiwan|taipei|hinet"],
+  ["\u65E5\u672C", "\u{1F1EF}\u{1F1F5}", "\u{1F1EF}\u{1F1F5}|\u65E5\u672C|\\bJPN?\\b|japan|tokyo|osaka|\u4E1C\u4EAC|\u5927\u962A"],
+  ["\u97E9\u56FD", "\u{1F1F0}\u{1F1F7}", "\u{1F1F0}\u{1F1F7}|\u97E9\u56FD|(?:^|[^A-Za-z])KR(?:$|[^A-Za-z])|korea|seoul|\u9996\u5C14"],
+  ["\u65B0\u52A0\u5761", "\u{1F1F8}\u{1F1EC}", "\u{1F1F8}\u{1F1EC}|\u65B0\u52A0\u5761|\u72EE\u57CE|\\bSGP?\\b|singapore"],
+  ["\u7F8E\u56FD", "\u{1F1FA}\u{1F1F8}", "\u{1F1FA}\u{1F1F8}|\u7F8E\u56FD|(?:^|[^A-Za-z])US(?:$|[^A-Za-z])|(?:^|[^A-Za-z])USA(?:$|[^A-Za-z])|america|united[\\s_-]*states|los[\\s_-]*angeles|\u6D1B\u6749\u77F6|san[\\s_-]*jose|\u5723\u4F55\u585E|\u7EBD\u7EA6|new[\\s_-]*york|\u829D\u52A0\u54E5|chicago|\u8FBE\u62C9\u65AF|dallas|\u897F\u96C5\u56FE|seattle|\u7845\u8C37|\u77FD\u8C37|silicon|\u8FC8\u963F\u5BC6|miami|\u51E4\u51F0\u57CE|phoenix"],
+  ["\u82F1\u56FD", "\u{1F1EC}\u{1F1E7}", "\u{1F1EC}\u{1F1E7}|\u82F1\u56FD|(?:^|[^A-Za-z0-9])GB(?:$|[^A-Za-z])|united[\\s_-]*kingdom|london|\u4F26\u6566"],
+  ["\u5FB7\u56FD", "\u{1F1E9}\u{1F1EA}", "\u{1F1E9}\u{1F1EA}|\u5FB7\u56FD|(?:^|[^A-Za-z])DE(?:$|[^A-Za-z])|germany|frankfurt|\u6CD5\u5170\u514B\u798F"],
+  ["\u8377\u5170", "\u{1F1F3}\u{1F1F1}", "\u{1F1F3}\u{1F1F1}|\u8377\u5170|(?:^|[^A-Za-z])NL(?:$|[^A-Za-z])|nether?lands|amsterdam|\u963F\u59C6\u65AF\u7279\u4E39"],
+  ["\u9A6C\u6765\u897F\u4E9A", "\u{1F1F2}\u{1F1FE}", "\u{1F1F2}\u{1F1FE}|\u9A6C\u6765\u897F\u4E9A|(?:^|[^A-Za-z])MY(?:$|[^A-Za-z])|malaysia|kuala[\\s_-]*lumpur|\u5409\u9686\u5761"],
+  ["\u6CF0\u56FD", "\u{1F1F9}\u{1F1ED}", "\u{1F1F9}\u{1F1ED}|\u6CF0\u56FD|(?:^|[^A-Za-z])TH(?:$|[^A-Za-z])|thailand|bangkok|\u66FC\u8C37"],
+  ["\u8D8A\u5357", "\u{1F1FB}\u{1F1F3}", "\u{1F1FB}\u{1F1F3}|\u8D8A\u5357|(?:^|[^A-Za-z])VN(?:$|[^A-Za-z])|vietnam|hanoi|\u6CB3\u5185|ho[\\s_-]*chi[\\s_-]*minh|\u80E1\u5FD7\u660E"],
+  ["\u83F2\u5F8B\u5BBE", "\u{1F1F5}\u{1F1ED}", "\u{1F1F5}\u{1F1ED}|\u83F2\u5F8B\u5BBE|(?:^|[^A-Za-z])PH(?:$|[^A-Za-z])|philippines|manila|\u9A6C\u5C3C\u62C9"],
+  ["\u5370\u5C3C", "\u{1F1EE}\u{1F1E9}", "\u{1F1EE}\u{1F1E9}|\u5370\u5C3C|\u5370\u5EA6\u5C3C\u897F\u4E9A|(?:^|[^A-Za-z])ID(?:$|[^A-Za-z])|indonesia|jakarta|\u96C5\u52A0\u8FBE"],
+  ["\u5370\u5EA6", "\u{1F1EE}\u{1F1F3}", "\u{1F1EE}\u{1F1F3}|\u5370\u5EA6|(?:^|[^A-Za-z])IN(?:$|[^A-Za-z])|india|mumbai|\u5B5F\u4E70|delhi|\u5FB7\u91CC"],
+  ["\u6FB3\u5927\u5229\u4E9A", "\u{1F1E6}\u{1F1FA}", "\u{1F1E6}\u{1F1FA}|\u6FB3\u5927\u5229\u4E9A|\u6FB3\u6D32|(?:^|[^A-Za-z])AU(?:$|[^A-Za-z])|australia|sydney|\u6089\u5C3C|melbourne|\u58A8\u5C14\u672C"],
+  ["\u6CD5\u56FD", "\u{1F1EB}\u{1F1F7}", "\u{1F1EB}\u{1F1F7}|\u6CD5\u56FD|(?:^|[^A-Za-z])FR(?:$|[^A-Za-z])|france|paris|\u5DF4\u9ECE"],
+  ["\u4FC4\u7F57\u65AF", "\u{1F1F7}\u{1F1FA}", "\u{1F1F7}\u{1F1FA}|\u4FC4\u7F57\u65AF|(?:^|[^A-Za-z])RU(?:$|[^A-Za-z])|russia|moscow|\u83AB\u65AF\u79D1"],
+  ["\u610F\u5927\u5229", "\u{1F1EE}\u{1F1F9}", "\u{1F1EE}\u{1F1F9}|\u610F\u5927\u5229|(?:^|[^A-Za-z])IT(?:$|[^A-Za-z])|\\bitaly\\b|rome|\u7F57\u9A6C"],
+  ["\u52A0\u62FF\u5927", "\u{1F1E8}\u{1F1E6}", "\u{1F1E8}\u{1F1E6}|\u52A0\u62FF\u5927|(?:^|[^A-Za-z])CA(?:$|[^A-Za-z])|canada|toronto|\u591A\u4F26\u591A"],
+  ["\u963F\u6839\u5EF7", "\u{1F1E6}\u{1F1F7}", "\u{1F1E6}\u{1F1F7}|\u963F\u6839\u5EF7|(?:^|[^A-Za-z])AR(?:$|[^A-Za-z])|argentina|buenos[\\s_-]*aires|\u5E03\u5B9C\u8BFA\u65AF\u827E\u5229\u65AF"],
+  ["\u5DF4\u897F", "\u{1F1E7}\u{1F1F7}", "\u{1F1E7}\u{1F1F7}|\u5DF4\u897F|(?:^|[^A-Za-z])BR(?:$|[^A-Za-z])|brazil|sao[\\s_-]*paulo|\u5723\u4FDD\u7F57"],
+  ["\u58A8\u897F\u54E5", "\u{1F1F2}\u{1F1FD}", "\u{1F1F2}\u{1F1FD}|\u58A8\u897F\u54E5|(?:^|[^A-Za-z])MX(?:$|[^A-Za-z])|mexico"],
+  ["\u6C99\u7279\u963F\u62C9\u4F2F", "\u{1F1F8}\u{1F1E6}", "\u{1F1F8}\u{1F1E6}|\u6C99\u7279\u963F\u62C9\u4F2F|\u6C99\u7279|(?:^|[^A-Za-z])SA(?:$|[^A-Za-z])|saudi[\\s_-]*arabia"],
+  ["\u5357\u975E", "\u{1F1FF}\u{1F1E6}", "\u{1F1FF}\u{1F1E6}|\u5357\u975E|(?:^|[^A-Za-z])ZA(?:$|[^A-Za-z])|south[\\s_-]*africa|johannesburg|\u7EA6\u7FF0\u5185\u65AF\u5821"],
+  ["\u571F\u8033\u5176", "\u{1F1F9}\u{1F1F7}", "\u{1F1F9}\u{1F1F7}|\u571F\u8033\u5176|(?:^|[^A-Za-z])TR(?:$|[^A-Za-z])|turkey|istanbul|\u4F0A\u65AF\u5766\u5E03\u5C14"],
+  ["\u6587\u83B1", "\u{1F1E7}\u{1F1F3}", "\u{1F1E7}\u{1F1F3}|\u6587\u83B1|(?:^|[^A-Za-z])BN(?:$|[^A-Za-z])|brunei"],
+  ["\u67EC\u57D4\u5BE8", "\u{1F1F0}\u{1F1ED}", "\u{1F1F0}\u{1F1ED}|\u67EC\u57D4\u5BE8|(?:^|[^A-Za-z])KH(?:$|[^A-Za-z])|cambodia|phnom[\\s_-]*penh|\u91D1\u8FB9"],
+  ["\u8001\u631D", "\u{1F1F1}\u{1F1E6}", "\u{1F1F1}\u{1F1E6}|\u8001\u631D|(?:^|[^A-Za-z])LA(?:$|[^A-Za-z])|\\blaos\\b|vientiane|\u4E07\u8C61"],
+  ["\u7F05\u7538", "\u{1F1F2}\u{1F1F2}", "\u{1F1F2}\u{1F1F2}|\u7F05\u7538|(?:^|[^A-Za-z])MM(?:$|[^A-Za-z])|myanmar|yangon|\u4EF0\u5149"],
+  ["\u5965\u5730\u5229", "\u{1F1E6}\u{1F1F9}", "\u{1F1E6}\u{1F1F9}|\u5965\u5730\u5229|(?:^|[^A-Za-z])AT(?:$|[^A-Za-z])|austria|vienna|\u7EF4\u4E5F\u7EB3"],
+  ["\u6BD4\u5229\u65F6", "\u{1F1E7}\u{1F1EA}", "\u{1F1E7}\u{1F1EA}|\u6BD4\u5229\u65F6|(?:^|[^A-Za-z])BE(?:$|[^A-Za-z])|belgium|brussels|\u5E03\u9C81\u585E\u5C14"],
+  ["\u4FDD\u52A0\u5229\u4E9A", "\u{1F1E7}\u{1F1EC}", "\u{1F1E7}\u{1F1EC}|\u4FDD\u52A0\u5229\u4E9A|(?:^|[^A-Za-z])BG(?:$|[^A-Za-z])|bulgaria|sofia|\u7D22\u975E\u4E9A"],
+  ["\u514B\u7F57\u5730\u4E9A", "\u{1F1ED}\u{1F1F7}", "\u{1F1ED}\u{1F1F7}|\u514B\u7F57\u5730\u4E9A|(?:^|[^A-Za-z])HR(?:$|[^A-Za-z])|croatia"],
+  ["\u585E\u6D66\u8DEF\u65AF", "\u{1F1E8}\u{1F1FE}", "\u{1F1E8}\u{1F1FE}|\u585E\u6D66\u8DEF\u65AF|(?:^|[^A-Za-z])CY(?:$|[^A-Za-z])|cyprus"],
+  ["\u6377\u514B", "\u{1F1E8}\u{1F1FF}", "\u{1F1E8}\u{1F1FF}|\u6377\u514B|\u6377\u514B\u5171\u548C\u56FD|(?:^|[^A-Za-z])CZ(?:$|[^A-Za-z])|czech|prague|\u5E03\u62C9\u683C"],
+  ["\u4E39\u9EA6", "\u{1F1E9}\u{1F1F0}", "\u{1F1E9}\u{1F1F0}|\u4E39\u9EA6|(?:^|[^A-Za-z])DK(?:$|[^A-Za-z])|denmark|copenhagen|\u54E5\u672C\u54C8\u6839"],
+  ["\u7231\u6C99\u5C3C\u4E9A", "\u{1F1EA}\u{1F1EA}", "\u{1F1EA}\u{1F1EA}|\u7231\u6C99\u5C3C\u4E9A|(?:^|[^A-Za-z])EE(?:$|[^A-Za-z])|estonia"],
+  ["\u82AC\u5170", "\u{1F1EB}\u{1F1EE}", "\u{1F1EB}\u{1F1EE}|\u82AC\u5170|(?:^|[^A-Za-z])FI(?:$|[^A-Za-z])|finland|helsinki|\u8D6B\u5C14\u8F9B\u57FA"],
+  ["\u5E0C\u814A", "\u{1F1EC}\u{1F1F7}", "\u{1F1EC}\u{1F1F7}|\u5E0C\u814A|(?:^|[^A-Za-z])GR(?:$|[^A-Za-z])|greece|athens|\u96C5\u5178"],
+  ["\u5308\u7259\u5229", "\u{1F1ED}\u{1F1FA}", "\u{1F1ED}\u{1F1FA}|\u5308\u7259\u5229|(?:^|[^A-Za-z])HU(?:$|[^A-Za-z])|hungary|budapest|\u5E03\u8FBE\u4F69\u65AF"],
+  ["\u7231\u5C14\u5170", "\u{1F1EE}\u{1F1EA}", "\u{1F1EE}\u{1F1EA}|\u7231\u5C14\u5170|(?:^|[^A-Za-z])IE(?:$|[^A-Za-z])|ireland|dublin|\u90FD\u67CF\u6797"],
+  ["\u62C9\u8131\u7EF4\u4E9A", "\u{1F1F1}\u{1F1FB}", "\u{1F1F1}\u{1F1FB}|\u62C9\u8131\u7EF4\u4E9A|(?:^|[^A-Za-z])LV(?:$|[^A-Za-z])|latvia"],
+  ["\u7ACB\u9676\u5B9B", "\u{1F1F1}\u{1F1F9}", "\u{1F1F1}\u{1F1F9}|\u7ACB\u9676\u5B9B|(?:^|[^A-Za-z])LT(?:$|[^A-Za-z])|lithuania"],
+  ["\u5362\u68EE\u5821", "\u{1F1F1}\u{1F1FA}", "\u{1F1F1}\u{1F1FA}|\u5362\u68EE\u5821|(?:^|[^A-Za-z])LU(?:$|[^A-Za-z])|luxembourg"],
+  ["\u9A6C\u8033\u4ED6", "\u{1F1F2}\u{1F1F9}", "\u{1F1F2}\u{1F1F9}|\u9A6C\u8033\u4ED6|(?:^|[^A-Za-z])MT(?:$|[^A-Za-z])|malta"],
+  ["\u6CE2\u5170", "\u{1F1F5}\u{1F1F1}", "\u{1F1F5}\u{1F1F1}|\u6CE2\u5170|(?:^|[^A-Za-z])PL(?:$|[^A-Za-z])|poland|warsaw|\u534E\u6C99"],
+  ["\u8461\u8404\u7259", "\u{1F1F5}\u{1F1F9}", "\u{1F1F5}\u{1F1F9}|\u8461\u8404\u7259|(?:^|[^A-Za-z])PT(?:$|[^A-Za-z])|portugal|lisbon|\u91CC\u65AF\u672C"],
+  ["\u7F57\u9A6C\u5C3C\u4E9A", "\u{1F1F7}\u{1F1F4}", "\u{1F1F7}\u{1F1F4}|\u7F57\u9A6C\u5C3C\u4E9A|(?:^|[^A-Za-z])RO(?:$|[^A-Za-z])|romania|bucharest|\u5E03\u52A0\u52D2\u65AF\u7279"],
+  ["\u65AF\u6D1B\u4F10\u514B", "\u{1F1F8}\u{1F1F0}", "\u{1F1F8}\u{1F1F0}|\u65AF\u6D1B\u4F10\u514B|(?:^|[^A-Za-z])SK(?:$|[^A-Za-z])|slovakia"],
+  ["\u65AF\u6D1B\u6587\u5C3C\u4E9A", "\u{1F1F8}\u{1F1EE}", "\u{1F1F8}\u{1F1EE}|\u65AF\u6D1B\u6587\u5C3C\u4E9A|(?:^|[^A-Za-z])SI(?:$|[^A-Za-z])|slovenia"],
+  ["\u897F\u73ED\u7259", "\u{1F1EA}\u{1F1F8}", "\u{1F1EA}\u{1F1F8}|\u897F\u73ED\u7259|(?:^|[^A-Za-z])ES(?:$|[^A-Za-z])|\\bspain\\b|madrid|\u9A6C\u5FB7\u91CC"],
+  ["\u745E\u5178", "\u{1F1F8}\u{1F1EA}", "\u{1F1F8}\u{1F1EA}|\u745E\u5178|(?:^|[^A-Za-z])SE(?:$|[^A-Za-z])|sweden|stockholm|\u65AF\u5FB7\u54E5\u5C14\u6469"],
+  ["\u963F\u5C14\u53CA\u5229\u4E9A", "\u{1F1E9}\u{1F1FF}", "\u{1F1E9}\u{1F1FF}|\u963F\u5C14\u53CA\u5229\u4E9A|(?:^|[^A-Za-z])DZ(?:$|[^A-Za-z])|algeria"],
+  ["\u5B89\u54E5\u62C9", "\u{1F1E6}\u{1F1F4}", "\u{1F1E6}\u{1F1F4}|\u5B89\u54E5\u62C9|(?:^|[^A-Za-z])AO(?:$|[^A-Za-z])|angola"],
+  ["\u8D1D\u5B81", "\u{1F1E7}\u{1F1EF}", "\u{1F1E7}\u{1F1EF}|\u8D1D\u5B81|(?:^|[^A-Za-z])BJ(?:$|[^A-Za-z])|benin"],
+  ["\u535A\u8328\u74E6\u7EB3", "\u{1F1E7}\u{1F1FC}", "\u{1F1E7}\u{1F1FC}|\u535A\u8328\u74E6\u7EB3|(?:^|[^A-Za-z])BW(?:$|[^A-Za-z])|botswana"],
+  ["\u5E03\u57FA\u7EB3\u6CD5\u7D22", "\u{1F1E7}\u{1F1EB}", "\u{1F1E7}\u{1F1EB}|\u5E03\u57FA\u7EB3\u6CD5\u7D22|(?:^|[^A-Za-z])BF(?:$|[^A-Za-z])|burkina[\\s_-]*faso"],
+  ["\u5E03\u9686\u8FEA", "\u{1F1E7}\u{1F1EE}", "\u{1F1E7}\u{1F1EE}|\u5E03\u9686\u8FEA|(?:^|[^A-Za-z])BI(?:$|[^A-Za-z])|burundi"],
+  ["\u4F5B\u5F97\u89D2", "\u{1F1E8}\u{1F1FB}", "\u{1F1E8}\u{1F1FB}|\u4F5B\u5F97\u89D2|(?:^|[^A-Za-z])CV(?:$|[^A-Za-z])|cabo[\\s_-]*verde|cape[\\s_-]*verde"],
+  ["\u5580\u9EA6\u9686", "\u{1F1E8}\u{1F1F2}", "\u{1F1E8}\u{1F1F2}|\u5580\u9EA6\u9686|(?:^|[^A-Za-z])CM(?:$|[^A-Za-z])|cameroon"],
+  ["\u4E2D\u975E\u5171\u548C\u56FD", "\u{1F1E8}\u{1F1EB}", "\u{1F1E8}\u{1F1EB}|\u4E2D\u975E\u5171\u548C\u56FD|\u4E2D\u975E|(?:^|[^A-Za-z])CF(?:$|[^A-Za-z])|central[\\s_-]*african"],
+  ["\u4E4D\u5F97", "\u{1F1F9}\u{1F1E9}", "\u{1F1F9}\u{1F1E9}|\u4E4D\u5F97|(?:^|[^A-Za-z])TD(?:$|[^A-Za-z])|\\bchad\\b"],
+  ["\u79D1\u6469\u7F57", "\u{1F1F0}\u{1F1F2}", "\u{1F1F0}\u{1F1F2}|\u79D1\u6469\u7F57|(?:^|[^A-Za-z])KM(?:$|[^A-Za-z])|comoros"],
+  ["\u521A\u679C\u5171\u548C\u56FD", "\u{1F1E8}\u{1F1EC}", "\u{1F1E8}\u{1F1EC}|\u521A\u679C\u5171\u548C\u56FD|\u521A\u679C\uFF08\u5E03\uFF09|(?:^|[^A-Za-z])CG(?:$|[^A-Za-z])|\\bcongo\\b"],
+  ["\u521A\u679C\u6C11\u4E3B\u5171\u548C\u56FD", "\u{1F1E8}\u{1F1E9}", "\u{1F1E8}\u{1F1E9}|\u521A\u679C\u6C11\u4E3B\u5171\u548C\u56FD|\u521A\u679C\uFF08\u91D1\uFF09|\u6C11\u4E3B\u521A\u679C|(?:^|[^A-Za-z])CD(?:$|[^A-Za-z])|dr[\\s_-]*congo|democratic[\\s_-]*republic[\\s_-]*of[\\s_-]*the[\\s_-]*congo"],
+  ["\u79D1\u7279\u8FEA\u74E6", "\u{1F1E8}\u{1F1EE}", "\u{1F1E8}\u{1F1EE}|\u79D1\u7279\u8FEA\u74E6|\u8C61\u7259\u6D77\u5CB8|(?:^|[^A-Za-z])CI(?:$|[^A-Za-z])|cote[\\s_-]*d.ivoire|ivory[\\s_-]*coast"],
+  ["\u5409\u5E03\u63D0", "\u{1F1E9}\u{1F1EF}", "\u{1F1E9}\u{1F1EF}|\u5409\u5E03\u63D0|(?:^|[^A-Za-z])DJ(?:$|[^A-Za-z])|djibouti"],
+  ["\u57C3\u53CA", "\u{1F1EA}\u{1F1EC}", "\u{1F1EA}\u{1F1EC}|\u57C3\u53CA|(?:^|[^A-Za-z])EG(?:$|[^A-Za-z])|egypt|cairo|\u5F00\u7F57"],
+  ["\u8D64\u9053\u51E0\u5185\u4E9A", "\u{1F1EC}\u{1F1F6}", "\u{1F1EC}\u{1F1F6}|\u8D64\u9053\u51E0\u5185\u4E9A|(?:^|[^A-Za-z])GQ(?:$|[^A-Za-z])|equatorial[\\s_-]*guinea"],
+  ["\u5384\u7ACB\u7279\u91CC\u4E9A", "\u{1F1EA}\u{1F1F7}", "\u{1F1EA}\u{1F1F7}|\u5384\u7ACB\u7279\u91CC\u4E9A|(?:^|[^A-Za-z])ER(?:$|[^A-Za-z])|eritrea"],
+  ["\u65AF\u5A01\u58EB\u5170", "\u{1F1F8}\u{1F1FF}", "\u{1F1F8}\u{1F1FF}|\u65AF\u5A01\u58EB\u5170|\u57C3\u65AF\u74E6\u8482\u5C3C|(?:^|[^A-Za-z])SZ(?:$|[^A-Za-z])|eswatini|swaziland"],
+  ["\u57C3\u585E\u4FC4\u6BD4\u4E9A", "\u{1F1EA}\u{1F1F9}", "\u{1F1EA}\u{1F1F9}|\u57C3\u585E\u4FC4\u6BD4\u4E9A|(?:^|[^A-Za-z])ET(?:$|[^A-Za-z])|ethiopia"],
+  ["\u52A0\u84EC", "\u{1F1EC}\u{1F1E6}", "\u{1F1EC}\u{1F1E6}|\u52A0\u84EC|(?:^|[^A-Za-z])GA(?:$|[^A-Za-z])|\\bgabon\\b"],
+  ["\u5188\u6BD4\u4E9A", "\u{1F1EC}\u{1F1F2}", "\u{1F1EC}\u{1F1F2}|\u5188\u6BD4\u4E9A|(?:^|[^A-Za-z])GM(?:$|[^A-Za-z])|gambia"],
+  ["\u52A0\u7EB3", "\u{1F1EC}\u{1F1ED}", "\u{1F1EC}\u{1F1ED}|\u52A0\u7EB3|(?:^|[^A-Za-z])GH(?:$|[^A-Za-z])|\\bghana\\b"],
+  ["\u51E0\u5185\u4E9A", "\u{1F1EC}\u{1F1F3}", "\u{1F1EC}\u{1F1F3}|\u51E0\u5185\u4E9A|(?:^|[^A-Za-z])GN(?:$|[^A-Za-z])|\\bguinea\\b"],
+  ["\u51E0\u5185\u4E9A\u6BD4\u7ECD", "\u{1F1EC}\u{1F1FC}", "\u{1F1EC}\u{1F1FC}|\u51E0\u5185\u4E9A\u6BD4\u7ECD|(?:^|[^A-Za-z])GW(?:$|[^A-Za-z])|guinea-bissau|guinea[\\s_-]*bissau"],
+  ["\u80AF\u5C3C\u4E9A", "\u{1F1F0}\u{1F1EA}", "\u{1F1F0}\u{1F1EA}|\u80AF\u5C3C\u4E9A|(?:^|[^A-Za-z])KE(?:$|[^A-Za-z])|kenya|nairobi|\u5185\u7F57\u6BD5"],
+  ["\u83B1\u7D22\u6258", "\u{1F1F1}\u{1F1F8}", "\u{1F1F1}\u{1F1F8}|\u83B1\u7D22\u6258|(?:^|[^A-Za-z])LS(?:$|[^A-Za-z])|lesotho"],
+  ["\u5229\u6BD4\u91CC\u4E9A", "\u{1F1F1}\u{1F1F7}", "\u{1F1F1}\u{1F1F7}|\u5229\u6BD4\u91CC\u4E9A|(?:^|[^A-Za-z])LR(?:$|[^A-Za-z])|liberia"],
+  ["\u5229\u6BD4\u4E9A", "\u{1F1F1}\u{1F1FE}", "\u{1F1F1}\u{1F1FE}|\u5229\u6BD4\u4E9A|(?:^|[^A-Za-z])LY(?:$|[^A-Za-z])|\\blibya\\b"],
+  ["\u9A6C\u8FBE\u52A0\u65AF\u52A0", "\u{1F1F2}\u{1F1EC}", "\u{1F1F2}\u{1F1EC}|\u9A6C\u8FBE\u52A0\u65AF\u52A0|(?:^|[^A-Za-z])MG(?:$|[^A-Za-z])|madagascar"],
+  ["\u9A6C\u62C9\u7EF4", "\u{1F1F2}\u{1F1FC}", "\u{1F1F2}\u{1F1FC}|\u9A6C\u62C9\u7EF4|(?:^|[^A-Za-z])MW(?:$|[^A-Za-z])|malawi"],
+  ["\u9A6C\u91CC", "\u{1F1F2}\u{1F1F1}", "\u{1F1F2}\u{1F1F1}|\u9A6C\u91CC|(?:^|[^A-Za-z])ML(?:$|[^A-Za-z])|\\bmali\\b"],
+  ["\u6BDB\u91CC\u5854\u5C3C\u4E9A", "\u{1F1F2}\u{1F1F7}", "\u{1F1F2}\u{1F1F7}|\u6BDB\u91CC\u5854\u5C3C\u4E9A|(?:^|[^A-Za-z])MR(?:$|[^A-Za-z])|mauritania"],
+  ["\u6BDB\u91CC\u6C42\u65AF", "\u{1F1F2}\u{1F1FA}", "\u{1F1F2}\u{1F1FA}|\u6BDB\u91CC\u6C42\u65AF|(?:^|[^A-Za-z])MU(?:$|[^A-Za-z])|mauritius"],
+  ["\u6469\u6D1B\u54E5", "\u{1F1F2}\u{1F1E6}", "\u{1F1F2}\u{1F1E6}|\u6469\u6D1B\u54E5|(?:^|[^A-Za-z])MA(?:$|[^A-Za-z])|morocco|casablanca|\u5361\u8428\u5E03\u5170\u5361"],
+  ["\u83AB\u6851\u6BD4\u514B", "\u{1F1F2}\u{1F1FF}", "\u{1F1F2}\u{1F1FF}|\u83AB\u6851\u6BD4\u514B|(?:^|[^A-Za-z])MZ(?:$|[^A-Za-z])|mozambique"],
+  ["\u7EB3\u7C73\u6BD4\u4E9A", "\u{1F1F3}\u{1F1E6}", "\u{1F1F3}\u{1F1E6}|\u7EB3\u7C73\u6BD4\u4E9A|(?:^|[^A-Za-z])NA(?:$|[^A-Za-z])|\\bnamibia\\b"],
+  ["\u5C3C\u65E5\u5C14", "\u{1F1F3}\u{1F1EA}", "\u{1F1F3}\u{1F1EA}|\u5C3C\u65E5\u5C14|(?:^|[^A-Za-z])NE(?:$|[^A-Za-z])|\\bniger\\b"],
+  ["\u5C3C\u65E5\u5229\u4E9A", "\u{1F1F3}\u{1F1EC}", "\u{1F1F3}\u{1F1EC}|\u5C3C\u65E5\u5229\u4E9A|(?:^|[^A-Za-z])NG(?:$|[^A-Za-z])|nigeria|lagos|\u62C9\u5404\u65AF"],
+  ["\u5362\u65FA\u8FBE", "\u{1F1F7}\u{1F1FC}", "\u{1F1F7}\u{1F1FC}|\u5362\u65FA\u8FBE|(?:^|[^A-Za-z])RW(?:$|[^A-Za-z])|rwanda"],
+  ["\u5723\u591A\u7F8E\u548C\u666E\u6797\u897F\u6BD4", "\u{1F1F8}\u{1F1F9}", "\u{1F1F8}\u{1F1F9}|\u5723\u591A\u7F8E\u548C\u666E\u6797\u897F\u6BD4|(?:^|[^A-Za-z])ST(?:$|[^A-Za-z])|sao[\\s_-]*tome"],
+  ["\u585E\u5185\u52A0\u5C14", "\u{1F1F8}\u{1F1F3}", "\u{1F1F8}\u{1F1F3}|\u585E\u5185\u52A0\u5C14|(?:^|[^A-Za-z])SN(?:$|[^A-Za-z])|senegal"],
+  ["\u585E\u820C\u5C14", "\u{1F1F8}\u{1F1E8}", "\u{1F1F8}\u{1F1E8}|\u585E\u820C\u5C14|(?:^|[^A-Za-z])SC(?:$|[^A-Za-z])|seychelles"],
+  ["\u585E\u62C9\u5229\u6602", "\u{1F1F8}\u{1F1F1}", "\u{1F1F8}\u{1F1F1}|\u585E\u62C9\u5229\u6602|(?:^|[^A-Za-z])SL(?:$|[^A-Za-z])|sierra[\\s_-]*leone"],
+  ["\u7D22\u9A6C\u91CC", "\u{1F1F8}\u{1F1F4}", "\u{1F1F8}\u{1F1F4}|\u7D22\u9A6C\u91CC|(?:^|[^A-Za-z])SO(?:$|[^A-Za-z])|somalia"],
+  ["\u5357\u82CF\u4E39", "\u{1F1F8}\u{1F1F8}", "\u{1F1F8}\u{1F1F8}|\u5357\u82CF\u4E39|(?:^|[^A-Za-z])SS(?:$|[^A-Za-z])|south[\\s_-]*sudan"],
+  ["\u82CF\u4E39", "\u{1F1F8}\u{1F1E9}", "\u{1F1F8}\u{1F1E9}|\u82CF\u4E39|(?:^|[^A-Za-z])SD(?:$|[^A-Za-z])|\\bsudan\\b"],
+  ["\u5766\u6851\u5C3C\u4E9A", "\u{1F1F9}\u{1F1FF}", "\u{1F1F9}\u{1F1FF}|\u5766\u6851\u5C3C\u4E9A|(?:^|[^A-Za-z])TZ(?:$|[^A-Za-z])|tanzania"],
+  ["\u591A\u54E5", "\u{1F1F9}\u{1F1EC}", "\u{1F1F9}\u{1F1EC}|\u591A\u54E5|(?:^|[^A-Za-z])TG(?:$|[^A-Za-z])|\\btogo\\b"],
+  ["\u7A81\u5C3C\u65AF", "\u{1F1F9}\u{1F1F3}", "\u{1F1F9}\u{1F1F3}|\u7A81\u5C3C\u65AF|(?:^|[^A-Za-z])TN(?:$|[^A-Za-z])|tunisia"],
+  ["\u4E4C\u5E72\u8FBE", "\u{1F1FA}\u{1F1EC}", "\u{1F1FA}\u{1F1EC}|\u4E4C\u5E72\u8FBE|(?:^|[^A-Za-z])UG(?:$|[^A-Za-z])|uganda"],
+  ["\u8D5E\u6BD4\u4E9A", "\u{1F1FF}\u{1F1F2}", "\u{1F1FF}\u{1F1F2}|\u8D5E\u6BD4\u4E9A|(?:^|[^A-Za-z])ZM(?:$|[^A-Za-z])|zambia"],
+  ["\u6D25\u5DF4\u5E03\u97E6", "\u{1F1FF}\u{1F1FC}", "\u{1F1FF}\u{1F1FC}|\u6D25\u5DF4\u5E03\u97E6|(?:^|[^A-Za-z])ZW(?:$|[^A-Za-z])|zimbabwe"],
+  ["\u963F\u5BCC\u6C57", "\u{1F1E6}\u{1F1EB}", "\u{1F1E6}\u{1F1EB}|\u963F\u5BCC\u6C57|afghanistan"],
+  ["\u4E9A\u7F8E\u5C3C\u4E9A", "\u{1F1E6}\u{1F1F2}", "\u{1F1E6}\u{1F1F2}|\u4E9A\u7F8E\u5C3C\u4E9A|armenia"],
+  ["\u963F\u585E\u62DC\u7586", "\u{1F1E6}\u{1F1FF}", "\u{1F1E6}\u{1F1FF}|\u963F\u585E\u62DC\u7586|azerbaijan"],
+  ["\u5DF4\u6797", "\u{1F1E7}\u{1F1ED}", "\u{1F1E7}\u{1F1ED}|\u5DF4\u6797|bahrain"],
+  ["\u5B5F\u52A0\u62C9\u56FD", "\u{1F1E7}\u{1F1E9}", "\u{1F1E7}\u{1F1E9}|\u5B5F\u52A0\u62C9\u56FD|bangladesh"],
+  ["\u4E0D\u4E39", "\u{1F1E7}\u{1F1F9}", "\u{1F1E7}\u{1F1F9}|\u4E0D\u4E39|bhutan"],
+  ["\u683C\u9C81\u5409\u4E9A", "\u{1F1EC}\u{1F1EA}", "\u{1F1EC}\u{1F1EA}|\u683C\u9C81\u5409\u4E9A|georgia"],
+  ["\u4F0A\u6717", "\u{1F1EE}\u{1F1F7}", "\u{1F1EE}\u{1F1F7}|\u4F0A\u6717|iran"],
+  ["\u4F0A\u62C9\u514B", "\u{1F1EE}\u{1F1F6}", "\u{1F1EE}\u{1F1F6}|\u4F0A\u62C9\u514B|iraq"],
+  ["\u4EE5\u8272\u5217", "\u{1F1EE}\u{1F1F1}", "\u{1F1EE}\u{1F1F1}|\u4EE5\u8272\u5217|israel"],
+  ["\u7EA6\u65E6", "\u{1F1EF}\u{1F1F4}", "\u{1F1EF}\u{1F1F4}|\u7EA6\u65E6|jordan"],
+  ["\u54C8\u8428\u514B\u65AF\u5766", "\u{1F1F0}\u{1F1FF}", "\u{1F1F0}\u{1F1FF}|\u54C8\u8428\u514B\u65AF\u5766|kazakhstan"],
+  ["\u79D1\u5A01\u7279", "\u{1F1F0}\u{1F1FC}", "\u{1F1F0}\u{1F1FC}|\u79D1\u5A01\u7279|kuwait"],
+  ["\u5409\u5C14\u5409\u65AF\u65AF\u5766", "\u{1F1F0}\u{1F1EC}", "\u{1F1F0}\u{1F1EC}|\u5409\u5C14\u5409\u65AF\u65AF\u5766|kyrgyzstan"],
+  ["\u9ECE\u5DF4\u5AE9", "\u{1F1F1}\u{1F1E7}", "\u{1F1F1}\u{1F1E7}|\u9ECE\u5DF4\u5AE9|lebanon"],
+  ["\u9A6C\u5C14\u4EE3\u592B", "\u{1F1F2}\u{1F1FB}", "\u{1F1F2}\u{1F1FB}|\u9A6C\u5C14\u4EE3\u592B|maldives"],
+  ["\u8499\u53E4", "\u{1F1F2}\u{1F1F3}", "\u{1F1F2}\u{1F1F3}|\u8499\u53E4|mongolia"],
+  ["\u5C3C\u6CCA\u5C14", "\u{1F1F3}\u{1F1F5}", "\u{1F1F3}\u{1F1F5}|\u5C3C\u6CCA\u5C14|nepal"],
+  ["\u671D\u9C9C", "\u{1F1F0}\u{1F1F5}", "\u{1F1F0}\u{1F1F5}|\u671D\u9C9C|north[\\s_-]*korea|dprk"],
+  ["\u963F\u66FC", "\u{1F1F4}\u{1F1F2}", "\u{1F1F4}\u{1F1F2}|\u963F\u66FC|oman"],
+  ["\u5DF4\u57FA\u65AF\u5766", "\u{1F1F5}\u{1F1F0}", "\u{1F1F5}\u{1F1F0}|\u5DF4\u57FA\u65AF\u5766|pakistan"],
+  ["\u5DF4\u52D2\u65AF\u5766", "\u{1F1F5}\u{1F1F8}", "\u{1F1F5}\u{1F1F8}|\u5DF4\u52D2\u65AF\u5766|palestine|west[\\s_-]*bank|gaza"],
+  ["\u5361\u5854\u5C14", "\u{1F1F6}\u{1F1E6}", "\u{1F1F6}\u{1F1E6}|\u5361\u5854\u5C14|qatar"],
+  ["\u65AF\u91CC\u5170\u5361", "\u{1F1F1}\u{1F1F0}", "\u{1F1F1}\u{1F1F0}|\u65AF\u91CC\u5170\u5361|sri[\\s_-]*lanka"],
+  ["\u53D9\u5229\u4E9A", "\u{1F1F8}\u{1F1FE}", "\u{1F1F8}\u{1F1FE}|\u53D9\u5229\u4E9A|syria"],
+  ["\u5854\u5409\u514B\u65AF\u5766", "\u{1F1F9}\u{1F1EF}", "\u{1F1F9}\u{1F1EF}|\u5854\u5409\u514B\u65AF\u5766|tajikistan"],
+  ["\u4E1C\u5E1D\u6C76", "\u{1F1F9}\u{1F1F1}", "\u{1F1F9}\u{1F1F1}|\u4E1C\u5E1D\u6C76|timor[\\s_-]*leste|east[\\s_-]*timor"],
+  ["\u571F\u5E93\u66FC\u65AF\u5766", "\u{1F1F9}\u{1F1F2}", "\u{1F1F9}\u{1F1F2}|\u571F\u5E93\u66FC\u65AF\u5766|turkmenistan"],
+  ["\u963F\u8054\u914B", "\u{1F1E6}\u{1F1EA}", "\u{1F1E6}\u{1F1EA}|\u963F\u8054\u914B|\u8FEA\u62DC|\u963F\u5E03\u624E\u6BD4|dubai|abu[s_-]*dhabi|uae|united[\\s_-]*arab[\\s_-]*emirates"],
+  ["\u4E4C\u5179\u522B\u514B\u65AF\u5766", "\u{1F1FA}\u{1F1FF}", "\u{1F1FA}\u{1F1FF}|\u4E4C\u5179\u522B\u514B\u65AF\u5766|uzbekistan"],
+  ["\u4E5F\u95E8", "\u{1F1FE}\u{1F1EA}", "\u{1F1FE}\u{1F1EA}|\u4E5F\u95E8|yemen"],
+  ["\u6FB3\u95E8", "\u{1F1F2}\u{1F1F4}", "\u{1F1F2}\u{1F1F4}|\u6FB3\u95E8|macau|macao"],
+  ["\u963F\u5C14\u5DF4\u5C3C\u4E9A", "\u{1F1E6}\u{1F1F1}", "\u{1F1E6}\u{1F1F1}|\u963F\u5C14\u5DF4\u5C3C\u4E9A|albania"],
+  ["\u5B89\u9053\u5C14", "\u{1F1E6}\u{1F1E9}", "\u{1F1E6}\u{1F1E9}|\u5B89\u9053\u5C14|andorra"],
+  ["\u767D\u4FC4\u7F57\u65AF", "\u{1F1E7}\u{1F1FE}", "\u{1F1E7}\u{1F1FE}|\u767D\u4FC4\u7F57\u65AF|belarus"],
+  ["\u6CE2\u65AF\u5C3C\u4E9A\u548C\u9ED1\u585E\u54E5\u7EF4\u90A3", "\u{1F1E7}\u{1F1E6}", "\u{1F1E7}\u{1F1E6}|\u6CE2\u65AF\u5C3C\u4E9A\u548C\u9ED1\u585E\u54E5\u7EF4\u90A3|bosnia|bosnia[\\s_-]*and[\\s_-]*herzegovina"],
+  ["\u51B0\u5C9B", "\u{1F1EE}\u{1F1F8}", "\u{1F1EE}\u{1F1F8}|\u51B0\u5C9B|iceland"],
+  ["\u5217\u652F\u6566\u58EB\u767B", "\u{1F1F1}\u{1F1EE}", "\u{1F1F1}\u{1F1EE}|\u5217\u652F\u6566\u58EB\u767B|liechtenstein"],
+  ["\u6469\u5C14\u591A\u74E6", "\u{1F1F2}\u{1F1E9}", "\u{1F1F2}\u{1F1E9}|\u6469\u5C14\u591A\u74E6|moldova"],
+  ["\u6469\u7EB3\u54E5", "\u{1F1F2}\u{1F1E8}", "\u{1F1F2}\u{1F1E8}|\u6469\u7EB3\u54E5|monaco"],
+  ["\u9ED1\u5C71", "\u{1F1F2}\u{1F1EA}", "\u{1F1F2}\u{1F1EA}|\u9ED1\u5C71|montenegro"],
+  ["\u5317\u9A6C\u5176\u987F", "\u{1F1F2}\u{1F1F0}", "\u{1F1F2}\u{1F1F0}|\u5317\u9A6C\u5176\u987F|north[\\s_-]*macedonia|macedonia"],
+  ["\u632A\u5A01", "\u{1F1F3}\u{1F1F4}", "\u{1F1F3}\u{1F1F4}|\u632A\u5A01|norway"],
+  ["\u5723\u9A6C\u529B\u8BFA", "\u{1F1F8}\u{1F1F2}", "\u{1F1F8}\u{1F1F2}|\u5723\u9A6C\u529B\u8BFA|san[\\s_-]*marino"],
+  ["\u585E\u5C14\u7EF4\u4E9A", "\u{1F1F7}\u{1F1F8}", "\u{1F1F7}\u{1F1F8}|\u585E\u5C14\u7EF4\u4E9A|serbia"],
+  ["\u745E\u58EB", "\u{1F1E8}\u{1F1ED}", "\u{1F1E8}\u{1F1ED}|\u745E\u58EB|switzerland"],
+  ["\u4E4C\u514B\u5170", "\u{1F1FA}\u{1F1E6}", "\u{1F1FA}\u{1F1E6}|\u4E4C\u514B\u5170|ukraine"],
+  ["\u68B5\u8482\u5188", "\u{1F1FB}\u{1F1E6}", "\u{1F1FB}\u{1F1E6}|\u68B5\u8482\u5188|vatican"],
+  ["\u79D1\u7D22\u6C83", "\u{1F1FD}\u{1F1F0}", "\u{1F1FD}\u{1F1F0}|\u79D1\u7D22\u6C83|kosovo"],
+  ["\u5DF4\u54C8\u9A6C", "\u{1F1E7}\u{1F1F8}", "\u{1F1E7}\u{1F1F8}|\u5DF4\u54C8\u9A6C|bahamas"],
+  ["\u5DF4\u5DF4\u591A\u65AF", "\u{1F1E7}\u{1F1E7}", "\u{1F1E7}\u{1F1E7}|\u5DF4\u5DF4\u591A\u65AF|barbados"],
+  ["\u4F2F\u5229\u5179", "\u{1F1E7}\u{1F1FF}", "\u{1F1E7}\u{1F1FF}|\u4F2F\u5229\u5179|belize"],
+  ["\u54E5\u65AF\u8FBE\u9ECE\u52A0", "\u{1F1E8}\u{1F1F7}", "\u{1F1E8}\u{1F1F7}|\u54E5\u65AF\u8FBE\u9ECE\u52A0|costa[\\s_-]*rica"],
+  ["\u53E4\u5DF4", "\u{1F1E8}\u{1F1FA}", "\u{1F1E8}\u{1F1FA}|\u53E4\u5DF4|cuba"],
+  ["\u591A\u7C73\u5C3C\u514B", "\u{1F1E9}\u{1F1F2}", "\u{1F1E9}\u{1F1F2}|\u591A\u7C73\u5C3C\u514B|dominica"],
+  ["\u591A\u7C73\u5C3C\u52A0", "\u{1F1E9}\u{1F1F4}", "\u{1F1E9}\u{1F1F4}|\u591A\u7C73\u5C3C\u52A0|dominican[\\s_-]*republic|dominican"],
+  ["\u8428\u5C14\u74E6\u591A", "\u{1F1F8}\u{1F1FB}", "\u{1F1F8}\u{1F1FB}|\u8428\u5C14\u74E6\u591A|el[\\s_-]*salvador"],
+  ["\u683C\u6797\u7EB3\u8FBE", "\u{1F1EC}\u{1F1E9}", "\u{1F1EC}\u{1F1E9}|\u683C\u6797\u7EB3\u8FBE|grenada"],
+  ["\u5371\u5730\u9A6C\u62C9", "\u{1F1EC}\u{1F1F9}", "\u{1F1EC}\u{1F1F9}|\u5371\u5730\u9A6C\u62C9|guatemala"],
+  ["\u6D77\u5730", "\u{1F1ED}\u{1F1F9}", "\u{1F1ED}\u{1F1F9}|\u6D77\u5730|haiti"],
+  ["\u6D2A\u90FD\u62C9\u65AF", "\u{1F1ED}\u{1F1F3}", "\u{1F1ED}\u{1F1F3}|\u6D2A\u90FD\u62C9\u65AF|honduras"],
+  ["\u7259\u4E70\u52A0", "\u{1F1EF}\u{1F1F2}", "\u{1F1EF}\u{1F1F2}|\u7259\u4E70\u52A0|jamaica"],
+  ["\u5C3C\u52A0\u62C9\u74DC", "\u{1F1F3}\u{1F1EE}", "\u{1F1F3}\u{1F1EE}|\u5C3C\u52A0\u62C9\u74DC|nicaragua"],
+  ["\u5DF4\u62FF\u9A6C", "\u{1F1F5}\u{1F1E6}", "\u{1F1F5}\u{1F1E6}|\u5DF4\u62FF\u9A6C|panama"],
+  ["\u5723\u57FA\u8328\u548C\u5C3C\u7EF4\u65AF", "\u{1F1F0}\u{1F1F3}", "\u{1F1F0}\u{1F1F3}|\u5723\u57FA\u8328\u548C\u5C3C\u7EF4\u65AF|saint[\\s_-]*kitts|st[\\s_-]*kitts"],
+  ["\u5723\u5362\u897F\u4E9A", "\u{1F1F1}\u{1F1E8}", "\u{1F1F1}\u{1F1E8}|\u5723\u5362\u897F\u4E9A|saint[\\s_-]*lucia|st[\\s_-]*lucia"],
+  ["\u5723\u6587\u68EE\u7279\u548C\u683C\u6797\u7EB3\u4E01\u65AF", "\u{1F1FB}\u{1F1E8}", "\u{1F1FB}\u{1F1E8}|\u5723\u6587\u68EE\u7279\u548C\u683C\u6797\u7EB3\u4E01\u65AF|saint[\\s_-]*vincent|st[\\s_-]*vincent"],
+  ["\u7279\u7ACB\u5C3C\u8FBE\u548C\u591A\u5DF4\u54E5", "\u{1F1F9}\u{1F1F9}", "\u{1F1F9}\u{1F1F9}|\u7279\u7ACB\u5C3C\u8FBE\u548C\u591A\u5DF4\u54E5|trinidad[\\s_-]*and[\\s_-]*tobago"],
+  ["\u5B89\u63D0\u74DC\u548C\u5DF4\u5E03\u8FBE", "\u{1F1E6}\u{1F1EC}", "\u{1F1E6}\u{1F1EC}|\u5B89\u63D0\u74DC\u548C\u5DF4\u5E03\u8FBE|antigua[\\s_-]*and[\\s_-]*barbuda"],
+  ["\u54E5\u4F26\u6BD4\u4E9A", "\u{1F1E8}\u{1F1F4}", "\u{1F1E8}\u{1F1F4}|\u54E5\u4F26\u6BD4\u4E9A|\u6CE2\u54E5\u5927|\u9EA6\u5FB7\u6797|(?:^|[^A-Za-z])CO(?:$|[^A-Za-z])|bogot[a\xE1]|medellin|colombia"],
+  ["\u667A\u5229", "\u{1F1E8}\u{1F1F1}", "\u{1F1E8}\u{1F1F1}|\u667A\u5229|chile"],
+  ["\u79D8\u9C81", "\u{1F1F5}\u{1F1EA}", "\u{1F1F5}\u{1F1EA}|\u79D8\u9C81|peru"],
+  ["\u4E4C\u62C9\u572D", "\u{1F1FA}\u{1F1FE}", "\u{1F1FA}\u{1F1FE}|\u4E4C\u62C9\u572D|uruguay"],
+  ["\u5DF4\u62C9\u572D", "\u{1F1F5}\u{1F1FE}", "\u{1F1F5}\u{1F1FE}|\u5DF4\u62C9\u572D|paraguay"],
+  ["\u73BB\u5229\u7EF4\u4E9A", "\u{1F1E7}\u{1F1F4}", "\u{1F1E7}\u{1F1F4}|\u73BB\u5229\u7EF4\u4E9A|bolivia"],
+  ["\u5384\u74DC\u591A\u5C14", "\u{1F1EA}\u{1F1E8}", "\u{1F1EA}\u{1F1E8}|\u5384\u74DC\u591A\u5C14|ecuador"],
+  ["\u59D4\u5185\u745E\u62C9", "\u{1F1FB}\u{1F1EA}", "\u{1F1FB}\u{1F1EA}|\u59D4\u5185\u745E\u62C9|venezuela"],
+  ["\u572D\u4E9A\u90A3", "\u{1F1EC}\u{1F1FE}", "\u{1F1EC}\u{1F1FE}|\u572D\u4E9A\u90A3|guyana"],
+  ["\u82CF\u91CC\u5357", "\u{1F1F8}\u{1F1F7}", "\u{1F1F8}\u{1F1F7}|\u82CF\u91CC\u5357|suriname"],
+  ["\u65B0\u897F\u5170", "\u{1F1F3}\u{1F1FF}", "\u{1F1F3}\u{1F1FF}|\u65B0\u897F\u5170|new[\\s_-]*zealand|auckland|\u5965\u514B\u5170|wellington|\u60E0\u7075\u987F"],
+  ["\u6590\u6D4E", "\u{1F1EB}\u{1F1EF}", "\u{1F1EB}\u{1F1EF}|\u6590\u6D4E|fiji"],
+  ["\u5DF4\u5E03\u4E9A\u65B0\u51E0\u5185\u4E9A", "\u{1F1F5}\u{1F1EC}", "\u{1F1F5}\u{1F1EC}|\u5DF4\u5E03\u4E9A\u65B0\u51E0\u5185\u4E9A|papua[\\s_-]*new[\\s_-]*guinea"],
+  ["\u6240\u7F57\u95E8\u7FA4\u5C9B", "\u{1F1F8}\u{1F1E7}", "\u{1F1F8}\u{1F1E7}|\u6240\u7F57\u95E8\u7FA4\u5C9B|solomon[\\s_-]*islands"],
+  ["\u74E6\u52AA\u963F\u56FE", "\u{1F1FB}\u{1F1FA}", "\u{1F1FB}\u{1F1FA}|\u74E6\u52AA\u963F\u56FE|vanuatu"],
+  ["\u8428\u6469\u4E9A", "\u{1F1FC}\u{1F1F8}", "\u{1F1FC}\u{1F1F8}|\u8428\u6469\u4E9A|samoa"],
+  ["\u6C64\u52A0", "\u{1F1F9}\u{1F1F4}", "\u{1F1F9}\u{1F1F4}|\u6C64\u52A0|tonga"],
+  ["\u57FA\u91CC\u5DF4\u65AF", "\u{1F1F0}\u{1F1EE}", "\u{1F1F0}\u{1F1EE}|\u57FA\u91CC\u5DF4\u65AF|kiribati"],
+  ["\u56FE\u74E6\u5362", "\u{1F1F9}\u{1F1FB}", "\u{1F1F9}\u{1F1FB}|\u56FE\u74E6\u5362|tuvalu"],
+  ["\u7459\u9C81", "\u{1F1F3}\u{1F1F7}", "\u{1F1F3}\u{1F1F7}|\u7459\u9C81|nauru"],
+  ["\u5E15\u52B3", "\u{1F1F5}\u{1F1FC}", "\u{1F1F5}\u{1F1FC}|\u5E15\u52B3|palau"],
+  ["\u9A6C\u7ECD\u5C14\u7FA4\u5C9B", "\u{1F1F2}\u{1F1ED}", "\u{1F1F2}\u{1F1ED}|\u9A6C\u7ECD\u5C14\u7FA4\u5C9B|marshall[\\s_-]*islands"],
+  ["\u5BC6\u514B\u7F57\u5C3C\u897F\u4E9A", "\u{1F1EB}\u{1F1F2}", "\u{1F1EB}\u{1F1F2}|\u5BC6\u514B\u7F57\u5C3C\u897F\u4E9A|micronesia|federated[\\s_-]*states[\\s_-]*of[\\s_-]*micronesia"],
+  ["\u5173\u5C9B", "\u{1F1EC}\u{1F1FA}", "\u{1F1EC}\u{1F1FA}|\u5173\u5C9B|guam"],
+  ["\u6CE2\u591A\u9ECE\u5404", "\u{1F1F5}\u{1F1F7}", "\u{1F1F5}\u{1F1F7}|\u6CE2\u591A\u9ECE\u5404|puerto[\\s_-]*rico"],
+  ["\u767E\u6155\u5927", "\u{1F1E7}\u{1F1F2}", "\u{1F1E7}\u{1F1F2}|\u767E\u6155\u5927|bermuda"],
+  ["\u683C\u9675\u5170", "\u{1F1EC}\u{1F1F1}", "\u{1F1EC}\u{1F1F1}|\u683C\u9675\u5170|greenland"],
+  ["\u5E93\u62C9\u7D22", "\u{1F1E8}\u{1F1FC}", "\u{1F1E8}\u{1F1FC}|\u5E93\u62C9\u7D22|curacao|cura\xE7ao"],
+  ["\u963F\u9C81\u5DF4", "\u{1F1E6}\u{1F1FC}", "\u{1F1E6}\u{1F1FC}|\u963F\u9C81\u5DF4|aruba"],
+  ["\u5F00\u66FC\u7FA4\u5C9B", "\u{1F1F0}\u{1F1FE}", "\u{1F1F0}\u{1F1FE}|\u5F00\u66FC\u7FA4\u5C9B|cayman[\\s_-]*islands"],
+  ["\u82F1\u5C5E\u7EF4\u5C14\u4EAC\u7FA4\u5C9B", "\u{1F1FB}\u{1F1EC}", "\u{1F1FB}\u{1F1EC}|\u82F1\u5C5E\u7EF4\u5C14\u4EAC\u7FA4\u5C9B|british[\\s_-]*virgin[\\s_-]*islands"],
+  ["\u7F8E\u5C5E\u7EF4\u5C14\u4EAC\u7FA4\u5C9B", "\u{1F1FB}\u{1F1EE}", "\u{1F1FB}\u{1F1EE}|\u7F8E\u5C5E\u7EF4\u5C14\u4EAC\u7FA4\u5C9B|us[\\s_-]*virgin[\\s_-]*islands|u\\.s\\.[\\s_-]*virgin[\\s_-]*islands"],
+  ["\u65B0\u5580\u91CC\u591A\u5C3C\u4E9A", "\u{1F1F3}\u{1F1E8}", "\u{1F1F3}\u{1F1E8}|\u65B0\u5580\u91CC\u591A\u5C3C\u4E9A|new[\\s_-]*caledonia"],
+  ["\u6CD5\u5C5E\u6CE2\u5229\u5C3C\u897F\u4E9A", "\u{1F1F5}\u{1F1EB}", "\u{1F1F5}\u{1F1EB}|\u6CD5\u5C5E\u6CE2\u5229\u5C3C\u897F\u4E9A|french[\\s_-]*polynesia"],
+  ["\u5E93\u514B\u7FA4\u5C9B", "\u{1F1E8}\u{1F1F0}", "\u{1F1E8}\u{1F1F0}|\u5E93\u514B\u7FA4\u5C9B|cook[\\s_-]*islands"],
+  ["\u7EBD\u57C3", "\u{1F1F3}\u{1F1FA}", "\u{1F1F3}\u{1F1FA}|\u7EBD\u57C3|niue"]
+];
+var REGION_RES = REGION_DEFS.map(([name, , src]) => [name, new RegExp(src, "i")]);
+var STRONG_INFO = /剩余|已用|距离下次|下次重置|套餐|到期|过期|官网|官址|客服|订阅|工单|邮箱|网址|流量\s*[:：]|traffic\s*[:：]|\bexpire\b|\bhttps?:\/\/|t\.me\//iu;
+var EXCLUDE_FILTER = new RegExp("\u7FA4|\u8FD4\u5229|\u5FAA\u73AF|\u5B98\u7F51|\u5BA2\u670D|\u7F51\u7AD9|\u7F51\u5740|\u83B7\u53D6|\u8BA2\u9605|\u6D41\u91CF|\u5230\u671F|\u673A\u573A|\u4E0B\u6B21|\u7248\u672C|\u5B98\u5740|\u5907\u7528|\u8FC7\u671F|\u5DF2\u7528|\u8054\u7CFB|\u90AE\u7BB1|\u5DE5\u5355|\u8D29\u5356|\u901A\u77E5|\u5012\u5356|\u9632\u6B62|\u56FD\u5185|\u5730\u5740|\u9891\u9053|\u7535\u62A5|\u65E0\u6CD5|\u8BF4\u660E|\u4F7F\u7528|\u63D0\u793A|\u8BBF\u95EE|\u652F\u6301|\u6559\u7A0B|\u5173\u6CE8|\u66F4\u65B0|\u4F5C\u8005|\u52A0\u5165|\u8D85\u65F6|\u6536\u85CF|\u4F18\u60E0|\u798F\u5229|\u9080\u8BF7|\u597D\u53CB|\u5931\u8054|\u9009\u62E9|\u5269\u4F59|\u516C\u76CA|\u53D1\u5E03|DIZTNA|\u901A\u8DEF|\u767B\u5F55|\u7981\u6B62|\u5B9A\u65F6|\u6E20\u9053|\u7262\u8BB0|\u6C38\u4E45|\u4F59\u989D|\u9601\u4E0B|\u672C\u7AD9|\u5237\u65B0|\u5BFC\u822A|\u5EFA\u8BAE|\u91CD\u7F6E|\u4EE5\u4E0B|\u8FC7\u6EE4|\u26A0\uFE0F|@|t\\.me\\/\\+|\\bexpire\\b|\\bhttps?:\\/\\/|\\btraffic\\b", "iu");
+var TRAD2SIMP = {
+  "\u7063": "\u6E7E",
+  "\u570B": "\u56FD",
+  "\u81FA": "\u53F0",
+  "\u6771": "\u4E1C",
+  "\u5CF6": "\u5C9B",
+  "\u4E9E": "\u4E9A",
+  "\u502B": "\u4F26",
+  "\u862D": "\u5170",
+  "\u99AC": "\u9A6C",
+  "\u8CD3": "\u5BBE",
+  "\u7D10": "\u7EBD",
+  "\u7D04": "\u7EA6",
+  "\u9054": "\u8FBE",
+  "\u78EF": "\u77F6",
+  "\u8056": "\u5723",
+  "\u9580": "\u95E8",
+  "\u97D3": "\u97E9",
+  "\u7F85": "\u7F57",
+  "\u8607": "\u82CF",
+  "\u806F": "\u8054",
+  "\u611B": "\u7231",
+  "\u723E": "\u5C14",
+  "\u70CF": "\u4E4C",
+  "\u85A9": "\u8428",
+  "\u83EF": "\u534E",
+  "\u9813": "\u987F",
+  "\u7DAD": "\u7EF4",
+  "\u7DEC": "\u7F05",
+  "\u5EE3": "\u5E7F"
+};
+var TRAD_RE = new RegExp(`[${Object.keys(TRAD2SIMP).join("")}]`, "g");
+function foldTrad(text) {
+  return String(text).replace(TRAD_RE, (ch) => TRAD2SIMP[ch]);
+}
+var ICON_BASE = "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/";
+var EXTRA_DEFS = [
+  {
+    name: "\u4F4E\u500D\u7387\u8282\u70B9",
+    icon: ICON_BASE + "Available.svg",
+    re: new RegExp("^(?!.*(?:\u5269|\u671F)).*(?:(?<!\\d)0\\.[0-5]|(?<=[ \\[\\(|\uFF5C\u4E28\u2223\u2503\\-\u2010\u2013\u2014\u2212\uFF0D\uFE63])0[*\xD7\u2715\u2716\u2A2F\u2A09x\u500D])|(?:(?<=[ \\[\\(|\uFF5C\u4E28\u2223\u2503\\-\u2010\u2013\u2014\u2212\uFF0D\uFE63])[*\xD7\u2715\u2716\u2A2F\u2A09x]0(?=[ \\)\\]]|\u500D|$))|^(?!.*(?:\u5BA2\u6237\u7AEF|\u8F6F\u4EF6)).*\u4E0B\u8F7D|\u4F4E\u500D|\u514D\u8D39|(?<![A-Za-z])free(?![A-Za-z])", "i")
+  },
+  {
+    name: "\u9AD8\u500D\u7387\u8282\u70B9",
+    icon: ICON_BASE + "Airport.svg",
+    re: new RegExp("(?<=[ \\[\\(|\uFF5C\u4E28\u2223\u2503\\-\u2010\u2013\u2014\u2212\uFF0D\uFE63])((?:[*\xD7\u2715\u2716\u2A2F\u2A09x]\\s*(?:[2-9]\\d*|[1-9]\\d+)(?:\\.\\d+)?)|(?:(?<![\\d.])(?:[2-9]\\d*|[1-9]\\d+)(?:\\.\\d+)?\\s*(?:\u500D|[*\xD7\u2715\u2716\u2A2F\u2A09x])))", "i")
+  },
+  {
+    name: "\u5BB6\u5BBD\u8282\u70B9",
+    icon: ICON_BASE + "Server.svg",
+    re: new RegExp("\u5BB6\u5BBD|\u4F4F\u5B85|\u539F\u751F\\s*IP|\u5BB6\u5EAD\u5BBD\u5E26|\\bISP\\b|\\bRES\\b|residential", "i")
+  }
+];
+var AUTO_ICON = ICON_BASE + "Auto.svg";
+var OTHER_ICON = ICON_BASE + "WorldMap.svg";
+function matchedRegions(name) {
+  const text = foldTrad(name);
+  let best = -1;
+  const hits = [];
+  for (let i = 0; i < REGION_RES.length; i++) {
+    const m = text.match(REGION_RES[i][1]);
+    if (m) {
+      hits.push([i, m[0].length]);
+      if (m[0].length > best) best = m[0].length;
+    }
+  }
+  const geo = hits.filter(([, len]) => len === best).map(([i]) => i);
+  const extras = [];
+  for (let i = 0; i < EXTRA_DEFS.length; i++) {
+    if (EXTRA_DEFS[i].re.test(text)) extras.push(i);
+  }
+  return { geo, extras };
+}
+function regionPlan(names) {
+  const buckets = /* @__PURE__ */ new Map();
+  const add = (key, pname, icon, n) => {
+    if (!buckets.has(key)) {
+      buckets.set(key, { name: pname, icon, members: [] });
+    }
+    buckets.get(key).members.push(n);
+  };
+  const matched = /* @__PURE__ */ new Set();
+  for (const n of names) {
+    if (STRONG_INFO.test(n)) continue;
+    const { geo, extras } = matchedRegions(n);
+    for (const i of geo) add("g" + i, REGION_DEFS[i][0], "", n);
+    for (const i of extras) add("x" + i, EXTRA_DEFS[i].name, EXTRA_DEFS[i].icon, n);
+    if (geo.length) matched.add(n);
+  }
+  const pairs = [];
+  for (let i = 0; i < REGION_DEFS.length; i++) {
+    const b = buckets.get("g" + i);
+    if (b) pairs.push(b);
+  }
+  for (let i = 0; i < EXTRA_DEFS.length; i++) {
+    const b = buckets.get("x" + i);
+    if (b) pairs.push(b);
+  }
+  const other = names.filter(
+    (n) => !matched.has(n) && !STRONG_INFO.test(n)
+  );
+  if (other.length) {
+    pairs.push({ name: "\u5176\u4ED6\u8282\u70B9", icon: OTHER_ICON, members: other });
+  }
+  const selectNames = pairs.map((q) => q.name);
+  const pairNames = [];
+  for (const q of pairs) pairNames.push(q.name + "-\u81EA\u52A8\u9009\u62E9", q.name);
+  return { pairs, selectNames, pairNames };
+}
+function keepPlainNode(name) {
+  if (STRONG_INFO.test(name)) return false;
+  if (matchedRegions(name).geo.length) return true;
+  return !EXCLUDE_FILTER.test(name);
+}
+var INVISIBLE_CHARS = /[\u00AD\u180E\u200B\u200E\u200F\u202A-\u202E\u2060-\u206F\uFEFF\u115F\u1160\u3164\uFFA0]/g;
+var FLAG_RE = /[\u{1F1E6}-\u{1F1FF}]{2}/u;
+function normalizePlainName(name) {
+  const clean = String(name).replace(INVISIBLE_CHARS, "");
+  const flag = clean.match(FLAG_RE)?.[0];
+  const rest = (flag ? clean.replace(flag, "") : clean).replace(/\s+/g, " ").trim();
+  const { geo } = matchedRegions(clean);
+  const regionFlag = flag || (geo.length ? REGION_DEFS[geo[0]][1] : void 0);
+  return regionFlag ? `${regionFlag} ${rest}` : rest;
+}
+var RESERVED_NAMES = /* @__PURE__ */ new Set([
+  "\u9ED8\u8BA4\u4EE3\u7406",
+  "GLOBAL",
+  "\u624B\u52A8\u9009\u62E9",
+  "\u81EA\u52A8\u9009\u62E9",
+  "\u8D1F\u8F7D\u5747\u8861",
+  "\u6545\u969C\u8F6C\u79FB",
+  "\u76F4\u8FDE",
+  "\u6F0F\u7F51\u4E4B\u9C7C",
+  "\u8FDC\u63A7\u5DE5\u5177",
+  "AdBlock",
+  "FCM",
+  "YouTube",
+  "Google",
+  "Claude",
+  "ClaudeAI",
+  "GitHub",
+  "AI",
+  "Microsoft",
+  "Apple",
+  "Telegram",
+  "Steam",
+  "TikTok",
+  "Twitter",
+  "Meta",
+  "Line",
+  "Netflix",
+  "Emby",
+  "PikPak",
+  "Spotify",
+  "Crypto",
+  "EHentai",
+  "\u94FE\u5F0F\u4E2D\u8F6C",
+  "\u5176\u4ED6\u8282\u70B9",
+  "REJECT",
+  "REJECT-DROP",
+  "PASS",
+  "DIRECT",
+  "\u{1F1E8}\u{1F1F3} \u76F4\u8FDE | \u53CC\u6808",
+  "\u{1F1E8}\u{1F1F3} \u76F4\u8FDE | IPv4\u4F18\u5148",
+  "\u{1F1E8}\u{1F1F3} \u76F4\u8FDE | IPv6\u4F18\u5148",
+  "\u{1F1E8}\u{1F1F3} \u76F4\u8FDE | \u4EC5IPv4",
+  "\u{1F1E8}\u{1F1F3} \u76F4\u8FDE | \u4EC5IPv6",
+  ...REGION_DEFS.map(([n]) => n),
+  ...REGION_DEFS.map(([n]) => n + "-\u81EA\u52A8\u9009\u62E9"),
+  ...EXTRA_DEFS.map((d) => d.name),
+  ...EXTRA_DEFS.map((d) => d.name + "-\u81EA\u52A8\u9009\u62E9"),
+  "\u5176\u4ED6\u8282\u70B9-\u81EA\u52A8\u9009\u62E9"
+]);
+function preparePlainNodes(nodes) {
+  const kept = [];
+  const renameMap = /* @__PURE__ */ new Map();
+  const used = /* @__PURE__ */ new Set();
+  for (const node of nodes) {
+    const raw = String(node.name ?? "");
+    const t = String(node.type ?? "").toLowerCase();
+    if (t === "direct" || t === "reject") continue;
+    if (!keepPlainNode(raw)) continue;
+    let nn = normalizePlainName(raw);
+    if (RESERVED_NAMES.has(nn)) {
+      let cand = "\u8282\u70B9-" + nn;
+      let i = 2;
+      while (used.has(cand) || RESERVED_NAMES.has(cand)) {
+        cand = "\u8282\u70B9-" + nn + "-" + i++;
+      }
+      nn = cand;
+    }
+    if (!renameMap.has(raw)) renameMap.set(raw, nn);
+    if (used.has(nn)) continue;
+    used.add(nn);
+    kept.push(nn === raw ? node : { ...node, name: nn });
+  }
+  return { nodes: kept, renameMap };
+}
 var MEMBER_TOKENS = /* @__PURE__ */ new Set(["@ENTRIES@", "@EXITS@", "@ALL@"]);
 var LINK_ALPHABET = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 var CODE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
@@ -6232,44 +6695,58 @@ var PAGE = `<!DOCTYPE html>
 <style>
 :root{color-scheme:dark}
 *{box-sizing:border-box}
-body{font-family:system-ui,-apple-system,sans-serif;background:#111;color:#eee;margin:0;padding:24px 16px 40px}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:#060809;color:#eef6f5;margin:0;padding:24px 16px 40px}
 .wrap{max-width:600px;margin:0 auto}
-h1{font-size:22px;margin:0 0 4px}
-.sub{color:#999;font-size:14px;margin:0 0 20px}
-.card{background:#17181a;border:1px solid #2a2b2e;border-radius:12px;padding:16px;margin-bottom:16px}
-.card h2{font-size:15px;margin:0 0 10px;color:#ddd}
+h1{font-size:31px;font-weight:800;letter-spacing:.05em;text-align:center;margin:0 0 8px;background:linear-gradient(90deg,#2dd4bf,#3b82f6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:#a3bab5;font-size:14px;margin:0;text-align:center}
+.hero{text-align:center;margin:10px 0 22px}
+.hero-badge{display:inline-block;font-size:11px;letter-spacing:.28em;color:#5eead4;border:1px solid rgba(45,212,191,.45);background:rgba(20,184,166,.10);padding:5px 12px 5px 15px;border-radius:999px;margin-bottom:14px}
+.hero::after{content:"";display:block;width:64px;height:3px;border-radius:2px;margin:16px auto 0;background:linear-gradient(90deg,#2dd4bf,#3b82f6)}
+.card{background:#0c1113;border:1px solid #1f2a2f;border-radius:12px;padding:16px;margin-bottom:16px}
+.card h2{font-size:15px;margin:0 0 10px;color:#eef6f5}
 .restore{display:flex;gap:8px}
 .restore input{flex:1}
 .tabs{display:flex;gap:8px;margin-bottom:16px}
-.tabs button{flex:1;padding:11px;border:1px solid #444;border-radius:10px;background:#1c1c1e;color:#bbb;font-size:15px;cursor:pointer}
-.tabs button.on{background:#0a84ff;color:#fff;border-color:#0a84ff}
-label{display:block;margin:16px 0 6px;color:#bbb;font-size:14px}
+.tabs button{flex:1;padding:11px;border:1px solid #31424a;border-radius:10px;background:#11181b;color:#c3d2d0;font-size:15px;cursor:pointer}
+.tabs button.on{background:linear-gradient(135deg,#14b8a6,#2563eb);color:#fff;border-color:#14b8a6}
+label{display:block;margin:16px 0 6px;color:#c3d2d0;font-size:14px}
 label:first-of-type{margin-top:4px}
-select,textarea,input{width:100%;padding:10px;border-radius:8px;border:1px solid #444;background:#1c1c1e;color:#eee;font-size:15px}
-select:focus,textarea:focus,input:focus{outline:2px solid #0a84ff;border-color:#0a84ff}
+select,textarea,input{width:100%;padding:10px;border-radius:8px;border:1px solid #31424a;background:#11181b;color:#eef6f5;font-size:15px}
+select:focus,textarea:focus,input:focus{outline:2px solid #14b8a6;border-color:#14b8a6}
 textarea{resize:vertical;font-family:inherit;line-height:1.5}
 .ta-wrap{position:relative}
-.clear{position:absolute;top:6px;right:6px;padding:3px 10px;border:1px solid #444;border-radius:6px;background:#26262a;color:#aaa;font-size:12px;cursor:pointer}
-.go{margin-top:18px;width:100%;padding:13px;border:0;border-radius:10px;background:#0a84ff;color:#fff;font-size:16px;cursor:pointer}
+.clear{position:absolute;top:6px;right:6px;padding:3px 10px;border:1px solid #31424a;border-radius:6px;background:#162024;color:#a3bab5;font-size:12px;cursor:pointer}
+.go{margin-top:18px;width:100%;padding:13px;border:0;border-radius:10px;background:linear-gradient(135deg,#14b8a6,#2563eb);color:#fff;font-size:16px;cursor:pointer}
 .go:disabled{opacity:.55;cursor:wait}
-.err{display:none;color:#ff6b60;font-size:14px;margin-top:10px}
-.ok{display:none;color:#4cc38a;font-size:14px;margin-top:10px}
+.err{display:none;color:#ef4444;font-size:14px;margin-top:10px}
+.ok{display:none;color:#22c55e;font-size:14px;margin-top:10px}
 .out{margin-top:18px;display:none}
-.link-row{background:#1c1c1e;border:1px solid #333;border-radius:10px;padding:12px;margin-top:10px}
-.link-row .tag{font-size:12px;color:#0a84ff;margin-bottom:6px}
-.link-row .u{word-break:break-all;font-size:14px;color:#eee}
+.link-row{background:#11181b;border:1px solid #1f2a2f;border-radius:10px;padding:12px;margin-top:10px}
+.link-row .tag{font-size:12px;color:#2dd4bf;margin-bottom:6px}
+.link-row .u{word-break:break-all;font-size:13px;color:#eef6f5;font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .link-row .ops{display:flex;gap:8px;margin-top:10px}
-.link-row .ops button,.link-row .ops a{flex:1;padding:9px;border:0;border-radius:8px;background:#333;color:#eee;font-size:14px;text-align:center;text-decoration:none;cursor:pointer}
-.link-row .ops a.imp{background:#0a84ff;color:#fff}
-.note{color:#888;font-size:13px;margin-top:10px;line-height:1.6}
+.link-row .ops button,.link-row .ops a{flex:1;padding:9px;border:0;border-radius:8px;background:#1b272c;color:#eef6f5;font-size:14px;text-align:center;text-decoration:none;cursor:pointer}
+.link-row .ops a.imp{background:linear-gradient(135deg,#14b8a6,#2563eb);color:#fff}
+.note{color:#a3bab5;font-size:13px;margin-top:10px;line-height:1.6}
 .hide{display:none}
-footer{color:#777;font-size:13px;margin-top:24px;line-height:1.6}
+.rgchip{padding:4px 11px;border-radius:999px;border:1px solid #31424a;background:#11181b;color:#c3d2d0;font-size:13px;cursor:pointer}
+.rgchip.on{border-color:#14b8a6;background:rgba(20,184,166,.2);color:#fff;font-weight:700}
+footer{color:#5d726d;font-size:13px;margin-top:24px;line-height:1.6}
+/* \u7ED3\u6784\u5C42 (2.2): \u53CC\u5217 \u2014 \u4E3B\u8868\u5355\u5DE6, \u6062\u590D\u5361\u53F3\u8F68 */
+.wrap{max-width:860px}
+.wrap>.card{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 16px;margin-bottom:16px}
+.wrap>.card h2{margin:0;font-size:14px;white-space:nowrap}
+.wrap>.card .restore{flex:1;min-width:220px}
+.wrap>.card .err,.wrap>.card .ok{flex-basis:100%;margin-top:2px}
 </style>
 </head>
 <body>
 <div class="wrap">
+<header class="hero">
+<div class="hero-badge">SUBSCRIPTION CONVERTER</div>
 <h1>\u8BA2\u9605\u8F6C\u6362</h1>
 <p class="sub">\u628A\u8282\u70B9\u3001\u8BA2\u9605\u8F6C\u6210\u5BA2\u6237\u7AEF\u80FD\u76F4\u63A5\u7528\u7684\u8BA2\u9605\u94FE\u63A5\uFF0C\u652F\u6301\u666E\u901A\u8F6C\u6362\u4E0E\u94FE\u5F0F\u4EE3\u7406\u3002</p>
+</header>
 
 <div class="card">
 <h2>\u5DF2\u6709\u77ED\u94FE\uFF1F\u6062\u590D\u4E0A\u6B21\u7684\u586B\u5199</h2>
@@ -6298,6 +6775,9 @@ footer{color:#777;font-size:13px;margin-top:24px;line-height:1.6}
 <option value="loon">Loon</option>
 <option value="quanx">Quantumult X</option>
 </select>
+<label>\u53EA\u4FDD\u7559\u8FD9\u4E9B\u5730\u533A\u7684\u8282\u70B9\uFF08\u53EF\u9009\uFF0C\u4E0D\u9009 = \u5168\u90E8\u4FDD\u7559\uFF09</label>
+<div id="rgChips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+<input id="rgExtra" placeholder="\u5176\u5B83\u5730\u533A\u4EE3\u7801\uFF0C\u9017\u53F7\u5206\u9694\uFF08\u5982 DE,GB\uFF09" style="margin-top:8px">
 <label>\u81EA\u5B9A\u4E49\u540E\u7F00\uFF08\u53EF\u9009\uFF0C\u4E0D\u586B\u5219\u968F\u673A\uFF09</label>
 <input id="codeN" placeholder="\u5982 home\uFF0C\u53EA\u7528\u5B57\u6BCD\u3001\u6570\u5B57\u3001-\u3001_">
 <button class="go" id="goN" onclick="genN()">\u751F\u6210\u8F6C\u6362\u94FE\u63A5</button>
@@ -6314,6 +6794,9 @@ footer{color:#777;font-size:13px;margin-top:24px;line-height:1.6}
 <select id="tc">
 <option value="singbox">sing-box</option>
 <option value="clash">Mihomo / Clash</option>
+<option value="surge">Surge</option>
+<option value="loon">Loon</option>
+<option value="quanx">Quantumult X</option>
 </select>
 <label>\u81EA\u5B9A\u4E49\u540E\u7F00\uFF08\u53EF\u9009\uFF0C\u4E0D\u586B\u5219\u968F\u673A\uFF09</label>
 <input id="codeC" placeholder="\u5982 chain\uFF0C\u53EA\u7528\u5B57\u6BCD\u3001\u6570\u5B57\u3001-\u3001_">
@@ -6363,7 +6846,7 @@ function restore(){
     }else{
       mode("n");
       $("u").value=(rec.url||"").split("|").join("\\n");
-      if(rec.target) $("t").value=rec.target;
+      if(rec.target) $("t").value=rec.target; RGSEL={};(rec.regions||[]).forEach(function(c){RGSEL[c]=1});rgSync();
       $("codeN").value=code;
     }
     $("rok").style.display="block";
@@ -6413,11 +6896,16 @@ function shorten(body){
   return fetch("/shorten",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
     .then(function(r){return r.text().then(function(t){return {ok:r.ok,text:t}})});
 }
+var RGSEL={};
+function rgSync(){document.querySelectorAll(".rgchip").forEach(function(ch){ch.className=RGSEL[ch.getAttribute("data-c")]?"rgchip on":"rgchip"})}
+function rgSel(){var s={};for(var k in RGSEL)if(RGSEL[k])s[k]=1;var ex=$("rgExtra");if(ex)ex.value.split(/[,\\s]+/).forEach(function(x){x=x.trim().toUpperCase();if(x)s[x]=1});return Object.keys(s)}
+function rgBuild(codes){var box=$("rgChips");if(!box)return;box.innerHTML="";codes.forEach(function(c){var b=document.createElement("button");b.type="button";b.className="rgchip";b.setAttribute("data-c",c);b.textContent=c;b.onclick=function(){RGSEL[c]=!RGSEL[c];rgSync()};box.appendChild(b)});rgSync()}
+(function(){var pop=["JP","HK","SG","US","TW","KR","DE","GB","FR","NL","CA","AU"];rgBuild(pop);fetch("/?get_regions=1").then(function(r){return r.json()}).then(function(cs){if(cs&&cs.length)rgBuild(cs)}).catch(function(){})})();
 function genN(){
   var it=lines("u");hideErr("errN");
   if(!it.length){showErr("errN","\u5148\u7C98\u8D34\u8282\u70B9\u6216\u8BA2\u9605\u94FE\u63A5");return}
   var tg=$("t").value, cd=$("codeN").value.trim();
-  var body={target:tg,url:it.join("|")}; if(cd)body.code=cd;
+  var body={target:tg,url:it.join("|")}; if(cd)body.code=cd; var rgs=rgSel(); if(rgs.length)body.regions=rgs.join("-");
   var btn=$("goN");btn.disabled=true;btn.textContent="\u751F\u6210\u4E2D\u2026";
   shorten(body).then(function(res){
     if(res.ok){
@@ -6999,6 +7487,760 @@ function clashEmit(node) {
   }
   return p;
 }
+var TEXT_TARGETS = /* @__PURE__ */ new Set(["v2ray", "surge", "loon", "quanx"]);
+var ALL_TARGETS = /* @__PURE__ */ new Set(["clash", "singbox", ...TEXT_TARGETS]);
+var TEST_URL = "https://www.gstatic.com/generate_204";
+var AUTO_GROUP = "\u81EA\u52A8\u6D4B\u901F";
+var CHAIN_GROUP = "\u26D3 \u94FE\u5F0F\u4EE3\u7406";
+function textToB64(s) {
+  const bytes = _enc.encode(s);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 32768) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + 32768));
+  }
+  return btoa(bin);
+}
+function b64UrlText(s) {
+  return textToB64(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function nodeType(node) {
+  const t = String(node.type || "").toLowerCase();
+  return t === "hy2" ? "hysteria2" : t;
+}
+function hostOf(node) {
+  return String(node.server ?? "");
+}
+function urlHost(host) {
+  return host.includes(":") && !host.startsWith("[") ? `[${host}]` : host;
+}
+function sniOf(node) {
+  return node.servername || node.sni || "";
+}
+function wsHostOf(node) {
+  return ((node["ws-opts"] || {}).headers || {}).Host || "";
+}
+function wsPathOf(node) {
+  return (node["ws-opts"] || {}).path || "";
+}
+function grpcNameOf(node) {
+  return (node["grpc-opts"] || {})["grpc-service-name"] || "";
+}
+function netOf(node) {
+  return String(node.network || "tcp").toLowerCase();
+}
+function realityOf(node) {
+  return nonEmptyObj(node["reality-opts"]) ? node["reality-opts"] : null;
+}
+function txtName(name) {
+  return String(name ?? "").replace(/=/g, "-").replace(/,/g, " ").replace(/\s+/g, " ").trim();
+}
+function ssPluginSip002(node) {
+  const pl = String(node.plugin || "");
+  const o = node["plugin-opts"] || {};
+  if (pl === "obfs") {
+    const parts = ["obfs-local", "obfs=" + (o.mode || "http")];
+    if (o.host) parts.push("obfs-host=" + o.host);
+    return parts.join(";");
+  }
+  if (pl === "v2ray-plugin") {
+    const parts = ["v2ray-plugin", "mode=" + (o.mode || "websocket")];
+    if (o.tls) parts.push("tls");
+    if (o.host) parts.push("host=" + o.host);
+    if (o.path) parts.push("path=" + o.path);
+    return parts.join(";");
+  }
+  return "";
+}
+function nodeToShareLink(node) {
+  const t = nodeType(node);
+  const host = urlHost(hostOf(node));
+  const port = portOf(node);
+  const frag = "#" + encodeURIComponent(String(node.name || t));
+  const sni = sniOf(node);
+  const scv = node["skip-cert-verify"] === true;
+  const net = netOf(node);
+  const q = (pairs) => {
+    const p = pairs.filter(([, v]) => v !== "" && v !== void 0 && v !== null);
+    return p.length ? "?" + p.map(([k, v]) => k + "=" + encodeURIComponent(v)).join("&") : "";
+  };
+  if (t === "ss" || t === "shadowsocks") {
+    const cred = b64UrlText(
+      `${node.cipher || "aes-256-gcm"}:${node.password || ""}`
+    );
+    const plugin = ssPluginSip002(node);
+    return `ss://${cred}@${host}:${port}` + (plugin ? "/?plugin=" + encodeURIComponent(plugin) : "") + frag;
+  }
+  if (t === "vmess") {
+    const doc = {
+      v: "2",
+      ps: String(node.name || "vmess"),
+      add: hostOf(node),
+      port: String(port),
+      id: node.uuid || "",
+      aid: String(intOr(node.alterId, 0)),
+      scy: node.cipher || "auto",
+      net,
+      type: "none",
+      host: wsHostOf(node),
+      path: wsPathOf(node),
+      tls: node.tls ? "tls" : ""
+    };
+    if (net === "grpc") doc.path = grpcNameOf(node);
+    if (sni) doc.sni = sni;
+    if (Array.isArray(node.alpn) && node.alpn.length) {
+      doc.alpn = node.alpn.join(",");
+    }
+    if (node["client-fingerprint"]) doc.fp = node["client-fingerprint"];
+    return "vmess://" + textToB64(JSON.stringify(doc));
+  }
+  if (t === "vless") {
+    const ro = realityOf(node);
+    return `vless://${node.uuid || ""}@${host}:${port}` + q([
+      ["encryption", "none"],
+      ["security", ro ? "reality" : node.tls ? "tls" : "none"],
+      ["sni", sni],
+      ["fp", node["client-fingerprint"] || ""],
+      ["pbk", ro ? ro["public-key"] || "" : ""],
+      ["sid", ro ? ro["short-id"] || "" : ""],
+      ["flow", node.flow || ""],
+      ["type", net],
+      ["host", wsHostOf(node)],
+      ["path", wsPathOf(node)],
+      ["serviceName", net === "grpc" ? grpcNameOf(node) : ""],
+      ["allowInsecure", scv ? "1" : ""]
+    ]) + frag;
+  }
+  if (t === "trojan") {
+    return `trojan://${encodeURIComponent(node.password || "")}@${host}:${port}` + q([
+      ["sni", sni],
+      ["type", net],
+      ["host", wsHostOf(node)],
+      ["path", wsPathOf(node)],
+      ["serviceName", net === "grpc" ? grpcNameOf(node) : ""],
+      ["allowInsecure", scv ? "1" : ""]
+    ]) + frag;
+  }
+  if (t === "hysteria2") {
+    return `hysteria2://${encodeURIComponent(node.password || "")}@${host}:${port}` + q([
+      ["sni", sni],
+      ["obfs", node.obfs || ""],
+      ["obfs-password", node["obfs-password"] || ""],
+      ["insecure", scv ? "1" : ""]
+    ]) + frag;
+  }
+  if (t === "tuic") {
+    return `tuic://${node.uuid || ""}:${encodeURIComponent(node.password || "")}@${host}:${port}` + q([
+      ["sni", sni],
+      ["alpn", Array.isArray(node.alpn) ? node.alpn.join(",") : ""],
+      ["congestion_control", node["congestion-controller"] || ""],
+      ["udp_relay_mode", node["udp-relay-mode"] || ""],
+      ["allowInsecure", scv ? "1" : ""]
+    ]) + frag;
+  }
+  if (t === "anytls") {
+    return `anytls://${encodeURIComponent(node.password || "")}@${host}:${port}` + q([
+      ["sni", sni],
+      ["insecure", scv ? "1" : ""]
+    ]) + frag;
+  }
+  return null;
+}
+function portOf(node) {
+  return toPort(node.port, 443);
+}
+function surgeEmit(node) {
+  const t = nodeType(node);
+  const host = hostOf(node);
+  const port = portOf(node);
+  const sni = sniOf(node);
+  const scv = node["skip-cert-verify"] === true;
+  const net = netOf(node);
+  const parts = [];
+  const wsParams = () => {
+    parts.push("ws=true");
+    const p = wsPathOf(node);
+    if (p) parts.push("ws-path=" + p);
+    const h = wsHostOf(node);
+    if (h) parts.push("ws-headers=Host:" + h);
+  };
+  if (t === "ss" || t === "shadowsocks") {
+    parts.push(
+      "ss",
+      host,
+      String(port),
+      "encrypt-method=" + (node.cipher || "aes-256-gcm"),
+      "password=" + (node.password || "")
+    );
+    const pl = String(node.plugin || "");
+    const o = node["plugin-opts"] || {};
+    if (pl === "obfs") {
+      parts.push("obfs=" + (o.mode || "http"));
+      if (o.host) parts.push("obfs-host=" + o.host);
+    } else if (pl) {
+      return null;
+    }
+  } else if (t === "vmess") {
+    if (net !== "tcp" && net !== "ws") return null;
+    parts.push(
+      "vmess",
+      host,
+      String(port),
+      "username=" + (node.uuid || ""),
+      "tls=" + (node.tls ? "true" : "false"),
+      "vmess-aead=" + (intOr(node.alterId, 0) === 0 ? "true" : "false")
+    );
+    if (net === "ws") wsParams();
+    const effSni = sni || wsHostOf(node);
+    if (node.tls && effSni) parts.push("sni=" + effSni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "trojan") {
+    if (net !== "tcp" && net !== "ws") return null;
+    parts.push(
+      "trojan",
+      host,
+      String(port),
+      "password=" + (node.password || "")
+    );
+    if (net === "ws") wsParams();
+    const effSni = sni || wsHostOf(node);
+    if (effSni) parts.push("sni=" + effSni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "hysteria2") {
+    parts.push(
+      "hysteria2",
+      host,
+      String(port),
+      "password=" + (node.password || "")
+    );
+    if (node.obfs) {
+      parts.push("obfs=" + node.obfs);
+      if (node["obfs-password"]) {
+        parts.push("obfs-password=" + node["obfs-password"]);
+      }
+    }
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "anytls") {
+    if (realityOf(node)) return null;
+    parts.push(
+      "anytls",
+      host,
+      String(port),
+      "password=" + (node.password || "")
+    );
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "snell") {
+    parts.push(
+      "snell",
+      host,
+      String(port),
+      "psk=" + (node.psk || node.password || "")
+    );
+    const o = node["obfs-opts"] || {};
+    if (o.mode) {
+      parts.push("obfs=" + o.mode);
+      if (o.host) parts.push("obfs-host=" + o.host);
+    }
+    if (node.version) parts.push("version=" + node.version);
+  } else if (t === "socks5") {
+    parts.push(node.tls ? "socks5-tls" : "socks5", host, String(port));
+    if (node.username) parts.push("username=" + node.username);
+    if (node.password) parts.push("password=" + node.password);
+    if (node.tls && sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "http") {
+    parts.push("http", host, String(port));
+    if (node.username) parts.push("username=" + node.username);
+    if (node.password) parts.push("password=" + node.password);
+    parts.push("tls=" + (node.tls ? "true" : "false"));
+    if (scv) parts.push("skip-cert-verify=true");
+  } else {
+    return null;
+  }
+  if (node.tfo === true) parts.push("tfo=true");
+  if (node.udp === true) parts.push("udp-relay=true");
+  return parts.join(", ");
+}
+function loonEmit(node) {
+  const t = nodeType(node);
+  const host = hostOf(node);
+  const port = portOf(node);
+  const sni = sniOf(node);
+  const scv = node["skip-cert-verify"] === true;
+  const net = netOf(node);
+  const parts = [];
+  const quoted = (v) => `"${String(v ?? "")}"`;
+  if (t === "ss" || t === "shadowsocks") {
+    parts.push(
+      "Shadowsocks",
+      host,
+      String(port),
+      node.cipher || "aes-256-gcm",
+      quoted(node.password || "")
+    );
+    const pl = String(node.plugin || "");
+    const o = node["plugin-opts"] || {};
+    if (pl === "obfs") {
+      parts.push(String(o.mode || "http"));
+      if (o.host) parts.push(String(o.host));
+    } else if (pl) {
+      return null;
+    }
+  } else if (t === "ssr") {
+    parts.push(
+      "ShadowsocksR",
+      host,
+      String(port),
+      node.cipher || "aes-256-cfb",
+      quoted(node.password || ""),
+      "protocol=" + (node.protocol || "origin"),
+      "protocol-param=" + (node["protocol-param"] || ""),
+      "obfs=" + (node.obfs || "plain"),
+      "obfs-param=" + (node["obfs-param"] || "")
+    );
+  } else if (t === "vmess") {
+    if (net !== "tcp" && net !== "ws") return null;
+    const method = !node.cipher || node.cipher === "auto" ? "chacha20-ietf-poly1305" : node.cipher;
+    parts.push(
+      "vmess",
+      host,
+      String(port),
+      method,
+      quoted(node.uuid || ""),
+      "over-tls=" + (node.tls ? "true" : "false")
+    );
+    if (node.tls && sni) parts.push("tls-name=" + sni);
+    if (net === "ws") {
+      parts.push("transport=ws");
+      if (wsPathOf(node)) parts.push("path=" + wsPathOf(node));
+      if (wsHostOf(node)) parts.push("host=" + wsHostOf(node));
+    } else {
+      parts.push("transport=tcp");
+    }
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "vless") {
+    if (net !== "tcp" && net !== "ws") return null;
+    parts.push("VLESS", host, String(port), quoted(node.uuid || ""));
+    if (net === "ws") {
+      parts.push("transport=ws");
+      if (wsPathOf(node)) parts.push("path=" + wsPathOf(node));
+      if (wsHostOf(node)) parts.push("host=" + wsHostOf(node));
+    } else {
+      parts.push("transport=tcp");
+    }
+    if (node.flow) parts.push("flow=" + node.flow);
+    const ro = realityOf(node);
+    if (ro) {
+      parts.push("public-key=" + quoted(ro["public-key"] || ""));
+      if (ro["short-id"]) parts.push("short-id=" + ro["short-id"]);
+    }
+    parts.push("over-tls=" + (node.tls || ro ? "true" : "false"));
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "trojan") {
+    parts.push("trojan", host, String(port), quoted(node.password || ""));
+    if (net === "ws") {
+      parts.push("transport=ws");
+      if (wsPathOf(node)) parts.push("path=" + wsPathOf(node));
+      if (wsHostOf(node)) parts.push("host=" + wsHostOf(node));
+    }
+    if (sni) parts.push("tls-name=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "hysteria2") {
+    parts.push("hysteria2", host, String(port), quoted(node.password || ""));
+    if (node.obfs) {
+      parts.push("obfs=" + node.obfs);
+      if (node["obfs-password"]) {
+        parts.push("obfs-password=" + node["obfs-password"]);
+      }
+    }
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "tuic") {
+    parts.push(
+      "tuic",
+      host,
+      String(port),
+      quoted(node.uuid || ""),
+      quoted(node.password || "")
+    );
+    const alpn = Array.isArray(node.alpn) && node.alpn.length ? node.alpn[0] : "h3";
+    parts.push("alpn=" + alpn);
+    if (node["congestion-controller"]) {
+      parts.push("congestion-controller=" + node["congestion-controller"]);
+    }
+    if (node["udp-relay-mode"]) {
+      parts.push("udp-relay-mode=" + node["udp-relay-mode"]);
+    }
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "anytls") {
+    parts.push("anytls", host, String(port), quoted(node.password || ""));
+    if (sni) parts.push("sni=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "snell") {
+    parts.push(
+      "snell",
+      host,
+      String(port),
+      "psk=" + (node.psk || node.password || "")
+    );
+    const o = node["obfs-opts"] || {};
+    if (o.mode) {
+      parts.push("obfs=" + o.mode);
+      if (o.host) parts.push("obfs-host=" + o.host);
+    }
+    if (node.version) parts.push("version=" + node.version);
+  } else if (t === "socks5") {
+    parts.push("socks5", host, String(port));
+    if (node.username || node.password) {
+      parts.push(String(node.username || ""), quoted(node.password || ""));
+    }
+    parts.push("over-tls=" + (node.tls ? "true" : "false"));
+    if (node.tls && sni) parts.push("tls-name=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else if (t === "http") {
+    parts.push(node.tls ? "https" : "http", host, String(port));
+    if (node.username || node.password) {
+      parts.push(String(node.username || ""), quoted(node.password || ""));
+    }
+    if (node.tls && sni) parts.push("tls-name=" + sni);
+    if (scv) parts.push("skip-cert-verify=true");
+  } else {
+    return null;
+  }
+  if (node.tfo === true) parts.push("fast-open=true");
+  if (node.udp === true) parts.push("udp=true");
+  return parts.join(",");
+}
+function quanxEmit(node) {
+  const t = nodeType(node);
+  const host = hostOf(node);
+  const port = portOf(node);
+  const sni = sniOf(node);
+  const scv = node["skip-cert-verify"] === true;
+  const net = netOf(node);
+  const ro = realityOf(node);
+  const parts = [];
+  const realityParams = () => {
+    if (!ro) return;
+    parts.push("reality-base64-pubkey=" + (ro["public-key"] || ""));
+    if (ro["short-id"]) {
+      parts.push("reality-hex-shortid=" + ro["short-id"]);
+    }
+  };
+  const obfsParams = (withTls) => {
+    if (net === "grpc") return false;
+    if (net === "ws") {
+      parts.push("obfs=" + (withTls ? "wss" : "ws"));
+      const h = wsHostOf(node) || sni;
+      if (h) parts.push("obfs-host=" + h);
+      if (wsPathOf(node)) parts.push("obfs-uri=" + wsPathOf(node));
+    } else if (withTls) {
+      parts.push("obfs=over-tls");
+      if (sni) parts.push("obfs-host=" + sni);
+    }
+    return true;
+  };
+  if (t === "ss" || t === "shadowsocks") {
+    parts.push(
+      `shadowsocks=${host}:${port}`,
+      "method=" + (node.cipher || "aes-256-gcm"),
+      "password=" + (node.password || "")
+    );
+    const pl = String(node.plugin || "");
+    const o = node["plugin-opts"] || {};
+    if (pl === "obfs") {
+      parts.push("obfs=" + (o.mode || "http"));
+      if (o.host) parts.push("obfs-host=" + o.host);
+    } else if (pl === "v2ray-plugin") {
+      parts.push("obfs=" + (o.tls ? "wss" : "ws"));
+      if (o.host) parts.push("obfs-host=" + o.host);
+      if (o.path) parts.push("obfs-uri=" + o.path);
+    } else if (pl) {
+      return null;
+    }
+  } else if (t === "ssr") {
+    parts.push(
+      `shadowsocks=${host}:${port}`,
+      "method=" + (node.cipher || "aes-256-cfb"),
+      "password=" + (node.password || ""),
+      "ssr-protocol=" + (node.protocol || "origin")
+    );
+    if (node["protocol-param"]) {
+      parts.push("ssr-protocol-param=" + node["protocol-param"]);
+    }
+    parts.push("obfs=" + (node.obfs || "plain"));
+    if (node["obfs-param"]) parts.push("obfs-host=" + node["obfs-param"]);
+  } else if (t === "vmess") {
+    const method = !node.cipher || node.cipher === "auto" ? "chacha20-ietf-poly1305" : node.cipher;
+    parts.push(
+      `vmess=${host}:${port}`,
+      "method=" + method,
+      "password=" + (node.uuid || "")
+    );
+    if (intOr(node.alterId, 0) !== 0) parts.push("aead=false");
+    if (!obfsParams(!!node.tls || !!ro)) return null;
+    realityParams();
+    if (scv) parts.push("tls-verification=false");
+  } else if (t === "vless") {
+    parts.push(
+      `vless=${host}:${port}`,
+      "method=none",
+      "password=" + (node.uuid || "")
+    );
+    if (!obfsParams(!!node.tls || !!ro)) return null;
+    realityParams();
+    if (node.flow) parts.push("vless-flow=" + node.flow);
+    if (scv) parts.push("tls-verification=false");
+  } else if (t === "trojan") {
+    parts.push(
+      `trojan=${host}:${port}`,
+      "password=" + (node.password || "")
+    );
+    if (net === "ws") {
+      parts.push("obfs=wss");
+      const h = wsHostOf(node) || sni;
+      if (h) parts.push("obfs-host=" + h);
+      if (wsPathOf(node)) parts.push("obfs-uri=" + wsPathOf(node));
+      realityParams();
+    } else if (net === "tcp") {
+      parts.push("over-tls=true");
+      if (sni) parts.push("tls-host=" + sni);
+      realityParams();
+      if (scv) parts.push("tls-verification=false");
+    } else {
+      return null;
+    }
+  } else if (t === "anytls") {
+    parts.push(
+      `anytls=${host}:${port}`,
+      "password=" + (node.password || ""),
+      "over-tls=true"
+    );
+    if (sni) parts.push("tls-host=" + sni);
+    realityParams();
+    if (scv) parts.push("tls-verification=false");
+  } else if (t === "socks5") {
+    parts.push(`socks5=${host}:${port}`);
+    if (node.username) parts.push("username=" + node.username);
+    if (node.password) parts.push("password=" + node.password);
+    if (node.tls) {
+      parts.push("over-tls=true");
+      if (sni) parts.push("tls-host=" + sni);
+      realityParams();
+      if (scv) parts.push("tls-verification=false");
+    }
+  } else if (t === "http") {
+    parts.push(`http=${host}:${port}`);
+    if (node.username) parts.push("username=" + node.username);
+    if (node.password) parts.push("password=" + node.password);
+    if (node.tls) {
+      parts.push("over-tls=true");
+      if (sni) parts.push("tls-host=" + sni);
+      realityParams();
+      if (scv) parts.push("tls-verification=false");
+    }
+  } else {
+    return null;
+  }
+  if (node.tfo === true) parts.push("fast-open=true");
+  if (node.udp === true) parts.push("udp-relay=true");
+  return parts.join(", ");
+}
+var TEXT_EMITTERS = { surge: surgeEmit, loon: loonEmit, quanx: quanxEmit };
+function renderPairs(target, nodes, rename) {
+  const emit = TEXT_EMITTERS[target];
+  const out = [];
+  for (const n of nodes) {
+    const body = emit(n);
+    if (body === null) continue;
+    out.push({ name: txtName(rename ? rename(n.name) : n.name), body });
+  }
+  return out;
+}
+var PRIVATE_RULES = [
+  ["10.0.0.0/8"],
+  ["100.64.0.0/10"],
+  ["127.0.0.0/8"],
+  ["172.16.0.0/12"],
+  ["192.168.0.0/16"]
+];
+function assembleSurge(entries, exits) {
+  const lines = [
+    "# Generated by subscription-chain-converter (native Surge renderer)",
+    "[General]",
+    "loglevel = notify",
+    "",
+    "[Proxy]",
+    "DIRECT = direct"
+  ];
+  for (const p of entries || []) lines.push(`${p.name} = ${p.body}`);
+  for (const p of exits) {
+    lines.push(`${p.name} = ${p.body}` + (entries ? `, underlying-proxy=${ENTRY_AUTO}` : ""));
+  }
+  const en = (entries || []).map((p) => p.name);
+  const xn = exits.map((p) => p.name);
+  const all = [...en, ...xn];
+  lines.push("", "[Proxy Group]");
+  if (entries) {
+    lines.push(`${ENTRY_AUTO} = url-test, ${en.join(", ")}, url=${TEST_URL}, interval=30, tolerance=100`);
+    lines.push(`${EXIT_AUTO} = url-test, ${xn.join(", ")}, url=${TEST_URL}, interval=30, tolerance=100`);
+  }
+  lines.push("Proxy = select, " + (entries ? `${EXIT_AUTO}, ${ENTRY_AUTO}, ` : "") + `${AUTO_GROUP}, ${all.join(", ")}, DIRECT`);
+  lines.push(`${AUTO_GROUP} = url-test, ${xn.join(", ")}, url=${TEST_URL}, interval=30, tolerance=100`);
+  lines.push("", "[Rule]");
+  for (const [cidr] of PRIVATE_RULES) {
+    lines.push(`IP-CIDR,${cidr},DIRECT,no-resolve`);
+  }
+  lines.push(
+    "IP-CIDR6,::1/128,DIRECT,no-resolve",
+    "GEOIP,CN,DIRECT",
+    "FINAL,Proxy"
+  );
+  return lines.join("\n") + "\n";
+}
+function assembleLoon(entries, exits) {
+  const lines = [
+    "# Generated by subscription-chain-converter (native Loon renderer)",
+    "[Proxy]"
+  ];
+  for (const p of entries || []) lines.push(`${p.name} = ${p.body}`);
+  for (const p of exits) lines.push(`${p.name} = ${p.body}`);
+  const en = (entries || []).map((p) => p.name);
+  const xn = exits.map((p) => p.name);
+  const all = [...en, ...xn];
+  if (entries) {
+    lines.push(
+      "",
+      "[Proxy Chain]",
+      `${CHAIN_GROUP} = ${ENTRY_AUTO},${EXIT_AUTO},udp=true`
+    );
+  }
+  lines.push("", "[Proxy Group]");
+  if (entries) {
+    lines.push(`${ENTRY_AUTO} = url-test,${en.join(",")},url=${TEST_URL},interval=30,tolerance=100`);
+    lines.push(`${EXIT_AUTO} = url-test,${xn.join(",")},url=${TEST_URL},interval=30,tolerance=100`);
+  }
+  lines.push("Proxy = select," + (entries ? `${CHAIN_GROUP},${EXIT_AUTO},${ENTRY_AUTO},` : "") + `${AUTO_GROUP},${all.join(",")},DIRECT`);
+  lines.push(`${AUTO_GROUP} = url-test,${xn.join(",")},url=${TEST_URL},interval=30,tolerance=100`);
+  lines.push("", "[Rule]");
+  for (const [cidr] of PRIVATE_RULES) {
+    lines.push(`IP-CIDR,${cidr},DIRECT,no-resolve`);
+  }
+  lines.push(
+    "IP-CIDR6,::1/128,DIRECT,no-resolve",
+    "GEOIP,CN,DIRECT",
+    "FINAL,Proxy"
+  );
+  return lines.join("\n") + "\n";
+}
+function assembleQuanx(entries, exits) {
+  const lines = [
+    "# Generated by subscription-chain-converter (native Quantumult X renderer)",
+    "[general]",
+    `server_check_url = ${TEST_URL}`,
+    "",
+    "[server_local]"
+  ];
+  for (const p of entries || []) lines.push(`${p.body}, tag=${p.name}`);
+  for (const p of exits) {
+    lines.push(`${p.body}` + (entries ? `, via-server=${ENTRY_AUTO}` : "") + `, tag=${p.name}`);
+  }
+  const en = (entries || []).map((p) => p.name);
+  const xn = exits.map((p) => p.name);
+  const all = [...en, ...xn];
+  lines.push("", "[policy]");
+  if (entries) {
+    lines.push(`url-latency-benchmark=${ENTRY_AUTO}, ${en.join(", ")}, check-interval=30, tolerance=100`);
+    lines.push(`url-latency-benchmark=${EXIT_AUTO}, ${xn.join(", ")}, check-interval=30, tolerance=100`);
+  }
+  lines.push("static=Proxy, " + (entries ? `${EXIT_AUTO}, ${ENTRY_AUTO}, ` : "") + `${AUTO_GROUP}, ${all.join(", ")}, direct`);
+  lines.push(`url-latency-benchmark=${AUTO_GROUP}, ${xn.join(", ")}, check-interval=30, tolerance=100`);
+  lines.push("", "[filter_local]");
+  for (const [cidr] of PRIVATE_RULES) {
+    lines.push(`ip-cidr, ${cidr}, direct`);
+  }
+  lines.push(
+    "ip6-cidr, ::1/128, direct",
+    "geoip, cn, direct",
+    "final, Proxy"
+  );
+  return lines.join("\n") + "\n";
+}
+var TEXT_ASSEMBLERS = {
+  surge: assembleSurge,
+  loon: assembleLoon,
+  quanx: assembleQuanx
+};
+var TEXT_FORMAT_NAMES = {
+  surge: "Surge",
+  loon: "Loon",
+  quanx: "Quantumult X"
+};
+function buildTextPlain(target, nodes) {
+  if (target === "v2ray") {
+    const links = [];
+    for (const n of nodes) {
+      const link = nodeToShareLink(n);
+      if (link) links.push(link);
+    }
+    if (!links.length) {
+      throw new Error("\u6CA1\u6709\u53EF\u8F93\u51FA\u4E3A\u5206\u4EAB\u94FE\u63A5\u7684\u8282\u70B9");
+    }
+    return [
+      textToB64(links.join("\n") + "\n"),
+      "text/plain; charset=utf-8"
+    ];
+  }
+  const pairs = renderPairs(target, nodes, null);
+  if (!pairs.length) {
+    throw new Error(`\u6CA1\u6709 ${TEXT_FORMAT_NAMES[target]} \u53EF\u7528\u7684\u8282\u70B9\uFF08\u8BE5\u5BA2\u6237\u7AEF\u4E0D\u652F\u6301\u6240\u7ED9\u534F\u8BAE\uFF09`);
+  }
+  return [
+    TEXT_ASSEMBLERS[target](null, pairs),
+    "text/plain; charset=utf-8"
+  ];
+}
+async function mergeTextChain(target, entryItems, exitItems) {
+  if (target === "v2ray") {
+    STAGE.cur = "exit-convert";
+    const xnodes2 = await gather(exitItems);
+    if (!xnodes2.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
+    STAGE.cur = "merge";
+    return buildTextPlain("v2ray", xnodes2);
+  }
+  STAGE.cur = "entry-convert";
+  const enodes = await gather(entryItems);
+  if (!enodes.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
+  STAGE.cur = "exit-convert";
+  const xnodes = await gather(exitItems);
+  if (!xnodes.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
+  STAGE.cur = "merge";
+  const entries = renderPairs(
+    target,
+    enodes,
+    (name) => clashPrefixedName("\u5165\u53E3-", name)
+  );
+  const exits = renderPairs(
+    target,
+    xnodes,
+    (name) => clashPrefixedName("\u51FA\u53E3-", name)
+  );
+  if (!entries.length || !exits.length) {
+    throw new Error(`\u6CA1\u6709 ${TEXT_FORMAT_NAMES[target]} \u53EF\u7528\u7684\u5165\u53E3\u6216\u51FA\u53E3\u8282\u70B9\uFF08\u8BE5\u5BA2\u6237\u7AEF\u4E0D\u652F\u6301\u6240\u7ED9\u534F\u8BAE\uFF09`);
+  }
+  return [
+    TEXT_ASSEMBLERS[target](entries, exits),
+    "text/plain; charset=utf-8"
+  ];
+}
+function buildChainFor(target, entry, exit_, origin) {
+  if (target === "singbox") return mergeSingbox(entry, exit_, origin);
+  if (target === "clash") return mergeClash(entry, exit_, origin);
+  return mergeTextChain(target, entry, exit_);
+}
 function materialize(raw, origin) {
   return JSON.parse(JSON.stringify(raw).replaceAll("__PUBLIC_ORIGIN__", origin));
 }
@@ -7401,8 +8643,11 @@ async function mergeClash(entryItems, exitItems, origin) {
 async function buildConfig(target, items, origin) {
   const nodes = await gather(items);
   if (!nodes.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
+  if (TEXT_TARGETS.has(target)) return buildTextPlain(target, nodes);
+  const plain = preparePlainNodes(nodes);
+  if (!plain.nodes.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   if (target === "singbox") {
-    const emitted = nodes.map((n) => {
+    const emitted = plain.nodes.map((n) => {
       const o = sbLeafFix(sbEmit(n));
       delete o.detour;
       return o;
@@ -7418,27 +8663,158 @@ async function buildConfig(target, items, origin) {
       if ("outbounds" in o) o.outbounds = fillMembers(o.outbounds, [], tags);
       out.push(o);
     }
-    sk2.outbounds = out.filter((o) => o.tag !== ENTRY_AUTO);
-    for (const g of sk2.outbounds) {
+    const sbOut = out.filter(
+      (o) => o.tag !== ENTRY_AUTO && o.tag !== EXIT_AUTO
+    );
+    for (const g of sbOut) {
       if (Array.isArray(g.outbounds)) {
-        g.outbounds = g.outbounds.filter((m) => m !== ENTRY_AUTO);
+        g.outbounds = g.outbounds.filter(
+          (m) => m !== ENTRY_AUTO && m !== EXIT_AUTO
+        );
+      }
+      if ((g.default === ENTRY_AUTO || g.default === EXIT_AUTO) && Array.isArray(g.outbounds) && g.outbounds.length) {
+        g.default = g.outbounds[0];
       }
     }
+    const sbPlan = regionPlan(tags);
+    const sbPairs = [];
+    const addSbPair = (rname, members) => {
+      const autoTag = `${rname}-\u81EA\u52A8\u9009\u62E9`;
+      sbPairs.push({
+        type: "urltest",
+        tag: autoTag,
+        outbounds: members,
+        url: "https://www.gstatic.com/generate_204",
+        interval: "1m",
+        tolerance: 100,
+        interrupt_exist_connections: false
+      });
+      sbPairs.push({
+        type: "selector",
+        tag: rname,
+        outbounds: [autoTag, ...members],
+        interrupt_exist_connections: false
+      });
+    };
+    for (const p of sbPlan.pairs) addSbPair(p.name, p.members);
+    if (sbPairs.length) {
+      sbOut.push(...sbPairs);
+      const SB_NO_APPEND = /* @__PURE__ */ new Set([
+        "GLOBAL",
+        "\u9ED8\u8BA4\u4EE3\u7406",
+        "\u624B\u52A8\u9009\u62E9",
+        "\u81EA\u52A8\u9009\u62E9",
+        "AdBlock",
+        "\u8FDC\u63A7\u5DE5\u5177",
+        "\u76F4\u8FDE"
+      ]);
+      for (const g of sbOut) {
+        if (!Array.isArray(g.outbounds)) continue;
+        if (g.tag === "\u9ED8\u8BA4\u4EE3\u7406") {
+          g.outbounds = [...sbPlan.selectNames, ...g.outbounds];
+        } else if (g.tag === "GLOBAL") {
+          g.outbounds = [
+            ...g.outbounds,
+            ...sbPlan.pairNames.filter((t) => !g.outbounds.includes(t))
+          ];
+        } else if (!SB_NO_APPEND.has(g.tag) && !sbPlan.pairNames.includes(g.tag) && g.type === "selector") {
+          g.outbounds = [
+            ...g.outbounds,
+            ...sbPlan.selectNames.filter((t) => !g.outbounds.includes(t))
+          ];
+        }
+        if (g.default && !g.outbounds.includes(g.default)) {
+          g.default = g.outbounds[0];
+        }
+      }
+    }
+    sk2.outbounds = sbOut;
     return [JSON.stringify(sk2, null, 2), "application/json; charset=utf-8"];
   }
-  const proxies = nodes.map(clashEmit);
+  const proxies = plain.nodes.map((n) => {
+    const p = clashEmit(n);
+    if (p["dialer-proxy"] && plain.renameMap.has(p["dialer-proxy"])) {
+      p["dialer-proxy"] = plain.renameMap.get(p["dialer-proxy"]);
+    }
+    return p;
+  });
   const names = proxies.map((p) => String(p.name));
   const sk = materialize(skeleton_clash_default, origin);
   const specials = (sk.proxies || []).filter((x) => x !== "@NODES@");
   sk.proxies = [...proxies, ...specials];
   const groups = [];
   for (const g of sk["proxy-groups"] || []) {
-    if (g.name === ENTRY_AUTO) continue;
+    if (g.name === ENTRY_AUTO || g.name === EXIT_AUTO) continue;
     g.proxies = fillMembers(g.proxies, [], names);
     if (Array.isArray(g.proxies)) {
-      g.proxies = g.proxies.filter((m) => m !== ENTRY_AUTO);
+      g.proxies = g.proxies.filter(
+        (m) => m !== ENTRY_AUTO && m !== EXIT_AUTO
+      );
     }
     groups.push(g);
+  }
+  const plan = regionPlan(names);
+  const regionGroups = [];
+  for (const p of plan.pairs) {
+    const autoName = `${p.name}-\u81EA\u52A8\u9009\u62E9`;
+    regionGroups.push({
+      name: autoName,
+      type: "url-test",
+      interval: 600,
+      timeout: 3e3,
+      url: "https://www.apple.com/library/test/success.html",
+      lazy: true,
+      "max-failed-times": 3,
+      "empty-fallback": "REJECT",
+      tolerance: 50,
+      "exclude-type": "DIRECT",
+      icon: AUTO_ICON,
+      hidden: true,
+      proxies: p.members
+    });
+    const sel = {
+      name: p.name,
+      type: "select",
+      interval: 600,
+      timeout: 3e3,
+      url: "https://www.apple.com/library/test/success.html",
+      lazy: true,
+      "max-failed-times": 3,
+      "empty-fallback": "REJECT",
+      proxies: [autoName, ...p.members]
+    };
+    if (p.icon) sel.icon = p.icon;
+    regionGroups.push(sel);
+  }
+  if (regionGroups.length) {
+    groups.push(...regionGroups);
+    const NO_APPEND = /* @__PURE__ */ new Set([
+      "GLOBAL",
+      "\u9ED8\u8BA4\u4EE3\u7406",
+      "\u624B\u52A8\u9009\u62E9",
+      "\u81EA\u52A8\u9009\u62E9",
+      "\u8D1F\u8F7D\u5747\u8861",
+      "\u6545\u969C\u8F6C\u79FB",
+      "\u76F4\u8FDE",
+      "AdBlock",
+      "\u8FDC\u63A7\u5DE5\u5177"
+    ]);
+    for (const g of groups) {
+      if (!Array.isArray(g.proxies)) continue;
+      if (g.name === "\u9ED8\u8BA4\u4EE3\u7406") {
+        g.proxies = [...plan.selectNames, ...g.proxies];
+      } else if (g.name === "GLOBAL") {
+        g.proxies = [
+          ...g.proxies,
+          ...plan.pairNames.filter((n) => !g.proxies.includes(n))
+        ];
+      } else if (!NO_APPEND.has(g.name) && !plan.pairNames.includes(g.name)) {
+        g.proxies = [
+          ...g.proxies,
+          ...plan.selectNames.filter((n) => !g.proxies.includes(n))
+        ];
+      }
+    }
   }
   sk["proxy-groups"] = groups;
   return [
@@ -7678,7 +9054,7 @@ async function proxyToConverter(env, pathAndQuery, ua) {
   const base = (env.EXTERNAL_SUBCONVERTER_URL || "").replace(/\/+$/, "");
   if (!base) {
     return send(
-      "This Cloudflare Workers variant has no built-in subconverter for targets other than clash/singbox. Set the EXTERNAL_SUBCONVERTER_URL variable to an external subconverter base URL to enable those formats.",
+      "Unknown target format. clash, singbox, v2ray, surge, loon and quanx are rendered natively by this converter; any other target needs the EXTERNAL_SUBCONVERTER_URL variable set to an external subconverter base URL.",
       { status: 501 }
     );
   }
@@ -7720,7 +9096,7 @@ async function handleShorten(request, env) {
   }
   let record;
   if (entry || exit_) {
-    if (!["singbox", "clash"].includes(target) || !entry || !exit_) {
+    if (!ALL_TARGETS.has(target) || !entry || !exit_) {
       return send("bad request", { status: 400 });
     }
     record = { kind: "chain", target, entry, exit: exit_ };
@@ -7811,7 +9187,12 @@ async function handleFetch(request, env, ctx) {
     if (rec.kind === "chain") {
       STAGE.cur = "start";
       try {
-        const [body, ctype] = want === "singbox" ? await mergeSingbox(rec.entry, rec.exit, origin) : await mergeClash(rec.entry, rec.exit, origin);
+        const [body, ctype] = await buildChainFor(
+          want,
+          rec.entry,
+          rec.exit,
+          origin
+        );
         return send(body, { ctype });
       } catch (e) {
         return send(
@@ -7822,7 +9203,7 @@ async function handleFetch(request, env, ctx) {
     }
     const target = want;
     const items = rec.url || "";
-    if ((target === "singbox" || target === "clash") && items) {
+    if (ALL_TARGETS.has(target) && items) {
       try {
         const [body, ctype] = await buildConfig(target, items, origin);
         return send(body, { ctype });
@@ -7839,7 +9220,7 @@ async function handleFetch(request, env, ctx) {
   if (path === "/sub") {
     const target = url.searchParams.get("target") || "";
     const items = url.searchParams.get("url") || "";
-    if ((target === "singbox" || target === "clash") && items) {
+    if (ALL_TARGETS.has(target) && items) {
       try {
         const [body, ctype] = await buildConfig(target, items, origin);
         return send(body, { ctype });
@@ -7856,7 +9237,7 @@ async function handleFetch(request, env, ctx) {
   if (path === "/conv") {
     const target = url.searchParams.get("target") || "";
     const items = url.searchParams.get("url") || "";
-    if (!["singbox", "clash"].includes(target) || !items) {
+    if (!ALL_TARGETS.has(target) || !items) {
       return send("bad request", { status: 400 });
     }
     try {
@@ -7870,15 +9251,20 @@ async function handleFetch(request, env, ctx) {
     const target = url.searchParams.get("target") || "";
     const entry = url.searchParams.get("entry") || "";
     const exit_ = url.searchParams.get("exit") || "";
-    if (!["singbox", "clash"].includes(target) || !entry || !exit_) {
+    if (!ALL_TARGETS.has(target) || !entry || !exit_) {
       return send(
-        "bad request: need target=singbox|clash, entry, exit",
+        "bad request: need target=clash|singbox|v2ray|surge|loon|quanx, entry, exit",
         { status: 400 }
       );
     }
     STAGE.cur = "start";
     try {
-      const [body, ctype] = target === "singbox" ? await mergeSingbox(entry, exit_, origin) : await mergeClash(entry, exit_, origin);
+      const [body, ctype] = await buildChainFor(
+        target,
+        entry,
+        exit_,
+        origin
+      );
       return send(body, { ctype });
     } catch (e) {
       return send(
