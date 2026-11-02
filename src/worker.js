@@ -1694,16 +1694,16 @@ async function mergeTextChain(target, entryItems, exitItems) {
     // link set of the EXIT tier — the entry hop is dropped, the
     // exit endpoints stay reachable. Entries are not even fetched.
     STAGE.cur = "exit-convert";
-    const xnodes = await gather(exitItems);
+    const xnodes = chainPool(await gather(exitItems));
     if (!xnodes.length) throw new Error("没有可用节点");
     STAGE.cur = "merge";
     return buildTextPlain("v2ray", xnodes);
   }
   STAGE.cur = "entry-convert";
-  const enodes = await gather(entryItems);
+  const enodes = chainPool(await gather(entryItems));
   if (!enodes.length) throw new Error("没有可用节点");
   STAGE.cur = "exit-convert";
-  const xnodes = await gather(exitItems);
+  const xnodes = chainPool(await gather(exitItems));
   if (!xnodes.length) throw new Error("没有可用节点");
   STAGE.cur = "merge";
   const entries = renderPairs(target, enodes,
@@ -2151,13 +2151,25 @@ function finishChainSingbox(body) {
   return body;
 }
 
+// Chain pools never contain built-in endpoints: a source config's
+// direct / reject entries are configuration artifacts, not nodes —
+// as exits they would break the two-hop lock (an exit picked as
+// DIRECT leaves the chain at the entry side), and as entries they
+// silently degrade the chain to one hop.
+function chainPool(nodes) {
+  return nodes.filter((n) => {
+    const t = String(n.type ?? "").toLowerCase();
+    return t !== "direct" && t !== "reject";
+  });
+}
+
 async function mergeSingbox(entryItems, exitItems, origin) {
   STAGE.cur = "entry-convert";
-  const enodesRaw = await gather(entryItems);
+  const enodesRaw = chainPool(await gather(entryItems));
   if (!enodesRaw.length) throw new Error("没有可用节点");
   const enodes = enodesRaw.map(sbEmit);
   STAGE.cur = "exit-convert";
-  const xnodesRaw = await gather(exitItems);
+  const xnodesRaw = chainPool(await gather(exitItems));
   if (!xnodesRaw.length) throw new Error("没有可用节点");
   const xnodes = xnodesRaw.map(sbEmit);
   STAGE.cur = "merge";
@@ -2170,11 +2182,11 @@ async function mergeSingbox(entryItems, exitItems, origin) {
 
 async function mergeClash(entryItems, exitItems, origin) {
   STAGE.cur = "entry-convert";
-  const eproxRaw = await gather(entryItems);
+  const eproxRaw = chainPool(await gather(entryItems));
   if (!eproxRaw.length) throw new Error("没有可用节点");
   const eprox = eproxRaw.map(clashEmit);
   STAGE.cur = "exit-convert";
-  const xproxRaw = await gather(exitItems);
+  const xproxRaw = chainPool(await gather(exitItems));
   if (!xproxRaw.length) throw new Error("没有可用节点");
   const xprox = xproxRaw.map(clashEmit);
   STAGE.cur = "merge";

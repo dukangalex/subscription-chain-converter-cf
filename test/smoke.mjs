@@ -221,6 +221,29 @@ let code = null;
     (g.headers.get("Content-Type") || "").includes("text/yaml"));
 }
 
+// (b2) chain sources that are full configs: their built-in direct
+// proxies are configuration artifacts, never pool members
+{
+  const cfgWithDirect = (host, name) => [
+    "proxies:",
+    `  - {name: ${name}, type: vless, server: ${host}, port: 443, uuid: 00000000-0000-0000-0000-000000000000}`,
+    "  - {name: '直连 | 双栈', type: direct, udp: true}",
+  ].join("\n");
+  const r = await shorten({
+    target: "clash",
+    entry: cfgWithDirect("entry2.example.com", "cfg-entry"),
+    exit: cfgWithDirect("exit2.example.com", "cfg-exit"),
+  });
+  check("chain from configs shortens", r.status === 200, `got ${r.status}`);
+  const c2 = (await r.text()).split("/").pop();
+  const body = await (await call("/m/" + c2)).text();
+  check("no direct proxy in chain entry pool", !body.includes("入口- 直连"));
+  check("no direct proxy in chain exit pool", !body.includes("出口- 直连"));
+  const sb = await (await call("/s/" + c2)).text();
+  check("no direct proxy in sing-box chain pools",
+    !sb.includes("入口- 直连") && !sb.includes("出口- 直连"));
+}
+
 // (c) identical content dedupes to the same code
 {
   const r = await shorten({ target: "clash", entry: ENTRY, exit: EXIT });

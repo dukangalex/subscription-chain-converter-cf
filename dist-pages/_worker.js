@@ -8206,16 +8206,16 @@ function buildTextPlain(target, nodes) {
 async function mergeTextChain(target, entryItems, exitItems) {
   if (target === "v2ray") {
     STAGE.cur = "exit-convert";
-    const xnodes2 = await gather(exitItems);
+    const xnodes2 = chainPool(await gather(exitItems));
     if (!xnodes2.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
     STAGE.cur = "merge";
     return buildTextPlain("v2ray", xnodes2);
   }
   STAGE.cur = "entry-convert";
-  const enodes = await gather(entryItems);
+  const enodes = chainPool(await gather(entryItems));
   if (!enodes.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   STAGE.cur = "exit-convert";
-  const xnodes = await gather(exitItems);
+  const xnodes = chainPool(await gather(exitItems));
   if (!xnodes.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   STAGE.cur = "merge";
   const entries = renderPairs(
@@ -8608,13 +8608,19 @@ function finishChainSingbox(body) {
   }
   return body;
 }
+function chainPool(nodes) {
+  return nodes.filter((n) => {
+    const t = String(n.type ?? "").toLowerCase();
+    return t !== "direct" && t !== "reject";
+  });
+}
 async function mergeSingbox(entryItems, exitItems, origin) {
   STAGE.cur = "entry-convert";
-  const enodesRaw = await gather(entryItems);
+  const enodesRaw = chainPool(await gather(entryItems));
   if (!enodesRaw.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   const enodes = enodesRaw.map(sbEmit);
   STAGE.cur = "exit-convert";
-  const xnodesRaw = await gather(exitItems);
+  const xnodesRaw = chainPool(await gather(exitItems));
   if (!xnodesRaw.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   const xnodes = xnodesRaw.map(sbEmit);
   STAGE.cur = "merge";
@@ -8626,11 +8632,11 @@ async function mergeSingbox(entryItems, exitItems, origin) {
 }
 async function mergeClash(entryItems, exitItems, origin) {
   STAGE.cur = "entry-convert";
-  const eproxRaw = await gather(entryItems);
+  const eproxRaw = chainPool(await gather(entryItems));
   if (!eproxRaw.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   const eprox = eproxRaw.map(clashEmit);
   STAGE.cur = "exit-convert";
-  const xproxRaw = await gather(exitItems);
+  const xproxRaw = chainPool(await gather(exitItems));
   if (!xproxRaw.length) throw new Error("\u6CA1\u6709\u53EF\u7528\u8282\u70B9");
   const xprox = xproxRaw.map(clashEmit);
   STAGE.cur = "merge";
@@ -8698,7 +8704,8 @@ async function buildConfig(target, items, origin) {
     };
     for (const p of sbPlan.pairs) addSbPair(p.name, p.members);
     if (sbPairs.length) {
-      sbOut.push(...sbPairs);
+      const sbAt = sbOut.findIndex((o) => Array.isArray(o.outbounds));
+      sbOut.splice(sbAt < 0 ? sbOut.length : sbAt, 0, ...sbPairs);
       const SB_NO_APPEND = /* @__PURE__ */ new Set([
         "GLOBAL",
         "\u9ED8\u8BA4\u4EE3\u7406",
@@ -8787,7 +8794,7 @@ async function buildConfig(target, items, origin) {
     regionGroups.push(sel);
   }
   if (regionGroups.length) {
-    groups.push(...regionGroups);
+    groups.unshift(...regionGroups);
     const NO_APPEND = /* @__PURE__ */ new Set([
       "GLOBAL",
       "\u9ED8\u8BA4\u4EE3\u7406",
