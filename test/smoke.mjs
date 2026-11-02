@@ -351,6 +351,56 @@ let code = null;
     served.status === 200, `got ${served.status}`);
 }
 
+// (h) plain mode: no chain marks anywhere, exit tier renamed, and
+// HiClash-style region groups (select + "-自动选择" url-test pairs,
+// regions lead 默认代理, strong-info names prove no region)
+{
+  const yamlMod = await import("js-yaml");
+  const yamlLoad = yamlMod.load || (yamlMod.default && yamlMod.default.load);
+  const nodes = [
+    "vless://33333333-3333-3333-3333-333333333333@jp1.example.com:443?security=none#" +
+      encodeURIComponent("🇯🇵 日本 tokyo-1"),
+    "vless://44444444-4444-4444-4444-444444444444@jp2.example.com:443?security=none#" +
+      encodeURIComponent("🇯🇵 日本 tokyo-2"),
+    "vless://55555555-5555-5555-5555-555555555555@sg1.example.com:443?security=none#" +
+      encodeURIComponent("🇸🇬 新加坡 sg-1"),
+    "vless://66666666-6666-6666-6666-666666666666@info.example.com:443?security=none#" +
+      encodeURIComponent("剩余流量 120 GB"),
+  ].join("|");
+  const r = await shorten({ target: "clash", url: nodes });
+  const text = await r.text();
+  check("plain shorten returns 200", r.status === 200, `got ${r.status}: ${text}`);
+  const pcode = text.split("/").pop();
+  const g = await call("/m/" + pcode);
+  const body = await g.text();
+  check("plain clash has no chain-marked exit group", !body.includes("⛓ 出口优选"));
+  check("plain clash has no chain entry group", !body.includes("⛓ 入口优选"));
+  const doc = yamlLoad(body);
+  const groups = doc["proxy-groups"] || [];
+  const byName = Object.fromEntries(groups.map((x) => [x.name, x]));
+  check("plain clash exit tier renamed", !!byName["出口优选"]);
+  check("plain clash has JP region select", !!byName["日本"]);
+  check("plain clash has JP auto group", !!byName["日本-自动选择"]);
+  check("plain clash has SG region pair", !!byName["新加坡"] && !!byName["新加坡-自动选择"]);
+  check("plain clash JP select ends with its auto group",
+    Array.isArray(byName["日本"]?.proxies) &&
+    byName["日本"].proxies[byName["日本"].proxies.length - 1] === "日本-自动选择");
+  check("plain clash regions lead the default group",
+    byName["默认代理"]?.proxies?.[0] === "日本");
+  check("plain clash info node proves no region", !byName["英国"]);
+  const r2 = await shorten({ target: "singbox", url: nodes });
+  const scode = (await r2.text()).split("/").pop();
+  const g2 = await call("/s/" + scode);
+  const body2 = await g2.text();
+  check("plain sing-box has no chain-marked exit group", !body2.includes("⛓ 出口优选"));
+  const doc2 = JSON.parse(body2);
+  const tags = Object.fromEntries((doc2.outbounds || []).map((o) => [o.tag, o]));
+  check("plain sing-box exit tier renamed", !!tags["出口优选"]);
+  check("plain sing-box has JP region pair", !!tags["日本"] && !!tags["日本-自动选择"]);
+  check("plain sing-box regions lead the default group",
+    tags["默认代理"]?.outbounds?.[0] === "日本");
+}
+
 console.log(failures === 0
   ? "SMOKE OK — all assertions passed"
   : `SMOKE FAILED — ${failures} assertion(s) failed`);
