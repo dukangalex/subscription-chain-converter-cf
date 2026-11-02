@@ -70,6 +70,12 @@ class D1Stub {
       });
       return;
     }
+    if (sql.includes("UPDATE links SET kind")) {
+      const [kind, target, url, entry, exit, hash, code] = a;
+      const row = this.links.get(code);
+      if (row) Object.assign(row, { kind, target, url, entry, exit, hash });
+      return;
+    }
     if (sql.includes("UPDATE links SET hits")) {
       const row = this.links.get(a[0]);
       if (row) row.hits++;
@@ -265,6 +271,26 @@ let code = null;
     r2.status === 409, `got ${r2.status}`);
 }
 
+// (d2) with explicit consent (force), a taken custom code is
+// overwritten in place: same code, new payload
+{
+  const r3 = await shorten({
+    target: "singbox", entry: ENTRY2, exit: EXIT, code: "my-chain-01",
+    force: true,
+  });
+  check("force overwrite returns 200", r3.status === 200,
+    `got ${r3.status}`);
+  const rec = await (await call("/api/link/my-chain-01")).json();
+  check("force overwrite replaced the payload",
+    rec.entry === ENTRY2, JSON.stringify(rec).slice(0, 200));
+  const r4 = await shorten({
+    target: "singbox", entry: ENTRY, exit: EXIT, code: "my-chain-02",
+    force: true,
+  });
+  check("force on a free code just creates it", r4.status === 200,
+    `got ${r4.status}`);
+}
+
 // (e, part 2) first-run bootstrap refresh needs no token; once the
 // mirror exists, a wrong token is refused and the right one works
 {
@@ -357,6 +383,15 @@ let code = null;
   });
   check("D1: custom code conflict returns 409",
     c2.status === 409, `got ${c2.status}`);
+  const c3 = await shorten2({
+    target: "singbox", entry: ENTRY2, exit: EXIT, code: "d1-chain-01",
+    force: true,
+  });
+  check("D1: force overwrite returns 200", c3.status === 200,
+    `got ${c3.status}`);
+  const rec2 = await (await call2("/api/link/d1-chain-01")).json();
+  check("D1: force overwrite replaced the payload",
+    rec2.entry === ENTRY2, JSON.stringify(rec2).slice(0, 200));
 
   const before = await call2("/rules/clash/private.mrs");
   check("R2: rules 404 before refresh",

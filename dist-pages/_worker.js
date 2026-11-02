@@ -6894,18 +6894,29 @@ function render(outId,rows,note){
 }
 function shorten(body){
   return fetch("/shorten",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
-    .then(function(r){return r.text().then(function(t){return {ok:r.ok,text:t}})});
+    .then(function(r){return r.text().then(function(t){return {ok:r.ok,status:r.status,text:t}})});
 }
 var RGSEL={};
 function rgSync(){document.querySelectorAll(".rgchip").forEach(function(ch){ch.className=RGSEL[ch.getAttribute("data-c")]?"rgchip on":"rgchip"})}
 function rgSel(){var s={};for(var k in RGSEL)if(RGSEL[k])s[k]=1;var ex=$("rgExtra");if(ex)ex.value.split(/[,\\s]+/).forEach(function(x){x=x.trim().toUpperCase();if(x)s[x]=1});return Object.keys(s)}
 function rgBuild(codes){var box=$("rgChips");if(!box)return;box.innerHTML="";codes.forEach(function(c){var b=document.createElement("button");b.type="button";b.className="rgchip";b.setAttribute("data-c",c);b.textContent=c;b.onclick=function(){RGSEL[c]=!RGSEL[c];rgSync()};box.appendChild(b)});rgSync()}
 (function(){var pop=["JP","HK","SG","US","TW","KR","DE","GB","FR","NL","CA","AU"];rgBuild(pop);fetch("/?get_regions=1").then(function(r){return r.json()}).then(function(cs){if(cs&&cs.length)rgBuild(cs)}).catch(function(){})})();
-function genN(){
+function askOverwrite(sec,code,retry,codeInputId){
+  var out=$(sec==="N"?"outN":"outC");out.innerHTML="";
+  var box=document.createElement("div");box.className="link-row";
+  var t=document.createElement("div");t.className="tag";t.textContent="\u8FD9\u4E2A\u540E\u7F00\u5DF2\u7ECF\u6709\u77ED\u94FE\u4E86";box.appendChild(t);
+  var u=document.createElement("div");u.className="u";u.style.fontFamily="inherit";u.textContent="\u540E\u7F00\u300C"+code+"\u300D\u5DF2\u88AB\u5360\u7528\u3002\u5982\u679C\u8FD9\u662F\u4F60\u81EA\u5DF1\u7684\u94FE\u63A5\uFF0C\u7EE7\u7EED\u4F1A\u7528\u8FD9\u6B21\u586B\u5199\u7684\u5185\u5BB9\u8986\u76D6\u5B83\uFF1A\u8BA2\u9605\u5730\u5740\u4FDD\u6301\u4E0D\u53D8\uFF0C\u5DF2\u7ECF\u5BFC\u5165\u7684\u5BA2\u6237\u7AEF\u4E0D\u7528\u6539\uFF0C\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9\u3002";box.appendChild(u);
+  var ops=document.createElement("div");ops.className="ops";
+  var b1=document.createElement("button");b1.textContent="\u8986\u76D6\u66F4\u65B0";b1.onclick=function(){retry()};
+  var b2=document.createElement("button");b2.textContent="\u6362\u4E2A\u540E\u7F00";b2.onclick=function(){out.style.display="none";var i=$(codeInputId);i.focus();i.select();showErr(sec==="N"?"errN":"errC","\u5DF2\u53D6\u6D88\u8986\u76D6\u3002\u6362\u4E2A\u540E\u7F00\u4F1A\u751F\u6210\u65B0\u5730\u5740\uFF0C\u65E7\u94FE\u63A5\u4E0D\u53D7\u5F71\u54CD")};
+  ops.appendChild(b1);ops.appendChild(b2);box.appendChild(ops);out.appendChild(box);out.style.display="block";
+}
+function genN(){attemptN(false)}
+function attemptN(force){
   var it=lines("u");hideErr("errN");
   if(!it.length){showErr("errN","\u5148\u7C98\u8D34\u8282\u70B9\u6216\u8BA2\u9605\u94FE\u63A5");return}
   var tg=$("t").value, cd=$("codeN").value.trim();
-  var body={target:tg,url:it.join("|")}; if(cd)body.code=cd; var rgs=rgSel(); if(rgs.length)body.regions=rgs.join("-");
+  var body={target:tg,url:it.join("|")}; if(cd)body.code=cd; if(force)body.force=true; var rgs=rgSel(); if(rgs.length)body.regions=rgs.join("-");
   var btn=$("goN");btn.disabled=true;btn.textContent="\u751F\u6210\u4E2D\u2026";
   shorten(body).then(function(res){
     if(res.ok){
@@ -6916,12 +6927,12 @@ function genN(){
           {tag:"Mihomo",url:location.origin+"/m/"+code,imp:tg==="clash"?{label:"\u4E00\u952E\u5BFC\u5165 Clash",href:"clash://install-config?url="+encodeURIComponent(location.origin+"/m/"+code)}:null},
           {tag:"sing-box",url:location.origin+"/s/"+code,imp:tg==="singbox"?{label:"\u4E00\u952E\u5BFC\u5165 sing-box",href:"sing-box://import-remote-profile?url="+encodeURIComponent(location.origin+"/s/"+code)}:null}
         ];
-        render("outN",rows,"");
+        render("outN",rows,force?"\u5DF2\u8986\u76D6\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }else{
-        render("outN",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],"");
+        render("outN",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],force?"\u5DF2\u8986\u76D6\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }
     }else if(cd){
-      showErr("errN",res.text||"\u751F\u6210\u5931\u8D25");
+      if(res.status===409&&!force){askOverwrite("N",cd,function(){attemptN(true)},"codeN")}else{showErr("errN",res.text||"\u751F\u6210\u5931\u8D25")}
     }else{
       var base=(tg==="clash"||tg==="singbox")?"/conv":"/sub";
       var u2=location.origin+base+"?target="+tg+"&url="+encodeURIComponent(it.join("|"));
@@ -6936,11 +6947,12 @@ function genN(){
     }
   }).finally(function(){btn.disabled=false;btn.textContent="\u751F\u6210\u8F6C\u6362\u94FE\u63A5"});
 }
-function genC(){
+function genC(){attemptC(false)}
+function attemptC(force){
   var a=lines("ein"), b=lines("eout");hideErr("errC");
   if(!a.length||!b.length){showErr("errC","\u5165\u53E3\u548C\u51FA\u53E3\u90FD\u8981\u586B");return}
   var tg=$("tc").value, cd=$("codeC").value.trim();
-  var body={target:tg,entry:a.join("|"),exit:b.join("|")}; if(cd)body.code=cd;
+  var body={target:tg,entry:a.join("|"),exit:b.join("|")}; if(cd)body.code=cd; if(force)body.force=true;
   var btn=$("goC");btn.disabled=true;btn.textContent="\u751F\u6210\u4E2D\u2026";
   shorten(body).then(function(res){
     if(res.ok){
@@ -6951,12 +6963,12 @@ function genC(){
           {tag:"Mihomo",url:location.origin+"/m/"+code,imp:tg==="clash"?{label:"\u4E00\u952E\u5BFC\u5165 Clash",href:"clash://install-config?url="+encodeURIComponent(location.origin+"/m/"+code)}:null},
           {tag:"sing-box",url:location.origin+"/s/"+code,imp:tg==="singbox"?{label:"\u4E00\u952E\u5BFC\u5165 sing-box",href:"sing-box://import-remote-profile?url="+encodeURIComponent(location.origin+"/s/"+code)}:null}
         ];
-        render("outC",rows,"");
+        render("outC",rows,force?"\u5DF2\u8986\u76D6\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }else{
-        render("outC",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],"");
+        render("outC",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],force?"\u5DF2\u8986\u76D6\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }
     }else if(cd){
-      showErr("errC",res.text||"\u751F\u6210\u5931\u8D25");
+      if(res.status===409&&!force){askOverwrite("C",cd,function(){attemptC(true)},"codeC")}else{showErr("errC",res.text||"\u751F\u6210\u5931\u8D25")}
     }else{
       var u2=location.origin+"/chain?target="+tg+"&entry="+encodeURIComponent(a.join("|"))+"&exit="+encodeURIComponent(b.join("|"));
       render("outC",[{tag:"\u8BA2\u9605\u94FE\u63A5\uFF08\u957F\u94FE\u63A5\uFF09",url:u2}],"\u77ED\u94FE\u670D\u52A1\u6682\u4E0D\u53EF\u7528\uFF0C\u5DF2\u751F\u6210\u957F\u94FE\u63A5");
@@ -8868,6 +8880,7 @@ var SQL_LINK_BY_CODE = "SELECT code, kind, target, url, entry, exit, hits FROM l
 var SQL_CODE_BY_HASH = "SELECT code FROM links WHERE hash = ?";
 var SQL_LINK_INSERT = "INSERT INTO links (code, kind, target, url, entry, exit, hash, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 var SQL_LINK_HIT = "UPDATE links SET hits = hits + 1 WHERE code = ?";
+var SQL_LINK_UPDATE = "UPDATE links SET kind = ?, target = ?, url = ?, entry = ?, exit = ?, hash = ? WHERE code = ?";
 var SQL_REFRESH_LOG = "INSERT INTO refresh_log (time, ok, failed) VALUES (?, ?, ?)";
 var _dbReady = null;
 async function ensureDb(env) {
@@ -8899,12 +8912,25 @@ async function dbGetLink(env, code) {
   const row = await env.DB.prepare(SQL_LINK_BY_CODE).bind(code).first();
   return rowToRecord(row);
 }
-async function dbStoreLink(env, record, wantCode, hash) {
+async function dbStoreLink(env, record, wantCode, hash, force) {
   await ensureDb(env);
   const db = env.DB;
   if (wantCode) {
     const existing = await dbGetLink(env, wantCode);
-    if (existing) return samePayload(existing, record) ? wantCode : null;
+    if (existing) {
+      if (samePayload(existing, record)) return wantCode;
+      if (!force) return null;
+      await db.prepare(SQL_LINK_UPDATE).bind(
+        record.kind,
+        record.target ?? null,
+        record.url ?? null,
+        record.entry ?? null,
+        record.exit ?? null,
+        hash,
+        wantCode
+      ).run();
+      return wantCode;
+    }
     await db.prepare(SQL_LINK_INSERT).bind(
       wantCode,
       record.kind,
@@ -8936,17 +8962,20 @@ async function dbStoreLink(env, record, wantCode, hash) {
   ).run();
   return code;
 }
-async function storeLink(env, record, wantCode) {
+async function storeLink(env, record, wantCode, force) {
   const hash = await sha256Hex(linkIdentity(record));
   if (env.DB) {
     try {
-      return await dbStoreLink(env, record, wantCode, hash);
+      return await dbStoreLink(env, record, wantCode, hash, force);
     } catch {
     }
   }
   if (wantCode) {
     const existing = await env.KV.get("link:" + wantCode, "json");
-    if (existing) return samePayload(existing, record) ? wantCode : null;
+    if (existing) {
+      if (samePayload(existing, record)) return wantCode;
+      if (!force) return null;
+    }
     await env.KV.put("link:" + wantCode, JSON.stringify(record));
     await env.KV.put("idx:" + hash, wantCode);
     return wantCode;
@@ -9112,7 +9141,12 @@ async function handleShorten(request, env) {
   } else {
     return send("bad request", { status: 400 });
   }
-  const code = await storeLink(env, record, want || null);
+  const code = await storeLink(
+    env,
+    record,
+    want || null,
+    data.force === true
+  );
   if (code === null) {
     return send("\u8FD9\u4E2A\u540E\u7F00\u5DF2\u88AB\u5360\u7528\uFF0C\u6362\u4E00\u4E2A\u8BD5\u8BD5", { status: 409 });
   }
