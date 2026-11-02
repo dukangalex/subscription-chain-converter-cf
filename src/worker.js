@@ -2234,8 +2234,9 @@ async function buildConfig(target, items, origin) {
         g.default = g.outbounds[0];
       }
     }
-    // Region pairs (geographic + rate / home + catch-all), appended
-    // after the functional outbounds; region selectors lead 默认代理,
+    // Region pairs (geographic + rate / home + catch-all), inserted
+    // before the first group outbound so they rank first;
+    // region selectors lead 默认代理,
     // join every service selector, and join GLOBAL as pairs.
     const sbPlan = regionPlan(tags);
     const sbPairs = [];
@@ -2254,7 +2255,8 @@ async function buildConfig(target, items, origin) {
     };
     for (const p of sbPlan.pairs) addSbPair(p.name, p.members);
     if (sbPairs.length) {
-      sbOut.push(...sbPairs);
+      const sbAt = sbOut.findIndex((o) => Array.isArray(o.outbounds));
+      sbOut.splice(sbAt < 0 ? sbOut.length : sbAt, 0, ...sbPairs);
       const SB_NO_APPEND = new Set(["GLOBAL", "默认代理", "手动选择",
         "自动选择", "AdBlock", "远控工具", "直连"]);
       for (const g of sbOut) {
@@ -2303,7 +2305,8 @@ async function buildConfig(target, items, origin) {
     groups.push(g);
   }
   // Region pairs (geographic + rate / home + catch-all) in the
-  // script's createRegionGroup shape, placed after 直连; region
+  // script's createRegionGroup shape, placed at the very front of
+  // the group list (region groups rank first); region
   // selectors lead 默认代理, join every service group and 漏网之鱼,
   // and join GLOBAL as auto+select pairs. (Per the user's standing
   // instruction the auto group is each region selector's default —
@@ -2329,7 +2332,7 @@ async function buildConfig(target, items, origin) {
     regionGroups.push(sel);
   }
   if (regionGroups.length) {
-    groups.push(...regionGroups);
+    groups.unshift(...regionGroups);
     const NO_APPEND = new Set(["GLOBAL", "默认代理", "手动选择",
       "自动选择", "负载均衡", "故障转移", "直连", "AdBlock", "远控工具"]);
     for (const g of groups) {

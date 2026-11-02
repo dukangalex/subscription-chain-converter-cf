@@ -392,6 +392,8 @@ let code = null;
   check("plain clash JP select defaults to its auto group",
     Array.isArray(byName["日本"]?.proxies) &&
     byName["日本"].proxies[0] === "日本-自动选择");
+  check("plain clash region groups rank first in the list",
+    groups[0]?.name === "日本-自动选择" && groups[1]?.name === "日本");
   check("plain clash regions lead the default group",
     byName["默认代理"]?.proxies?.[0] === "日本");
   check("plain clash info node proves no region", !byName["英国"]);
@@ -407,6 +409,9 @@ let code = null;
   check("plain sing-box has JP region pair", !!tags["日本"] && !!tags["日本-自动选择"]);
   check("plain sing-box JP select defaults to its auto group",
     tags["日本"]?.outbounds?.[0] === "日本-自动选择");
+  check("plain sing-box region groups rank first among groups",
+    (doc2.outbounds || []).findIndex((o) => o.tag === "日本-自动选择") <
+    (doc2.outbounds || []).findIndex((o) => o.tag === "默认代理"));
   check("plain sing-box regions lead the default group",
     tags["默认代理"]?.outbounds?.[0] === "日本");
 }
