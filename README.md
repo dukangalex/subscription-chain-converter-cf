@@ -308,6 +308,10 @@ This project stands on the following third-party work:
   manual, the Loon sample configs, Quantumult X `sample.conf`).
   The output formats themselves belong to the mihomo and sing-box
   projects and their client ecosystems.
+- **Deployment form** — the presentation of this edition (the
+  Worker project at the repo root, the one-click deploy button,
+  the quick-start layout) follows the shape popularized by
+  [sublink-worker](https://github.com/7Sageer/sublink-worker).
 - **AliDNS DoH** — queried at generation time to resolve ECH
   configurations.
 - **Build tooling** — wrangler and esbuild are used to bundle
@@ -582,6 +586,10 @@ test/smoke.mjs        打桩 KV/fetch 的测试台：node test/smoke.mjs
   的生成器与各客户端自己的文档、示例配置写成的（Surge 手册、
   Loon 示例配置、Quantumult X 的 `sample.conf`）。输出格式
   本身属于 mihomo 与 sing-box 项目及其客户端生态。
+- **部署形态** —— 本版的呈现方式（仓库根即 Worker 工程、一键
+  部署按钮、快速上手的编排）借鉴了
+  [sublink-worker](https://github.com/7Sageer/sublink-worker)
+  的形态。
 - **阿里 DNS 的 DoH** —— 生成时查询它来解析 ECH 配置。
 - **构建工具** —— wrangler 与 esbuild 用于打包与部署；它们
   是开发工具，没有代码进入 Worker 本体。
