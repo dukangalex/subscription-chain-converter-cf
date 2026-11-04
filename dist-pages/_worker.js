@@ -6909,7 +6909,7 @@ function firstHostOf(s){
 }
 function describeOld(code,rec){
   var head="\u540E\u7F00\u300C"+code+"\u300D\u662F\u4F60\u4E4B\u524D\u751F\u6210\u8FC7\u7684\u4E00\u6761";
-  var tail="\u53EA\u6539\u5185\u5BB9\u3001\u4E0D\u6362\u5730\u5740\u5C31\u70B9\u300C\u8986\u76D6\u66F4\u65B0\u300D\uFF1A\u4F1A\u7528\u8FD9\u6B21\u586B\u5199\u7684\u5185\u5BB9\u66FF\u6362\u65E7\u5185\u5BB9\uFF0C\u8BA2\u9605\u5730\u5740\u4FDD\u6301\u4E0D\u53D8\uFF0C\u5DF2\u7ECF\u5BFC\u5165\u7684\u5BA2\u6237\u7AEF\u4E0D\u7528\u6539\uFF0C\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9\u3002";
+  var tail="\u8981\u7EE7\u7EED\u7528\u8FD9\u4E2A\u540E\u7F00\uFF0C\u5C31\u70B9\u300C\u7EE7\u7EED\u7528\u8FD9\u4E2A\u540E\u7F00\u300D\uFF1A\u4F1A\u7528\u8FD9\u6B21\u586B\u5199\u7684\u5185\u5BB9\u66F4\u65B0\u5B83\uFF0C\u8BA2\u9605\u5730\u5740\u4FDD\u6301\u4E0D\u53D8\uFF0C\u5DF2\u7ECF\u5BFC\u5165\u7684\u5BA2\u6237\u7AEF\u4E0D\u7528\u6539\uFF0C\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9\u3002\u4E0D\u60F3\u7528\u5C31\u6362\u4E2A\u540E\u7F00\uFF0C\u4F60\u4E4B\u524D\u7684\u94FE\u63A5\u4E0D\u53D7\u5F71\u54CD\u3002";
   if(!rec) return head+"\u94FE\u63A5\u3002"+tail;
   var kind=rec.kind==="chain"?"\u94FE\u5F0F\u4EE3\u7406":"\u666E\u901A\u8F6C\u6362";
   var bits=[];
@@ -6925,11 +6925,11 @@ function describeOld(code,rec){
 function askOverwrite(sec,code,retry,codeInputId){
   var out=$(sec==="N"?"outN":"outC");out.innerHTML="";
   var box=document.createElement("div");box.className="link-row";
-  var t=document.createElement("div");t.className="tag";t.textContent="\u8FD9\u4E2A\u540E\u7F00\u662F\u4F60\u81EA\u5DF1\u4E4B\u524D\u7528\u8FC7\u7684";box.appendChild(t);
+  var t=document.createElement("div");t.className="tag";t.textContent="\u8FD9\u4E2A\u540E\u7F00\u5DF2\u7ECF\u6709\u4F60\u7684\u4E00\u6761\u94FE\u63A5\u4E86";box.appendChild(t);
   var u=document.createElement("div");u.className="u";u.style.fontFamily="inherit";u.textContent="\u6B63\u5728\u8BFB\u53D6\u8FD9\u6761\u65E7\u94FE\u63A5\u7684\u5185\u5BB9\u2026";box.appendChild(u);
   var ops=document.createElement("div");ops.className="ops";
-  var b1=document.createElement("button");b1.textContent="\u8986\u76D6\u66F4\u65B0";b1.onclick=function(){retry()};
-  var b2=document.createElement("button");b2.textContent="\u6362\u4E2A\u540E\u7F00";b2.onclick=function(){out.style.display="none";var i=$(codeInputId);i.focus();i.select();showErr(sec==="N"?"errN":"errC","\u5DF2\u53D6\u6D88\u8986\u76D6\u3002\u6362\u4E2A\u540E\u7F00\u4F1A\u751F\u6210\u65B0\u5730\u5740\uFF0C\u4F60\u4E4B\u524D\u7684\u94FE\u63A5\u4E0D\u53D7\u5F71\u54CD")};
+  var b1=document.createElement("button");b1.textContent="\u7EE7\u7EED\u7528\u8FD9\u4E2A\u540E\u7F00";b1.onclick=function(){retry()};
+  var b2=document.createElement("button");b2.textContent="\u6362\u4E2A\u540E\u7F00";b2.onclick=function(){out.style.display="none";var i=$(codeInputId);i.focus();i.select();showErr(sec==="N"?"errN":"errC","\u5DF2\u53D6\u6D88\u3002\u6362\u4E2A\u540E\u7F00\u4F1A\u751F\u6210\u65B0\u5730\u5740\uFF0C\u4F60\u4E4B\u524D\u7684\u94FE\u63A5\u4E0D\u53D7\u5F71\u54CD")};
   ops.appendChild(b1);ops.appendChild(b2);box.appendChild(ops);out.appendChild(box);out.style.display="block";
   fetch("/api/link/"+encodeURIComponent(code)).then(function(r){return r.ok?r.json():null}).then(function(rec){u.textContent=describeOld(code,rec)}).catch(function(){u.textContent=describeOld(code,null)});
 }
@@ -6949,9 +6949,9 @@ function attemptN(force){
           {tag:"Mihomo",url:location.origin+"/m/"+code,imp:tg==="clash"?{label:"\u4E00\u952E\u5BFC\u5165 Clash",href:"clash://install-config?url="+encodeURIComponent(location.origin+"/m/"+code)}:null},
           {tag:"sing-box",url:location.origin+"/s/"+code,imp:tg==="singbox"?{label:"\u4E00\u952E\u5BFC\u5165 sing-box",href:"sing-box://import-remote-profile?url="+encodeURIComponent(location.origin+"/s/"+code)}:null}
         ];
-        render("outN",rows,force?"\u5DF2\u8986\u76D6\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
+        render("outN",rows,force?"\u5DF2\u7528\u539F\u540E\u7F00\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }else{
-        render("outN",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],force?"\u5DF2\u8986\u76D6\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
+        render("outN",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],force?"\u5DF2\u7528\u539F\u540E\u7F00\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }
     }else if(cd){
       if(res.status===409&&!force){askOverwrite("N",cd,function(){attemptN(true)},"codeN")}else{showErr("errN",res.text||"\u751F\u6210\u5931\u8D25")}
@@ -6985,9 +6985,9 @@ function attemptC(force){
           {tag:"Mihomo",url:location.origin+"/m/"+code,imp:tg==="clash"?{label:"\u4E00\u952E\u5BFC\u5165 Clash",href:"clash://install-config?url="+encodeURIComponent(location.origin+"/m/"+code)}:null},
           {tag:"sing-box",url:location.origin+"/s/"+code,imp:tg==="singbox"?{label:"\u4E00\u952E\u5BFC\u5165 sing-box",href:"sing-box://import-remote-profile?url="+encodeURIComponent(location.origin+"/s/"+code)}:null}
         ];
-        render("outC",rows,force?"\u5DF2\u8986\u76D6\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
+        render("outC",rows,force?"\u5DF2\u7528\u539F\u540E\u7F00\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }else{
-        render("outC",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],force?"\u5DF2\u8986\u76D6\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
+        render("outC",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],force?"\u5DF2\u7528\u539F\u540E\u7F00\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }
     }else if(cd){
       if(res.status===409&&!force){askOverwrite("C",cd,function(){attemptC(true)},"codeC")}else{showErr("errC",res.text||"\u751F\u6210\u5931\u8D25")}
