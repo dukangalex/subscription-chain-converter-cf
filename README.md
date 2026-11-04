@@ -1,3 +1,5 @@
+<p align="center"><img src="logo.svg" width="96" alt="Subscription Converter logo"></p>
+
 # Subscription Converter with Chain Proxy — Cloudflare Workers
 
 A fully self-hosted subscription converter for Mihomo (Clash) and
