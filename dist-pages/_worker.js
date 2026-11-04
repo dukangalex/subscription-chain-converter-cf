@@ -6729,9 +6729,11 @@ textarea{resize:vertical;font-family:inherit;line-height:1.5}
 .link-row .ops a.imp{background:linear-gradient(135deg,#14b8a6,#2563eb);color:#fff}
 .note{color:#a3bab5;font-size:13px;margin-top:10px;line-height:1.6}
 .hide{display:none}
-.rgchip{padding:4px 11px;border-radius:999px;border:1px solid #31424a;background:#11181b;color:#c3d2d0;font-size:13px;cursor:pointer}
-.rgchip.on{border-color:#14b8a6;background:rgba(20,184,166,.2);color:#fff;font-weight:700}
 footer{color:#5d726d;font-size:13px;margin-top:24px;line-height:1.6}
+footer a{color:#5eead4}
+.updatenote{display:flex;gap:10px;align-items:center;background:rgba(20,184,166,.12);border:1px solid rgba(45,212,191,.45);color:#eef6f5;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:14px}
+.updatenote a{color:#5eead4}
+.updatenote button{margin-left:auto;background:#1b272c;color:#eef6f5;border:0;border-radius:8px;padding:6px 12px;cursor:pointer}
 /* \u7ED3\u6784\u5C42 (2.2): \u53CC\u5217 \u2014 \u4E3B\u8868\u5355\u5DE6, \u6062\u590D\u5361\u53F3\u8F68 */
 .wrap{max-width:860px}
 .wrap>.card{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 16px;margin-bottom:16px}
@@ -6742,6 +6744,7 @@ footer{color:#5d726d;font-size:13px;margin-top:24px;line-height:1.6}
 </head>
 <body>
 <div class="wrap">
+<div id="updatenote" class="hide"></div>
 <header class="hero">
 <div class="hero-badge">SUBSCRIPTION CONVERTER</div>
 <h1>\u8BA2\u9605\u8F6C\u6362</h1>
@@ -6775,9 +6778,6 @@ footer{color:#5d726d;font-size:13px;margin-top:24px;line-height:1.6}
 <option value="loon">Loon</option>
 <option value="quanx">Quantumult X</option>
 </select>
-<label>\u53EA\u4FDD\u7559\u8FD9\u4E9B\u5730\u533A\u7684\u8282\u70B9\uFF08\u53EF\u9009\uFF0C\u4E0D\u9009 = \u5168\u90E8\u4FDD\u7559\uFF09</label>
-<div id="rgChips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-<input id="rgExtra" placeholder="\u5176\u5B83\u5730\u533A\u4EE3\u7801\uFF0C\u9017\u53F7\u5206\u9694\uFF08\u5982 DE,GB\uFF09" style="margin-top:8px">
 <label>\u81EA\u5B9A\u4E49\u540E\u7F00\uFF08\u53EF\u9009\uFF0C\u4E0D\u586B\u5219\u968F\u673A\uFF09</label>
 <input id="codeN" placeholder="\u5982 home\uFF0C\u53EA\u7528\u5B57\u6BCD\u3001\u6570\u5B57\u3001-\u3001_">
 <button class="go" id="goN" onclick="genN()">\u751F\u6210\u8F6C\u6362\u94FE\u63A5</button>
@@ -6806,7 +6806,7 @@ footer{color:#5d726d;font-size:13px;margin-top:24px;line-height:1.6}
 <p class="note">\u751F\u6210\u7684\u94FE\u63A5\u53EF\u76F4\u63A5\u5F53\u8BA2\u9605\u5730\u5740\u586B\u8FDB\u5BA2\u6237\u7AEF\uFF0C\u6BCF\u6B21\u66F4\u65B0\u90FD\u4F1A\u91CD\u65B0\u6309\u5165\u53E3\u5230\u51FA\u53E3\u4E32\u597D\u3002\u77ED\u94FE\u91CC\u7684\u5B57\u6BCD\u4EE3\u8868\u683C\u5F0F\uFF1A/m/ \u662F Mihomo\u3001/s/ \u662F sing-box\uFF0C\u540C\u4E00\u4E2A\u7801\u6539\u5B57\u6BCD\u5C31\u80FD\u5207\u6362\u683C\u5F0F\uFF0C\u4E0D\u7528\u91CD\u65B0\u751F\u6210\u3002</p>
 </div>
 
-<footer>\u8FD0\u884C\u5728\u4F60\u81EA\u5DF1\u7684 Cloudflare \u8D26\u53F7\u4E0A\uFF08Workers + KV\uFF09\uFF0C\u8BA2\u9605\u5185\u5BB9\u53EA\u4FDD\u5B58\u5728\u4F60\u7684 KV \u4E2D\uFF0C\u4E0D\u7ECF\u8FC7\u4EFB\u4F55\u7B2C\u4E09\u65B9\u3002</footer>
+<footer>\u8FD0\u884C\u5728\u4F60\u81EA\u5DF1\u7684 Cloudflare \u8D26\u53F7\u4E0A\uFF08Workers + KV\uFF09\uFF0C\u8BA2\u9605\u5185\u5BB9\u53EA\u4FDD\u5B58\u5728\u4F60\u7684 KV \u4E2D\uFF0C\u4E0D\u7ECF\u8FC7\u4EFB\u4F55\u7B2C\u4E09\u65B9\u3002<br>v1.0.0 \xB7 \u4ED3\u5E93 <a href="https://github.com/dukangalex/subscription-chain-converter-cf" target="_blank" rel="noopener">GitHub</a> \xB7 \u9891\u9053 <a href="https://t.me/AngelaNexus" target="_blank" rel="noopener">Telegram @AngelaNexus</a></footer>
 </div>
 <script>
 function $(id){return document.getElementById(id)}
@@ -6846,7 +6846,7 @@ function restore(){
     }else{
       mode("n");
       $("u").value=(rec.url||"").split("|").join("\\n");
-      if(rec.target) $("t").value=rec.target; RGSEL={};(rec.regions||[]).forEach(function(c){RGSEL[c]=1});rgSync();
+      if(rec.target) $("t").value=rec.target;
       $("codeN").value=code;
     }
     $("rok").style.display="block";
@@ -6896,11 +6896,6 @@ function shorten(body){
   return fetch("/shorten",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
     .then(function(r){return r.text().then(function(t){return {ok:r.ok,status:r.status,text:t}})});
 }
-var RGSEL={};
-function rgSync(){document.querySelectorAll(".rgchip").forEach(function(ch){ch.className=RGSEL[ch.getAttribute("data-c")]?"rgchip on":"rgchip"})}
-function rgSel(){var s={};for(var k in RGSEL)if(RGSEL[k])s[k]=1;var ex=$("rgExtra");if(ex)ex.value.split(/[,\\s]+/).forEach(function(x){x=x.trim().toUpperCase();if(x)s[x]=1});return Object.keys(s)}
-function rgBuild(codes){var box=$("rgChips");if(!box)return;box.innerHTML="";codes.forEach(function(c){var b=document.createElement("button");b.type="button";b.className="rgchip";b.setAttribute("data-c",c);b.textContent=c;b.onclick=function(){RGSEL[c]=!RGSEL[c];rgSync()};box.appendChild(b)});rgSync()}
-(function(){var pop=["JP","HK","SG","US","TW","KR","DE","GB","FR","NL","CA","AU"];rgBuild(pop);fetch("/?get_regions=1").then(function(r){return r.json()}).then(function(cs){if(cs&&cs.length)rgBuild(cs)}).catch(function(){})})();
 function countItems(s){return (s||"").split("|").filter(function(x){return x.trim().length>0}).length}
 function firstHostOf(s){
   var f=((s||"").split("|")[0]||"").split("#")[0];
@@ -6938,7 +6933,7 @@ function attemptN(force){
   var it=lines("u");hideErr("errN");
   if(!it.length){showErr("errN","\u5148\u7C98\u8D34\u8282\u70B9\u6216\u8BA2\u9605\u94FE\u63A5");return}
   var tg=$("t").value, cd=$("codeN").value.trim();
-  var body={target:tg,url:it.join("|")}; if(cd)body.code=cd; if(force)body.force=true; var rgs=rgSel(); if(rgs.length)body.regions=rgs.join("-");
+  var body={target:tg,url:it.join("|")}; if(cd)body.code=cd; if(force)body.force=true;
   var btn=$("goN");btn.disabled=true;btn.textContent="\u751F\u6210\u4E2D\u2026";
   shorten(body).then(function(res){
     if(res.ok){
@@ -7003,10 +6998,44 @@ function attemptC(force){
     }
   }).finally(function(){btn.disabled=false;btn.textContent="\u751F\u6210\u94FE\u5F0F\u8BA2\u9605\u94FE\u63A5"});
 }
+
+// Update check: compare the version published in the repo's VERSION
+// file with the one built into this page; prompt only when newer.
+// The result is cached for a day; dismissing hides that version.
+(function(){
+  var CURVER="1.0.0";
+  var REPO="https://github.com/dukangalex/subscription-chain-converter-cf";
+  var KEY="conv_update_check";
+  function ver(s){return String(s||"").trim().replace(/^v/,"").split(".").map(function(x){return parseInt(x,10)||0})}
+  function newer(a,b){var x=ver(a),y=ver(b);for(var k=0;k<3;k++){if((x[k]||0)!==(y[k]||0))return (x[k]||0)>(y[k]||0)}return false}
+  var store=null; try{store=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
+  function save(o){try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+  function show(v){
+    if(store&&store.dismissed===v)return;
+    var bar=$("updatenote"); if(!bar)return;
+    bar.innerHTML="";
+    var s=document.createElement("span");s.textContent="\u6709\u65B0\u7248\u672C v"+v+" \u53EF\u7528\uFF08\u5F53\u524D v"+CURVER+"\uFF09\u3002";bar.appendChild(s);
+    var a=document.createElement("a");a.href=REPO;a.target="_blank";a.rel="noopener";a.textContent="\u53BB\u4ED3\u5E93\u67E5\u770B\u66F4\u65B0";bar.appendChild(a);
+    var x=document.createElement("button");x.textContent="\u77E5\u9053\u4E86";
+    x.onclick=function(){bar.className="hide";save({v:v,at:Date.now(),dismissed:v})};
+    bar.appendChild(x);bar.className="updatenote";
+  }
+  if(store&&store.v&&newer(store.v,CURVER)&&(Date.now()-(store.at||0)<86400000))show(store.v);
+  fetch("https://raw.githubusercontent.com/dukangalex/subscription-chain-converter-cf/main/VERSION")
+    .then(function(r){return r.ok?r.text():null})
+    .then(function(t){
+      if(!t)return;
+      var v=t.trim().split(/\\s+/)[0];
+      if(!/^v?\\d+\\.\\d+\\.\\d+$/.test(v))return;
+      save({v:v,at:Date.now(),dismissed:store?store.dismissed:null});
+      if(newer(v,CURVER))show(v);
+    }).catch(function(){});
+})();
 </script>
 </body>
 </html>
 `;
+var VERSION = "1.0.0";
 var _enc = new TextEncoder();
 var _dec = new TextDecoder();
 function isObj(v) {
@@ -9279,7 +9308,7 @@ async function handleFetch(request, env, ctx) {
     return proxyToConverter(env, "/sub?" + q, BROWSER_UA);
   }
   if (path === "/version") {
-    return send("subscription-converter cf-worker");
+    return send("subscription-converter cf-worker " + VERSION);
   }
   if (path === "/sub") {
     const target = url.searchParams.get("target") || "";
