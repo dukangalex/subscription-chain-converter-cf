@@ -33,14 +33,16 @@ storage and fill the ids in).
    Worker.
 2. Open your Worker URL. The converter page is live immediately;
    only the rule mirror still needs its first fill.
-3. Fill the rule mirror once (no token needed on first run):
-
-   ```bash
-   curl -X POST https://<your-worker-domain>/admin/refresh
-   ```
-
-   It returns a JSON status like `{"ok":76,"failed":[]}`. From
-   then on a daily Cron Trigger (04:35 CST) keeps the mirror
+3. Nothing else: the page fills the rule mirror by itself. While
+   the mirror is empty, opening the page starts the fill in the
+   background and the page shows a notice with a **Fill now**
+   button if you want it done immediately (no token needed on
+   first run; the fill downloads the bundled manifest's official
+   rule files, 76 in total). Prefer the command line? The same
+   fill can be triggered with
+   `curl -X POST https://<your-worker-domain>/admin/refresh`,
+   which returns a JSON status like `{"ok":76,"failed":[]}`.
+   From then on a daily Cron Trigger (04:35 CST) keeps the mirror
    current, and this endpoint requires a token (see below).
 4. Optional — set a refresh token for later manual refreshes:
    Cloudflare dashboard → Workers & Pages → your Worker →
@@ -349,15 +351,15 @@ links, the page — is original to this project.
    数据库，并部署 Worker。
 2. 打开你的 Worker 域名。转换页面即刻可用，只差规则镜像的
    首次填充。
-3. 首次填充规则镜像（第一次调用不需要令牌）：
-
-   ```bash
-   curl -X POST https://<你的 Worker 域名>/admin/refresh
-   ```
-
-   返回形如 `{"ok":76,"failed":[]}` 的 JSON 状态即完成。此后
-   每天由 Cron 触发器（北京时间 04:35）保持镜像更新，之后再
-   调用这个接口就需要令牌（见下）。
+3. 不用再做别的：页面会自己填充规则镜像。镜像为空时，打开
+   页面就会在后台自动开始填充，页面顶部也会出现提示条，想
+   立刻填完点一下「立即填充」按钮即可（第一次不需要令牌；
+   填充内容是内置清单里的官方规则文件，共 76 个）。习惯命令
+   行的也可以用
+   `curl -X POST https://<你的 Worker 域名>/admin/refresh`
+   触发同一件事，返回形如 `{"ok":76,"failed":[]}` 的 JSON
+   状态。填充完成后，每天由 Cron 触发器（北京时间 04:35）
+   保持镜像更新，之后再调用这个接口就需要令牌（见下）。
 4. 可选——给后续手动刷新设一个令牌：Cloudflare 控制台 →
    Workers & Pages → 你的 Worker → 设置 → 变量和机密 → 添加
    机密 `REFRESH_TOKEN`，值填一段随机字符串。之后手动刷新带

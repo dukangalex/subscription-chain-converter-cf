@@ -6748,6 +6748,7 @@ footer a{color:#5eead4}
 <body>
 <div class="wrap">
 <div id="updatenote" class="hide"></div>
+<div id="fillnote" class="hide"></div>
 <header class="hero">
 <img class="logo" src="/logo.svg" alt="Subscription Converter">
 <div class="hero-badge">SUBSCRIPTION CONVERTER</div>
@@ -7035,11 +7036,51 @@ function attemptC(force){
       if(newer(v,CURVER))show(v);
     }).catch(function(){});
 })();
+
+// First-run helper: while the rule mirror has never been filled,
+// show a one-tap fill bar. The endpoint is tokenless only in this
+// bootstrap state; the worker also auto-fills in the background.
+(function(){
+  var bar=$("fillnote"); if(!bar)return;
+  function hide(){bar.className="hide"}
+  function check(){
+    fetch("/api/rules-status").then(function(r){return r.json()}).then(function(d){
+      if(!d||d.filled){hide();return}
+      bar.innerHTML="";
+      var s=document.createElement("span");
+      s.textContent="\u89C4\u5219\u955C\u50CF\u8FD8\u6CA1\u6709\u586B\u5145\uFF08\u9996\u6B21\u4F7F\u7528\u9700\u8981\uFF09\uFF0C\u4E0D\u586B\u5145\u751F\u6210\u7684\u914D\u7F6E\u4F1A\u7F3A\u89C4\u5219\u3002";
+      bar.appendChild(s);
+      var b=document.createElement("button");b.textContent="\u7ACB\u5373\u586B\u5145";
+      function finish(ok){
+        s.textContent="\u89C4\u5219\u955C\u50CF\u5DF2\u586B\u5145\u5B8C\u6210\uFF08"+ok+" \u4E2A\u6587\u4EF6\uFF09\uFF0C\u53EF\u4EE5\u6B63\u5E38\u751F\u6210\u4E86\u3002";
+        b.textContent="\u5B8C\u6210";setTimeout(hide,2500);
+      }
+      function poll(n){
+        fetch("/api/rules-status").then(function(r){return r.json()}).then(function(d){
+          if(d&&d.filled&&!d.refreshing){finish(d.status?d.status.ok:0);return}
+          if(n>0){s.textContent="\u6B63\u5728\u586B\u5145\u89C4\u5219\u955C\u50CF\uFF0C\u8BF7\u7A0D\u5019\u2026";setTimeout(function(){poll(n-1)},3000)}
+          else check();
+        }).catch(function(){if(n>0)setTimeout(function(){poll(n-1)},3000);else check()});
+      }
+      b.onclick=function(){
+        b.disabled=true;b.textContent="\u586B\u5145\u4E2D\u2026";
+        fetch("/admin/refresh",{method:"POST"}).then(function(r){return r.ok?r.json():null}).then(function(st){
+          if(st&&!st.partial&&typeof st.ok==="number")finish(st.ok);
+          else if(st&&st.partial)poll(40);
+          else check();
+        }).catch(function(){b.disabled=false;b.textContent="\u91CD\u8BD5\u586B\u5145"});
+      };
+      bar.appendChild(b);bar.className="updatenote";
+    }).catch(function(){});
+  }
+  check();
+})();
 </script>
 </body>
 </html>
 `;
 var VERSION = "1.0.0";
+var lastAutoFill = 0;
 var _enc = new TextEncoder();
 var _dec = new TextDecoder();
 function isObj(v) {
@@ -9093,44 +9134,83 @@ async function getRule(env, dst) {
   }
   return env.KV.get("rule:" + dst, "arrayBuffer");
 }
-async function refreshRules(env) {
-  const results = /* @__PURE__ */ new Map();
+var REFRESH_SLICE = 40;
+async function refreshSlice(env) {
+  let run = null;
+  try {
+    run = JSON.parse(await env.KV.get("meta:refresh_run") || "null");
+  } catch {
+  }
+  if (!run) {
+    run = {
+      nonce: crypto.randomUUID(),
+      offset: 0,
+      ok: 0,
+      failed: [],
+      started: (/* @__PURE__ */ new Date()).toISOString()
+    };
+  }
+  const part = MANIFEST.slice(run.offset, run.offset + REFRESH_SLICE);
   const chunk = 8;
-  for (let i = 0; i < MANIFEST.length; i += chunk) {
-    const part = MANIFEST.slice(i, i + chunk);
-    await Promise.all(part.map(async (entry) => {
-      const { dst, src } = entry;
+  for (let i = 0; i < part.length; i += chunk) {
+    const sub = part.slice(i, i + chunk);
+    await Promise.all(sub.map(async (entry) => {
       try {
-        const resp = await fetch(src, {
+        const resp = await fetch(entry.src, {
           headers: { "User-Agent": REFRESH_UA },
           signal: AbortSignal.timeout(12e4)
         });
         if (!resp.ok) throw new Error("HTTP " + resp.status);
         const buf = new Uint8Array(await resp.arrayBuffer());
-        if (!validRule(dst, buf)) throw new Error("validation failed");
-        await putRule(env, dst, buf);
-        results.set(dst, true);
+        if (!validRule(entry.dst, buf)) throw new Error("validation failed");
+        await putRule(env, entry.dst, buf);
+        run.ok++;
       } catch {
-        results.set(dst, false);
+        run.failed.push(entry.dst);
       }
     }));
   }
-  let ok = 0;
-  const failed = [];
-  for (const e of MANIFEST) {
-    if (results.get(e.dst)) ok++;
-    else failed.push(e.dst);
+  run.offset += part.length;
+  if (run.offset < MANIFEST.length) {
+    await env.KV.put("meta:refresh_run", JSON.stringify(run));
+    return { done: false, run };
   }
-  const status = { time: (/* @__PURE__ */ new Date()).toISOString(), ok, failed };
+  const status = {
+    time: (/* @__PURE__ */ new Date()).toISOString(),
+    ok: run.ok,
+    failed: run.failed
+  };
   await env.KV.put("meta:rules_status", JSON.stringify(status));
+  await env.KV.delete("meta:refresh_run");
   if (env.DB) {
     try {
       await ensureDb(env);
-      await env.DB.prepare(SQL_REFRESH_LOG).bind(status.time, ok, JSON.stringify(failed)).run();
+      await env.DB.prepare(SQL_REFRESH_LOG).bind(status.time, status.ok, JSON.stringify(status.failed)).run();
     } catch {
     }
   }
-  return status;
+  return { done: true, status };
+}
+async function refreshToCompletion(env, origin) {
+  const r = await refreshSlice(env);
+  if (r.done) return r.status;
+  const partial = {
+    partial: true,
+    ok: r.run.ok,
+    failed: r.run.failed,
+    remaining: MANIFEST.length - r.run.offset
+  };
+  if (!origin) return partial;
+  try {
+    const resp = await fetch(
+      origin + "/admin/refresh?cont=" + encodeURIComponent(r.run.nonce),
+      { method: "POST" }
+    );
+    if (!resp.ok) return partial;
+    return await resp.json();
+  } catch {
+    return partial;
+  }
 }
 function send(body, { status = 200, ctype = "text/plain; charset=utf-8" } = {}) {
   return new Response(body, {
@@ -9229,12 +9309,33 @@ async function handleFetch(request, env, ctx) {
   if (request.method === "POST") {
     if (path === "/shorten") return handleShorten(request, env);
     if (path === "/admin/refresh") {
+      const origin2 = new URL(request.url).origin;
+      try {
+        await env.KV.put("meta:origin", origin2);
+      } catch {
+      }
+      const cont = url.searchParams.get("cont");
+      if (cont) {
+        let run = null;
+        try {
+          run = JSON.parse(await env.KV.get("meta:refresh_run") || "null");
+        } catch {
+        }
+        if (!run || run.nonce !== cont) {
+          return send("unauthorized", { status: 401 });
+        }
+        const status2 = await refreshToCompletion(env, origin2);
+        return send(
+          JSON.stringify(status2),
+          { ctype: "application/json; charset=utf-8" }
+        );
+      }
       const token = env.REFRESH_TOKEN;
       const authed = !!token && request.headers.get("Authorization") === `Bearer ${token}`;
       if (!authed && await env.KV.get("meta:rules_status")) {
         return send("unauthorized", { status: 401 });
       }
-      const status = await refreshRules(env);
+      const status = await refreshToCompletion(env, origin2);
       return send(
         JSON.stringify(status),
         { ctype: "application/json; charset=utf-8" }
@@ -9243,7 +9344,39 @@ async function handleFetch(request, env, ctx) {
     return send("not found", { status: 404 });
   }
   if (request.method !== "GET") return send("not found", { status: 404 });
+  if (path === "/api/rules-status") {
+    let st = null;
+    try {
+      st = JSON.parse(await env.KV.get("meta:rules_status") || "null");
+    } catch {
+    }
+    const refreshing = !!await env.KV.get("meta:refresh_run");
+    return send(
+      JSON.stringify({ filled: !!st, status: st, refreshing }),
+      { ctype: "application/json; charset=utf-8" }
+    );
+  }
   if (path === "/" || path === "/index.html") {
+    if ((request.headers.get("Accept") || "").includes("text/html") && Date.now() - lastAutoFill > 10 * 60 * 1e3) {
+      const origin2 = new URL(request.url).origin;
+      try {
+        await env.KV.put("meta:origin", origin2);
+      } catch {
+      }
+      let need = false;
+      try {
+        const run = await env.KV.get("meta:refresh_run");
+        const st = JSON.parse(
+          await env.KV.get("meta:rules_status") || "null"
+        );
+        need = !!run || !st || !!(st.failed && st.failed.length);
+      } catch {
+      }
+      if (need) {
+        lastAutoFill = Date.now();
+        ctx.waitUntil(refreshToCompletion(env, origin2));
+      }
+    }
     return send(PAGE, { ctype: "text/html; charset=utf-8" });
   }
   if (path.startsWith("/rules/")) {
@@ -9378,7 +9511,12 @@ async function handleFetch(request, env, ctx) {
 var worker_default = {
   fetch: (request, env, ctx) => handleFetch(request, env, ctx),
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(refreshRules(env));
+    let origin = null;
+    try {
+      origin = await env.KV.get("meta:origin");
+    } catch {
+    }
+    ctx.waitUntil(refreshToCompletion(env, origin));
   }
 };
 export {

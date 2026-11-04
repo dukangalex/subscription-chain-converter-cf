@@ -41,6 +41,9 @@ class KVStub {
   async put(key, value) {
     this.map.set(key, value);
   }
+  async delete(key) {
+    this.map.delete(key);
+  }
 }
 
 // ------------------------------------------------------------- D1 stub
@@ -132,6 +135,24 @@ const srcSet = new Map(manifest.map((e) => [e.src, e.dst]));
 
 globalThis.fetch = async (url) => {
   const u = String(url);
+  if (u.startsWith("https://cf.test/admin/refresh")) {
+    // Refresh-slice continuation self-call: dispatch back into the
+    // worker, like a real deployment's public origin would. The
+    // nonce identifies which test env's run is being continued
+    // (production has exactly one env per worker).
+    const cont = new URL(u).searchParams.get("cont");
+    let target = env;
+    if (cont && globalThis.__refreshEnvs) {
+      for (const e of globalThis.__refreshEnvs) {
+        try {
+          const run = JSON.parse(
+            (await e.KV.get("meta:refresh_run")) || "null");
+          if (run && run.nonce === cont) { target = e; break; }
+        } catch {}
+      }
+    }
+    return worker.fetch(new Request(u, { method: "POST" }), target, ctx);
+  }
   if (u.startsWith("https://dns.alidns.com/resolve")) {
     // Canned DNS HTTPS answer in the shape _fetch_ech_config parses.
     return Response.json({
@@ -159,6 +180,7 @@ const env = {
 };
 const ctx = { waitUntil() {} };
 const BASE = "https://cf.test";
+globalThis.__refreshEnvs = [env];
 
 let failures = 0;
 function check(name, cond, extra = "") {
@@ -346,6 +368,7 @@ let code = null;
     REFRESH_TOKEN: ["test", "token"].join("-"),
     EXTERNAL_SUBCONVERTER_URL: "",
   };
+  globalThis.__refreshEnvs.push(env2);
   const pending = [];
   const ctx2 = { waitUntil(p) { pending.push(p); } };
   const call2 = (path, opts = {}) =>
