@@ -6686,12 +6686,14 @@ var MANIFEST = rules_manifest_default;
 var DST_SET = new Set(MANIFEST.map((e) => e.dst));
 var STAGE = { cur: "-" };
 var ECH_CFG_CACHE = /* @__PURE__ */ new Map();
+var LOGO_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Subscription Converter">\n  <defs>\n    <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">\n      <stop offset="0" stop-color="#2dd4bf"/>\n      <stop offset="1" stop-color="#3b82f6"/>\n    </linearGradient>\n  </defs>\n  <rect x="4" y="4" width="88" height="88" rx="22" fill="url(#g)"/>\n  <path d="M31 63 C31 33 65 63 65 33" fill="none" stroke="#ffffff" stroke-width="6.5" stroke-linecap="round"/>\n  <circle cx="31" cy="63" r="7.5" fill="#ffffff"/>\n  <circle cx="65" cy="33" r="7.5" fill="none" stroke="#ffffff" stroke-width="5"/>\n  <circle cx="65" cy="33" r="2.2" fill="#ffffff"/>\n</svg>';
 var PAGE = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>\u8BA2\u9605\u8F6C\u6362</title>
+<link rel="icon" type="image/svg+xml" href="/logo.svg">
 <style>
 :root{color-scheme:dark}
 *{box-sizing:border-box}
@@ -6700,6 +6702,7 @@ body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"PingFang SC","
 h1{font-size:31px;font-weight:800;letter-spacing:.05em;text-align:center;margin:0 0 8px;background:linear-gradient(90deg,#2dd4bf,#3b82f6);-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{color:#a3bab5;font-size:14px;margin:0;text-align:center}
 .hero{text-align:center;margin:10px 0 22px}
+.hero .logo{width:64px;height:64px}
 .hero-badge{display:inline-block;font-size:11px;letter-spacing:.28em;color:#5eead4;border:1px solid rgba(45,212,191,.45);background:rgba(20,184,166,.10);padding:5px 12px 5px 15px;border-radius:999px;margin-bottom:14px}
 .hero::after{content:"";display:block;width:64px;height:3px;border-radius:2px;margin:16px auto 0;background:linear-gradient(90deg,#2dd4bf,#3b82f6)}
 .card{background:#0c1113;border:1px solid #1f2a2f;border-radius:12px;padding:16px;margin-bottom:16px}
@@ -6746,6 +6749,7 @@ footer a{color:#5eead4}
 <div class="wrap">
 <div id="updatenote" class="hide"></div>
 <header class="hero">
+<img class="logo" src="/logo.svg" alt="Subscription Converter">
 <div class="hero-badge">SUBSCRIPTION CONVERTER</div>
 <h1>\u8BA2\u9605\u8F6C\u6362</h1>
 <p class="sub">\u628A\u8282\u70B9\u3001\u8BA2\u9605\u8F6C\u6210\u5BA2\u6237\u7AEF\u80FD\u76F4\u63A5\u7528\u7684\u8BA2\u9605\u94FE\u63A5\uFF0C\u652F\u6301\u666E\u901A\u8F6C\u6362\u4E0E\u94FE\u5F0F\u4EE3\u7406\u3002</p>
@@ -9306,6 +9310,9 @@ async function handleFetch(request, env, ctx) {
     }
     const q = new URLSearchParams({ target, url: items }).toString();
     return proxyToConverter(env, "/sub?" + q, BROWSER_UA);
+  }
+  if (path === "/logo.svg") {
+    return send(LOGO_SVG, { ctype: "image/svg+xml" });
   }
   if (path === "/version") {
     return send("subscription-converter cf-worker " + VERSION);
