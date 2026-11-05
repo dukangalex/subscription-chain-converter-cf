@@ -6808,10 +6808,10 @@ footer a{color:#5eead4}
 <button class="go" id="goC" onclick="genC()">\u751F\u6210\u94FE\u5F0F\u8BA2\u9605\u94FE\u63A5</button>
 <div class="err" id="errC"></div>
 <div class="out" id="outC"></div>
-<p class="note">\u751F\u6210\u7684\u94FE\u63A5\u53EF\u76F4\u63A5\u5F53\u8BA2\u9605\u5730\u5740\u586B\u8FDB\u5BA2\u6237\u7AEF\uFF0C\u6BCF\u6B21\u66F4\u65B0\u90FD\u4F1A\u91CD\u65B0\u6309\u5165\u53E3\u5230\u51FA\u53E3\u4E32\u597D\u3002\u77ED\u94FE\u91CC\u7684\u5B57\u6BCD\u4EE3\u8868\u683C\u5F0F\uFF1A/m/ \u662F Mihomo\u3001/s/ \u662F sing-box\uFF0C\u540C\u4E00\u4E2A\u7801\u6539\u5B57\u6BCD\u5C31\u80FD\u5207\u6362\u683C\u5F0F\uFF0C\u4E0D\u7528\u91CD\u65B0\u751F\u6210\u3002</p>
+<p class="note">\u751F\u6210\u7684\u94FE\u63A5\u53EF\u76F4\u63A5\u5F53\u8BA2\u9605\u5730\u5740\u586B\u8FDB\u5BA2\u6237\u7AEF\uFF0C\u6BCF\u6B21\u66F4\u65B0\u90FD\u4F1A\u91CD\u65B0\u6309\u5165\u53E3\u5230\u51FA\u53E3\u4E32\u597D\u3002\u77ED\u94FE\u91CC\u7684\u5B57\u6BCD\u4EE3\u8868\u683C\u5F0F\uFF1A/m/ Mihomo\u3001/s/ sing-box\u3001/v/ V2Ray\u3001/g/ Surge\u3001/l/ Loon\u3001/q/ Quantumult X\uFF0C\u540C\u4E00\u4E2A\u7801\u6539\u5B57\u6BCD\u5C31\u80FD\u5207\u6362\u683C\u5F0F\uFF0C\u4E0D\u7528\u91CD\u65B0\u751F\u6210\uFF1B/c/ \u6309\u751F\u6210\u65F6\u9009\u7684\u683C\u5F0F\u51FA\u3002</p>
 </div>
 
-<footer>\u8FD0\u884C\u5728\u4F60\u81EA\u5DF1\u7684 Cloudflare \u8D26\u53F7\u4E0A\uFF08Workers + KV\uFF09\uFF0C\u8BA2\u9605\u5185\u5BB9\u53EA\u4FDD\u5B58\u5728\u4F60\u7684 KV \u4E2D\uFF0C\u4E0D\u7ECF\u8FC7\u4EFB\u4F55\u7B2C\u4E09\u65B9\u3002<br>v1.0.0 \xB7 \u4ED3\u5E93 <a href="https://github.com/dukangalex/subscription-chain-converter-cf" target="_blank" rel="noopener">GitHub</a> \xB7 \u9891\u9053 <a href="https://t.me/AngelaNexus" target="_blank" rel="noopener">Telegram @AngelaNexus</a></footer>
+<footer>\u8FD0\u884C\u5728\u4F60\u81EA\u5DF1\u7684 Cloudflare \u8D26\u53F7\u4E0A\uFF08Workers + KV\uFF09\uFF0C\u8BA2\u9605\u5185\u5BB9\u53EA\u4FDD\u5B58\u5728\u4F60\u7684 KV \u4E2D\uFF0C\u4E0D\u7ECF\u8FC7\u4EFB\u4F55\u7B2C\u4E09\u65B9\u3002<br>v1.0.1 \xB7 \u4ED3\u5E93 <a href="https://github.com/dukangalex/subscription-chain-converter-cf" target="_blank" rel="noopener">GitHub</a> \xB7 \u9891\u9053 <a href="https://t.me/AngelaNexus" target="_blank" rel="noopener">Telegram @AngelaNexus</a></footer>
 </div>
 <script>
 function $(id){return document.getElementById(id)}
@@ -6943,13 +6943,16 @@ function attemptN(force){
   shorten(body).then(function(res){
     if(res.ok){
       var url=res.text.trim(), code=extractCode(url);
-      if((tg==="clash"||tg==="singbox")&&code){
+      if(code){
         var rows=[
-          {tag:"\u751F\u6210\u65F6\u683C\u5F0F",url:location.origin+"/c/"+code},
-          {tag:"Mihomo",url:location.origin+"/m/"+code,imp:tg==="clash"?{label:"\u4E00\u952E\u5BFC\u5165 Clash",href:"clash://install-config?url="+encodeURIComponent(location.origin+"/m/"+code)}:null},
-          {tag:"sing-box",url:location.origin+"/s/"+code,imp:tg==="singbox"?{label:"\u4E00\u952E\u5BFC\u5165 sing-box",href:"sing-box://import-remote-profile?url="+encodeURIComponent(location.origin+"/s/"+code)}:null}
+          {tag:"Mihomo",url:location.origin+"/m/"+code,imp:{label:"\u4E00\u952E\u5BFC\u5165 Clash",href:"clash://install-config?url="+encodeURIComponent(location.origin+"/m/"+code)}},
+          {tag:"sing-box",url:location.origin+"/s/"+code,imp:{label:"\u4E00\u952E\u5BFC\u5165 sing-box",href:"sing-box://import-remote-profile?url="+encodeURIComponent(location.origin+"/s/"+code)}},
+          {tag:"V2Ray",url:location.origin+"/v/"+code},
+          {tag:"Surge",url:location.origin+"/g/"+code},
+          {tag:"Loon",url:location.origin+"/l/"+code},
+          {tag:"Quantumult X",url:location.origin+"/q/"+code}
         ];
-        render("outN",rows,force?"\u5DF2\u7528\u539F\u540E\u7F00\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
+        render("outN",rows,force?"\u5DF2\u7528\u539F\u540E\u7F00\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"\u77ED\u94FE\u91CC\u7684\u5B57\u6BCD\u4EE3\u8868\u683C\u5F0F\uFF1A/m/ Mihomo\u3001/s/ sing-box\u3001/v/ V2Ray\u3001/g/ Surge\u3001/l/ Loon\u3001/q/ Quantumult X\uFF0C\u540C\u4E00\u4E2A\u7801\u6539\u5B57\u6BCD\u5C31\u80FD\u5207\u6362\u683C\u5F0F\uFF0C\u4E0D\u7528\u91CD\u65B0\u751F\u6210\uFF1B/c/ \u6309\u751F\u6210\u65F6\u9009\u7684\u683C\u5F0F\u51FA\u3002");
       }else{
         render("outN",[{tag:"\u8BA2\u9605\u94FE\u63A5",url:url}],force?"\u5DF2\u7528\u539F\u540E\u7F00\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }
@@ -6981,9 +6984,11 @@ function attemptC(force){
       var url=res.text.trim(), code=extractCode(url);
       if(code){
         var rows=[
-          {tag:"\u751F\u6210\u65F6\u683C\u5F0F",url:location.origin+"/c/"+code},
-          {tag:"Mihomo",url:location.origin+"/m/"+code,imp:tg==="clash"?{label:"\u4E00\u952E\u5BFC\u5165 Clash",href:"clash://install-config?url="+encodeURIComponent(location.origin+"/m/"+code)}:null},
-          {tag:"sing-box",url:location.origin+"/s/"+code,imp:tg==="singbox"?{label:"\u4E00\u952E\u5BFC\u5165 sing-box",href:"sing-box://import-remote-profile?url="+encodeURIComponent(location.origin+"/s/"+code)}:null}
+          {tag:"Mihomo",url:location.origin+"/m/"+code,imp:{label:"\u4E00\u952E\u5BFC\u5165 Clash",href:"clash://install-config?url="+encodeURIComponent(location.origin+"/m/"+code)}},
+          {tag:"sing-box",url:location.origin+"/s/"+code,imp:{label:"\u4E00\u952E\u5BFC\u5165 sing-box",href:"sing-box://import-remote-profile?url="+encodeURIComponent(location.origin+"/s/"+code)}},
+          {tag:"Surge",url:location.origin+"/g/"+code},
+          {tag:"Loon",url:location.origin+"/l/"+code},
+          {tag:"Quantumult X",url:location.origin+"/q/"+code}
         ];
         render("outC",rows,force?"\u5DF2\u7528\u539F\u540E\u7F00\u66F4\u65B0\uFF1A\u8BA2\u9605\u5730\u5740\u6CA1\u6709\u53D8\uFF0C\u5BA2\u6237\u7AEF\u4E0B\u6B21\u66F4\u65B0\u5C31\u4F1A\u62FF\u5230\u65B0\u5185\u5BB9":"");
       }else{
@@ -7008,7 +7013,7 @@ function attemptC(force){
 // file with the one built into this page; prompt only when newer.
 // The result is cached for a day; dismissing hides that version.
 (function(){
-  var CURVER="1.0.0";
+  var CURVER="1.0.1";
   var REPO="https://github.com/dukangalex/subscription-chain-converter-cf";
   var KEY="conv_update_check";
   function ver(s){return String(s||"").trim().replace(/^v/,"").split(".").map(function(x){return parseInt(x,10)||0})}
@@ -7079,7 +7084,7 @@ function attemptC(force){
 </body>
 </html>
 `;
-var VERSION = "1.0.0";
+var VERSION = "1.0.1";
 var lastAutoFill = 0;
 var _enc = new TextEncoder();
 var _dec = new TextDecoder();
@@ -9406,8 +9411,16 @@ async function handleFetch(request, env, ctx) {
       { ctype: "application/json; charset=utf-8" }
     );
   }
-  const fmt = { c: null, m: "clash", s: "singbox" };
-  const sm = path.match(/^\/([cms])\/(.+)$/);
+  const fmt = {
+    c: null,
+    m: "clash",
+    s: "singbox",
+    g: "surge",
+    l: "loon",
+    q: "quanx",
+    v: "v2ray"
+  };
+  const sm = path.match(/^\/([cmsglqv])\/(.+)$/);
   if (sm && path.length > 3) {
     const code = sm[2].replace(/^\/+|\/+$/g, "");
     const rec = code ? await getLink(env, code) : null;
