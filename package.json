@@ -5,7 +5,7 @@
   "description": "Cloudflare Workers variant of the self-hosted subscription converter with chain proxy (KV short links + KV rule mirror).",
   "devDependencies": {
     "esbuild": "^0.28.2",
-    "wrangler": "4.153.0"
+    "wrangler": "4.162.0"
   },
   "name": "subscription-chain-converter-cf",
   "private": true,
