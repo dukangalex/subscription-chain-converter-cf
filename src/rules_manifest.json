@@ -302,5 +302,29 @@
  {
   "src": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
   "dst": "singbox/geosite-geolocation-!cn.srs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs",
+  "dst": "clash/telegram_ip.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs",
+  "dst": "clash/twitter_ip.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs",
+  "dst": "clash/netflix_ip.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs",
+  "dst": "clash/google_ip.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs",
+  "dst": "clash/private_ip.mrs"
+ },
+ {
+  "src": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs",
+  "dst": "clash/cn-domain.mrs"
  }
 ]

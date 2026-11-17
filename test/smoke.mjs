@@ -10,6 +10,7 @@
 const worker = (await import(
   process.env.WORKER_PATH || "../src/worker.js")).default;
 import manifest from "../src/rules_manifest.json" with { type: "json" };
+import skeletonClash from "../src/skeleton_clash.json" with { type: "json" };
 
 // ------------------------------------------------------------- KV stub
 class KVStub {
@@ -495,6 +496,29 @@ let code = null;
     (doc2.outbounds || []).findIndex((o) => o.tag === "默认代理"));
   check("plain sing-box regions lead the default group",
     tags["默认代理"]?.outbounds?.[0] === "日本");
+}
+
+// ------------------------------------------ mrs behavior mapping
+// Every clash rule-provider's declared behavior must match the class
+// (geosite=domain / geoip=ipcidr) of the manifest source feeding the
+// file its URL points at; a crossed mapping makes the core reject
+// the provider with "invalid behavior" (T206).
+{
+  const srcOf = new Map(manifest.map((e) => [e.dst, e.src]));
+  let crossed = 0;
+  for (const p of Object.values(skeletonClash["rule-providers"] || {})) {
+    if (!p || (p.behavior !== "domain" && p.behavior !== "ipcidr")) {
+      continue;
+    }
+    const m = String(p.url || "").match(/\/rules\/(clash\/[^/?#]+)$/);
+    if (!m) continue;
+    const src = srcOf.get(m[1]) || "";
+    const cls = src.includes("/geosite/") ? "domain"
+      : src.includes("/geoip/") ? "ipcidr" : "?";
+    if (cls !== p.behavior) crossed++;
+  }
+  check("no crossed mrs behavior mappings", crossed === 0,
+    `${crossed} crossed`);
 }
 
 console.log(failures === 0

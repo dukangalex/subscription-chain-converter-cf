@@ -958,7 +958,7 @@
      "mihomo"
     ]
    },
-   "url": "__PUBLIC_ORIGIN__/rules/clash/private.mrs",
+   "url": "__PUBLIC_ORIGIN__/rules/clash/private_ip.mrs",
    "path": "./ruleset/private_ip.mrs",
    "path-in-bundle": "geo/geoip/private.mrs"
   },
@@ -1093,7 +1093,7 @@
      "mihomo"
     ]
    },
-   "url": "__PUBLIC_ORIGIN__/rules/clash/cn.mrs",
+   "url": "__PUBLIC_ORIGIN__/rules/clash/cn-domain.mrs",
    "path": "./ruleset/cn.mrs",
    "path-in-bundle": "geo/geosite/cn.mrs"
   },
@@ -1213,7 +1213,7 @@
      "mihomo"
     ]
    },
-   "url": "__PUBLIC_ORIGIN__/rules/clash/google.mrs",
+   "url": "__PUBLIC_ORIGIN__/rules/clash/google_ip.mrs",
    "path": "./ruleset/google_ip.mrs",
    "path-in-bundle": "geo/geoip/google.mrs"
   },
@@ -1318,7 +1318,7 @@
      "mihomo"
     ]
    },
-   "url": "__PUBLIC_ORIGIN__/rules/clash/telegram.mrs",
+   "url": "__PUBLIC_ORIGIN__/rules/clash/telegram_ip.mrs",
    "path": "./ruleset/telegram_ip.mrs",
    "path-in-bundle": "geo/geoip/telegram.mrs"
   },
@@ -1378,7 +1378,7 @@
      "mihomo"
     ]
    },
-   "url": "__PUBLIC_ORIGIN__/rules/clash/twitter.mrs",
+   "url": "__PUBLIC_ORIGIN__/rules/clash/twitter_ip.mrs",
    "path": "./ruleset/twitter_ip.mrs",
    "path-in-bundle": "geo/geoip/twitter.mrs"
   },
@@ -1453,7 +1453,7 @@
      "mihomo"
     ]
    },
-   "url": "__PUBLIC_ORIGIN__/rules/clash/netflix.mrs",
+   "url": "__PUBLIC_ORIGIN__/rules/clash/netflix_ip.mrs",
    "path": "./ruleset/netflix_ip.mrs",
    "path-in-bundle": "geo/geoip/netflix.mrs"
   },
