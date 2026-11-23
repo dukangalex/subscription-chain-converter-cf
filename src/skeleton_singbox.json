@@ -335,6 +335,7 @@
       "outbounds": [
         "REJECT",
         "默认代理",
+        "direct",
         "直连"
       ],
       "interrupt_exist_connections": false

@@ -875,6 +875,7 @@
       "name": "远控工具",
       "proxies": [
         "默认代理",
+        "DIRECT",
         "REJECT-DROP"
       ],
       "icon": "https://fastly.jsdelivr.net/gh/dukangalex/HiClash@assets-v1/Icons/svg/Remote.svg"
